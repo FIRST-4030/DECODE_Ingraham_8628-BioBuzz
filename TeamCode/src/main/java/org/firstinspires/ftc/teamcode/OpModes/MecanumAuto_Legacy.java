@@ -813,7 +813,7 @@ public class MecanumAuto_Legacy extends LinearOpMode {
 //                        moveToFarShootAutoStep,
 //                        shootThreeBallsAutoStep,
 
-                        moveToFreeSpaceAutoStep,
+//                        moveToFreeSpaceAutoStep,
                 }
         );
 
