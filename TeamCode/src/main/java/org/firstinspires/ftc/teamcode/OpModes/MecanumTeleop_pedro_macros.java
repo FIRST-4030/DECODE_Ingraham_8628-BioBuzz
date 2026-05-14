@@ -243,6 +243,8 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
         }
         follower.setStartingPose(correctedStartPose);
 
+        imu.resetYaw();
+
         runtime.reset();
 
         IterativeAutoStepChain activeIterativeAutoStepChain = farAutoStepChain;
@@ -250,10 +252,12 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
             activeIterativeAutoStepChain = nearAutoStepChain;
         }
 
-//        activeIterativeAutoStepChain = testAutoStepChain; // TEST
+        activeIterativeAutoStepChain = testAutoStepChain; // TEST
 
         activeIterativeAutoStepChain.init();
-        activeIterativeAutoStepChain.done = false;
+        activeIterativeAutoStepChain.done = true;
+
+//        localize();
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
@@ -377,18 +381,19 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
                     chassis.drive(0, 0, 0);
                 }
 
-                if (gamepad1.aWasReleased()) {
+                if (gamepad1.dpadDownWasReleased()) {
                     follower.resumePathFollowing();
                     escapeShooting();
                     activeIterativeAutoStepChain.init();
                 }
-                if (gamepad1.bWasReleased()) {
-                    follower.pausePathFollowing();
-                    follower.update();
-                }
             }
 
             drawPanelsField();
+
+            limelight.processRobotPoseMt2();
+//            telemetry.addData("x", limelight.getX());
+//            telemetry.addData("y", limelight.getY());
+            telemetry.addData("Target velocity", shooter.convertDistanceToShooterVelocity(distance));
             telemetry.update();
         }
     }
@@ -425,7 +430,7 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
     }
 
     public void handleIsShootingCase() {
-        if (gamepad1.dpadDownWasPressed()) {
+        if (gamepad1.bWasPressed()) {
             escapeShooting();
             return;
         }
@@ -847,6 +852,19 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
                         moveToFreeSpaceAutoStep,
                 }
         );
+    }
+
+    public void localize() {
+        int oldPipeline = limelight.limelight.getLatestResult().getPipelineIndex();
+
+        limelight.limelight.pipelineSwitch(2); // all april tags
+        limelight.processRobotPoseMt2();
+        if (limelight.isDataCurrent) {
+            Pose localizedPose = new Pose(-limelight.getX(), -limelight.getY());
+            follower.setStartingPose(localizedPose);
+        }
+
+        limelight.limelight.pipelineSwitch(oldPipeline);
     }
 
     public static class Datalog {
