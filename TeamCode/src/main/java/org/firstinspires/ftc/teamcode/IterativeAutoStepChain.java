@@ -11,7 +11,7 @@ public class IterativeAutoStepChain {
     public IterativeAutoStep[] iterativeAutoSteps;
     public double collectorSpeed;
     public boolean done = false;
-
+    public double distance;
 
     public int activeStepIndex = 0;
     private ElapsedTime currentWaitTime = new ElapsedTime();
@@ -26,6 +26,9 @@ public class IterativeAutoStepChain {
     private boolean finishedWaiting = false;
     private boolean shooterReachedSpeed = false;
 
+    double GoalX = -58.3727;
+    double BlueGoalY = -55.6425;
+    double RedGoalY = 55.6425;
 
     public IterativeAutoStepChain(double collectorSpeedValue, IterativeAutoStep[] iterativeAutoStepsValue) {
         collectorSpeed = collectorSpeedValue;
@@ -37,6 +40,10 @@ public class IterativeAutoStepChain {
             telemetry.addLine("Done");
             return;
         }
+
+        limelight.processRobotPoseMt1();
+        updateShootingDistance(limelight);
+        telemetry.addData("distance", distance);
 
         IterativeAutoStep activeIterativeAutoStep = iterativeAutoSteps[activeStepIndex];
 
@@ -80,10 +87,12 @@ public class IterativeAutoStepChain {
                 int targetShootCount = activeIterativeAutoStep.getTargetShootCount();
 
                 if (currentShootCount < targetShootCount) {
-                    shooter.setTargetVelocity(shooter.getShooterVelo(limelight));
+//                    shooter.setTargetVelocity(shooter.getShooterVelo(limelight));
+                    shooter.setTargetVelocity(shooter.convertDistanceToShooterVelocity(distance));
                     shooter.overridePower();
 
                     telemetry.addData("Current shot time", currentShotTime.milliseconds());
+                    telemetry.addData("Target velocity", shooter.convertDistanceToShooterVelocity(distance));
 
                     if (shooter.atSpeed()) {
                         shooterReachedSpeed = true;
@@ -151,5 +160,35 @@ public class IterativeAutoStepChain {
         IterativeAutoStep activeIterativeAutoStep = iterativeAutoSteps[activeStepIndex];
 
         follower.setMaxPower(activeIterativeAutoStep.getMaxPower());
+    }
+
+    public static double calculateDistance(double x1, double y1, double x2, double y2) {
+        double deltaX = x2 - x1;
+        double deltaY = y2 - y1;
+
+        double squaredDeltaX = deltaX * deltaX;
+        double squaredDeltaY = deltaY * deltaY;
+
+        double sumOfSquares = squaredDeltaX + squaredDeltaY;
+
+        double dist = Math.sqrt(sumOfSquares);
+
+        return dist;
+    }
+
+    public void updateShootingDistance(Limelight limelight) {
+        if (Blackboard.alliance == Blackboard.Alliance.BLUE) distance = calculateDistance(
+                limelight.getX(),
+                limelight.getY(),
+                GoalX,
+                BlueGoalY
+        );
+
+        if (Blackboard.alliance == Blackboard.Alliance.RED) distance = calculateDistance(
+                limelight.getX(),
+                limelight.getY(),
+                GoalX,
+                RedGoalY
+        );
     }
 }
