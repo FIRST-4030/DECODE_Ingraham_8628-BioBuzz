@@ -166,15 +166,19 @@ public class Limelight {
     }
 
     public void processRobotPoseMt2() {
-        limelight.pipelineSwitch(6); // obelisk
+//        int oldPipeline = limelight.getLatestResult().getPipelineIndex();
+
+//        limelight.pipelineSwitch(6); // obelisk
         YawPitchRollAngles orientation = imu.getRobotYawPitchRollAngles();
-        limelight.updateRobotOrientation(orientation.getYaw());
+        limelight.updateRobotOrientation(orientation.getYaw() + 180);
         LLResult result = limelight.getLatestResult();
         if (result != null && result.isValid()) {
             Pose3D botPose = result.getBotpose_MT2();
             x = botPose.getPosition().x*METERS_TO_INCHES + 72;
             y = botPose.getPosition().y*METERS_TO_INCHES + 72;
         }
+
+//        limelight.pipelineSwitch(oldPipeline);
     }
 
     @SuppressLint("DefaultLocale")
