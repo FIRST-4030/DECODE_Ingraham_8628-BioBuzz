@@ -60,7 +60,7 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
     public static long moveToFarShootDelayMS = 0;
     public static long moveToNearShootDelayMS = 0;
     public static long shootThreeBallsDelayMS = 0;
-    public static double collectorSpeed = 0.45;
+    public static double collectorSpeed = 0.525;
     public static float collectingMaxPower = 0.3f;
 
     public static double moveToFreeSpace_x = 20, moveToFreeSpace_y = 8, moveToFreeSpace_angle = 90;
