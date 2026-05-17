@@ -34,7 +34,7 @@ import org.firstinspires.ftc.teamcode.pedroPathing.ConstantsCompetition;
 import org.firstinspires.ftc.teamcode.pedroPathing.ConstantsDemo;
 
 @Configurable
-@TeleOp(name="Mecanum Auto Teleop Pedro Macros", group="Linear OpMode")
+@TeleOp(name="Mecanum Teleop Pedro Macros", group="Linear OpMode")
 public class MecanumTeleop_pedro_macros extends LinearOpMode {
 
     public static int polyRangeCrossover = 80;
@@ -80,6 +80,7 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
     Limelight limelight;
 
     Servo liftServo;
+    boolean lifted = false;
 
     ElapsedTime collectorTime = new ElapsedTime();
 
@@ -143,7 +144,7 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
         shooter.putHingeDown();
 
         liftServo = hardwareMap.get(Servo.class, "liftServo");
-        liftServo.setPosition(1);
+        liftServo.setPosition(0.95);
 
         imu = hardwareMap.get(IMU.class, "imu");
 
@@ -251,7 +252,7 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
         if (nearAutoEnabled) {
             activeIterativeAutoStepChain = nearAutoStepChain;
         }
-
+        
         activeIterativeAutoStepChain = testAutoStepChain; // TEST
 
         activeIterativeAutoStepChain.init();
@@ -275,30 +276,30 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
 
                 shooter.overridePower();
 
-                telemetry.addLine();
-                telemetry.addLine("--- CONTROLS ---");
-                telemetry.addLine();
-
-//        telemetry.addData("Target is in view:", targetInView);
-//        telemetry.addData("Shooter Current Velocity", shooter.getVelocity());
-//        telemetry.addData("Shooter Target Velocity", shooter.targetVelocity);
-//        telemetry.addData("Distance to Target", limelight.getRange());
-
-                telemetry.addData("Left Joystick", "Drive");
-                telemetry.addData("Right Joystick", "Rotate");
-                telemetry.addLine();
-                telemetry.addData("Left Bumper", "Very Slow Drive");
-                telemetry.addData("Right Bumper", "Slow Drive");
-//        telemetry.addData("Pad 1, A", "Raise Robot");
-//        telemetry.addData("Pad 1, Y", "Lower Robot");
-//        telemetry.addData("--", "--");
-                telemetry.addData("Left Trigger", "Shoot 1!");
-                telemetry.addData("Right Trigger", "Shoot 3!x");
-                telemetry.addData("Hold X", "Eject!");
-
-                telemetry.addLine();
-                telemetry.addLine("------------------------");
-                telemetry.addLine();
+//                telemetry.addLine();
+//                telemetry.addLine("--- CONTROLS ---");
+//                telemetry.addLine();
+//
+////        telemetry.addData("Target is in view:", targetInView);
+////        telemetry.addData("Shooter Current Velocity", shooter.getVelocity());
+////        telemetry.addData("Shooter Target Velocity", shooter.targetVelocity);
+////        telemetry.addData("Distance to Target", limelight.getRange());
+//
+//                telemetry.addData("Left Joystick", "Drive");
+//                telemetry.addData("Right Joystick", "Rotate");
+//                telemetry.addLine();
+//                telemetry.addData("Left Bumper", "Very Slow Drive");
+//                telemetry.addData("Right Bumper", "Slow Drive");
+////        telemetry.addData("Pad 1, A", "Raise Robot");
+////        telemetry.addData("Pad 1, Y", "Lower Robot");
+////        telemetry.addData("--", "--");
+//                telemetry.addData("Left Trigger", "Shoot 1!");
+//                telemetry.addData("Right Trigger", "Shoot 3!x");
+//                telemetry.addData("Hold X", "Eject!");
+//
+//                telemetry.addLine();
+//                telemetry.addLine("------------------------");
+//                telemetry.addLine();
 
                 telemetry.addData("Goal Tag Visible", limelight.isDataCurrent);
 
@@ -326,48 +327,24 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
                     chassis.setMaxSpeed(1.0);
                 }
 
-//        //Lift Servo Controls
-//        if (gamepad1.yWasPressed()) {
-//            shooter.targetVelocity = 0;
-//            collector.setPower(0.0);
-//            collectorOn = false;
-//            liftServo.setPosition(1.0);
-//        }
-//        if (gamepad1.aWasPressed()) {
-//            shooter.targetVelocity = 0;
-//            collector.setPower(0.0);
-//            collectorOn = false;
-//            liftServo.setPosition(0.0);
-//        }
-//
-//        //Gamepad 2
-//        if (gamepad1.start) {
-//            imu.resetYaw();
-//        }
+                //Lift Servo Controls
+                if (gamepad1.backWasPressed()) {
+                    lifted = !lifted;
+                }
 
-                //Collector Controls
-//        if (gamepad1.bWasReleased()) {
-//            if (!collectorOn) {
-//                collector.setPower(collectorSpeed);
-//                collectorOn = true;
-//            }
-//            else {
-//                collector.setPower(0.0);
-//                collectorOn = false;
-//            }
-//        }
+                if (lifted) {
+                    collector.setPower(0.0);
+                    collectorOn = false;
 
-//        if (gamepad1.xWasPressed()) {
-//            collector.setPower(-collectorSpeed);
-//        }
-//        if (gamepad1.xWasReleased()) {
-//            collector.setPower(collectorSpeed);
-//            collectorOn = false;
-//        }
+                    liftServo.setPosition(0.0);
+                    escapeShooting();
+                } else {
+                    liftServo.setPosition(0.95);
+                    handleShooting();
+                }
 
-                handleShooting();
 
-                if (!isShooting) {
+                if (!isShooting && !lifted) {
                     chassis.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
 
                     if (gamepad1.x) {
@@ -381,11 +358,13 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
                     chassis.drive(0, 0, 0);
                 }
 
-                if (gamepad1.dpadDownWasReleased()) {
-                    follower.resumePathFollowing();
-                    escapeShooting();
-                    activeIterativeAutoStepChain.init();
-                }
+//                if (gamepad1.dpadDownWasReleased() && !lifted) {
+//                    follower.resumePathFollowing();
+//                    escapeShooting();
+//                    activeIterativeAutoStepChain.init();
+//                }
+
+                telemetry.addData("lifted", lifted);
             }
 
             drawPanelsField();
@@ -484,8 +463,6 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
         isShooting = false;
         shooter.stopShooter();
         shooter.putHingeDown();
-        collector.setPower(collectorSpeed);
-        collectorOn = true;
     }
 
     public boolean isWithinLeniencyRange() {
