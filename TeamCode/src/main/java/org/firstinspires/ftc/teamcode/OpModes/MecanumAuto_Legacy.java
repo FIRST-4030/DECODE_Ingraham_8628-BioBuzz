@@ -57,8 +57,8 @@ public class MecanumAuto_Legacy extends LinearOpMode {
     public static long moveToFarShootDelayMS = 0;
     public static long moveToNearShootDelayMS = 0;
     public static long shootThreeBallsDelayMS = 0;
-    public static double collectorSpeed = 0.525;
-    public static float collectingMaxPower = 0.3f;
+    public static double collectorSpeed = 0.6;
+    public static float collectingMaxPower = 0.4f;
 
     public static double moveToFreeSpace_x = 20, moveToFreeSpace_y = 8, moveToFreeSpace_angle = 90;
     public static double moveToFarShoot_x = 55, moveToFarShoot_y = 16, moveToFarShoot_angle = 110;
@@ -259,134 +259,7 @@ public class MecanumAuto_Legacy extends LinearOpMode {
 
             if (!activeIterativeAutoStepChain.done) {
                 activeIterativeAutoStepChain.update(follower, collector, shooter, limelight, telemetry, chassis);
-            } else {
-                chassis.resetZeroPowerBehavior();
-
-                targetInView = limelight.process();
-                limelight.processRobotPoseMt1();
-                updateShootingDistance();
-
-                shooter.overridePower();
-
-                telemetry.addLine();
-                telemetry.addLine("--- CONTROLS ---");
-                telemetry.addLine();
-
-//        telemetry.addData("Target is in view:", targetInView);
-//        telemetry.addData("Shooter Current Velocity", shooter.getVelocity());
-//        telemetry.addData("Shooter Target Velocity", shooter.targetVelocity);
-//        telemetry.addData("Distance to Target", limelight.getRange());
-
-                telemetry.addData("Left Joystick", "Drive");
-                telemetry.addData("Right Joystick", "Rotate");
-                telemetry.addLine();
-                telemetry.addData("Left Bumper", "Very Slow Drive");
-                telemetry.addData("Right Bumper", "Slow Drive");
-//        telemetry.addData("Pad 1, A", "Raise Robot");
-//        telemetry.addData("Pad 1, Y", "Lower Robot");
-//        telemetry.addData("--", "--");
-                telemetry.addData("Left Trigger", "Shoot 1!");
-                telemetry.addData("Right Trigger", "Shoot 3!x");
-                telemetry.addData("Hold X", "Eject!");
-
-                telemetry.addLine();
-                telemetry.addLine("------------------------");
-                telemetry.addLine();
-
-                telemetry.addData("Goal Tag Visible", limelight.isDataCurrent);
-
-                telemetry.addData("Distance", distance);
-                telemetry.addData("Old Range", limelight.getRange());
-
-                //Gamepad 1
-//        if (gamepad1.start) {
-//            imu.resetYaw();
-//        }
-
-                //Slow Drive
-                if (gamepad1.rightBumperWasPressed()) {
-                    chassis.setMaxSpeed(0.4);
-                }
-                if (gamepad1.leftBumperWasReleased()) {
-                    chassis.setMaxSpeed(1.0);
-                }
-
-                //Precision Drive
-                if (gamepad1.leftBumperWasPressed()) {
-                    chassis.setMaxSpeed(0.2);
-                }
-                if (gamepad1.rightBumperWasReleased()) {
-                    chassis.setMaxSpeed(1.0);
-                }
-
-//        //Lift Servo Controls
-//        if (gamepad1.yWasPressed()) {
-//            shooter.targetVelocity = 0;
-//            collector.setPower(0.0);
-//            collectorOn = false;
-//            liftServo.setPosition(1.0);
-//        }
-//        if (gamepad1.aWasPressed()) {
-//            shooter.targetVelocity = 0;
-//            collector.setPower(0.0);
-//            collectorOn = false;
-//            liftServo.setPosition(0.0);
-//        }
-//
-//        //Gamepad 2
-//        if (gamepad1.start) {
-//            imu.resetYaw();
-//        }
-
-                //Collector Controls
-//        if (gamepad1.bWasReleased()) {
-//            if (!collectorOn) {
-//                collector.setPower(collectorSpeed);
-//                collectorOn = true;
-//            }
-//            else {
-//                collector.setPower(0.0);
-//                collectorOn = false;
-//            }
-//        }
-
-//        if (gamepad1.xWasPressed()) {
-//            collector.setPower(-collectorSpeed);
-//        }
-//        if (gamepad1.xWasReleased()) {
-//            collector.setPower(collectorSpeed);
-//            collectorOn = false;
-//        }
-
-                handleShooting();
-
-                if (!isShooting) {
-                    chassis.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
-
-                    if (gamepad1.x) {
-                        collector.setPower(-collectorSpeed);
-                        collectorOn = false;
-                    } else {
-                        collector.setPower(collectorSpeed);
-                        collectorOn = true;
-                    }
-                } else {
-                    chassis.drive(0, 0, 0);
-                }
-
-                if (gamepad1.aWasReleased()) {
-                    follower.resumePathFollowing();
-                    escapeShooting();
-                    activeIterativeAutoStepChain.init();
-                }
-                if (gamepad1.bWasReleased()) {
-                    follower.pausePathFollowing();
-                    follower.update();
-                }
             }
-
-            drawPanelsField();
-            telemetry.update();
         }
     }
 
@@ -708,6 +581,7 @@ public class MecanumAuto_Legacy extends LinearOpMode {
                 .setStepType(IterativeAutoStep.StepType.MOVE)
                 .setPathChain(moveToFarShoot)
                 .setStartDelayMS(moveToFarShootDelayMS)
+                .setMaxPower(2)
                 .build();
 
         IterativeAutoStep moveToNearShootAutoStep = new IterativeAutoStep.Builder()
@@ -726,6 +600,7 @@ public class MecanumAuto_Legacy extends LinearOpMode {
                 .setPathChain(inFrontOfBalls1)
                 .setCollectorOn(true)
                 .setStartDelayMS(moveToInFrontOfBallsDelayMS)
+                .setMaxPower(2)
                 .build();
 
         IterativeAutoStep moveToBehindBalls1AutoStep = new IterativeAutoStep.Builder()
@@ -741,6 +616,7 @@ public class MecanumAuto_Legacy extends LinearOpMode {
                 .setPathChain(inFrontOfBalls2)
                 .setCollectorOn(true)
                 .setStartDelayMS(moveToInFrontOfBallsDelayMS)
+                .setMaxPower(2)
                 .build();
 
         IterativeAutoStep moveToBehindBalls2AutoStep = new IterativeAutoStep.Builder()
@@ -756,6 +632,7 @@ public class MecanumAuto_Legacy extends LinearOpMode {
                 .setPathChain(inFrontOfBalls3)
                 .setCollectorOn(true)
                 .setStartDelayMS(moveToInFrontOfBallsDelayMS)
+                .setMaxPower(2)
                 .build();
 
         IterativeAutoStep moveToBehindBalls3AutoStep = new IterativeAutoStep.Builder()
@@ -809,6 +686,11 @@ public class MecanumAuto_Legacy extends LinearOpMode {
 
                         moveToInFrontOfBalls3AutoStep,
                         moveToBehindBalls3AutoStep,
+
+//                        moveToNearShootAutoStep,
+//                        shootThreeBallsAutoStep,
+//
+//                        moveToBehindBalls1AutoStep,
 
 //                        moveToFarShootAutoStep,
 //                        shootThreeBallsAutoStep,
