@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes;
+package org.firstinspires.ftc.teamcode.Archive;
 
 import com.bylazar.configurables.annotations.Configurable;
 
@@ -11,8 +11,6 @@ import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -25,13 +23,8 @@ import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 import org.firstinspires.ftc.teamcode.Datalogger;
-import org.firstinspires.ftc.teamcode.IterativeAutoStep;
-import org.firstinspires.ftc.teamcode.IterativeAutoStepChain;
 import org.firstinspires.ftc.teamcode.Limelight;
-import org.firstinspires.ftc.teamcode.Shooter;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.ConstantsCompetition;
-import org.firstinspires.ftc.teamcode.pedroPathing.ConstantsDemo;
+import org.firstinspires.ftc.teamcode.Pedro.Constants;
 
 @Configurable
 @TeleOp(name="Mecanum Teleop Pedro Macros", group="Linear OpMode")
@@ -70,7 +63,7 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
     Chassis chassis;
     Constants constants;
     DcMotorEx collector;
-    Shooter shooter;
+    DecodeShooter shooter;
     Servo shooterHinge;
     IMU imu;
     FieldManager panelsFieldManager = PanelsField.INSTANCE.getField();
@@ -133,7 +126,7 @@ public class MecanumTeleop_pedro_macros extends LinearOpMode {
 
         follower = constants.createFollower(hardwareMap);
 
-        shooter = new Shooter(hardwareMap, "shooter", true);
+        shooter = new DecodeShooter(hardwareMap, "shooter", true);
         shooter.setVeloParameters(polyRangeCrossover, polyVeloBaseFar, polyVeloBaseNear, polyVeloBaseRangeFactor);
 
         collector = hardwareMap.get(DcMotorEx.class, "collector");

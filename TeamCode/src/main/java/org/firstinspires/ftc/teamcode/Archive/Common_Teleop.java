@@ -1,26 +1,22 @@
-package org.firstinspires.ftc.teamcode.OpModes;
+package org.firstinspires.ftc.teamcode.Archive;
 
-import com.bylazar.configurables.annotations.Configurable;
+
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DigitalChannel;
+import com.qualcomm.robotcore.hardware.Gamepad;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.hardware.configuration.annotations.DigitalIoDeviceType;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Limelight;
-import org.firstinspires.ftc.teamcode.Shooter;
-@Disabled
-@Configurable
-@TeleOp(name = "Zeven's Learning OP Mode", group = "Robot")
-public class MecanumTeleop_Zeven extends OpMode {
+
+public class Common_Teleop {
+
     public static double collectorSpeed = 0.45;
 
     public static int polyRangeCrossover = 80;
@@ -28,11 +24,17 @@ public class MecanumTeleop_Zeven extends OpMode {
     public static int polyVeloBaseNear = 29;
     public static double polyVeloBaseRangeFactor = 0.125;
     public static double aimLeniencyDegrees = 3;
-    public DigitalChannel green, red;
 
-    Shooter shooter;
+    Chassis chassis;
+    DcMotorEx collector;
+    DecodeShooter shooter;
+    Servo liftServo;
     Limelight limelight;
     IMU imu;
+    Telemetry telemetry;
+    HardwareMap hardwareMap;
+    Gamepad gamepad1;
+    Gamepad gamepad2;
 
     boolean targetInView;
     boolean collectorOn = false;
@@ -46,17 +48,31 @@ public class MecanumTeleop_Zeven extends OpMode {
     public static double SHOOTER_HINGE_LIFT_DURATION_MS = 400;
     public static double SHOT_DURATION_MS = 800;
 
-    @Override
+    public Common_Teleop(Telemetry telemetry, HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
+        this.telemetry = telemetry;
+        this.hardwareMap = hardwareMap;
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
+    }
+
     public void init() {
         Blackboard.alliance = Blackboard.Alliance.BLUE;
 
-        shooter=new Shooter(hardwareMap,"shooter",true);
+        chassis = new Chassis(hardwareMap);
+
+        shooter=new DecodeShooter(hardwareMap,"shooter",true);
         shooter.setVeloParameters(polyRangeCrossover, polyVeloBaseFar, polyVeloBaseNear, polyVeloBaseRangeFactor);
+
+        collector = hardwareMap.get(DcMotorEx.class, "collector");
+
+        collector.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        collector.setDirection(DcMotor.Direction.REVERSE);
+
+        liftServo = hardwareMap.get(Servo.class, "liftServo");
+        liftServo.setPosition(1.0);  // Up with Axon Max is 1.0,  was 0.0 with Savox
+
         imu = hardwareMap.get(IMU.class, "imu");
-        green = hardwareMap.get(DigitalChannel.class, "green");
-        green.setMode(DigitalChannel.Mode.OUTPUT);
-        red = hardwareMap.get(DigitalChannel.class, "red");
-        red.setMode(DigitalChannel.Mode.OUTPUT);
 
         RevHubOrientationOnRobot.LogoFacingDirection logoDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
@@ -69,21 +85,10 @@ public class MecanumTeleop_Zeven extends OpMode {
 
         limelight = new Limelight();
         limelight.init(hardwareMap, imu, telemetry);
-
-        limelight.setTeam(586);
     }
 
-    @Override
     public void init_loop() {
         limelight.readObelisk();
-
-        if (limelight.isDataCurrent) {
-            green.setState(true);
-            red.setState(false);
-        } else {
-            red.setState(true);
-            green.setState(false);
-        }
         telemetry.update();
     }
 
@@ -94,10 +99,10 @@ public class MecanumTeleop_Zeven extends OpMode {
         else if (Blackboard.alliance == Blackboard.Alliance.BLUE) {
             limelight.setTeam(20);
         }
+        collector.setPower(collectorSpeed);
         collectorOn = true;
     }
 
-    @Override
     public void loop() {
         targetInView = limelight.process();
         shooter.overridePower();
@@ -106,13 +111,20 @@ public class MecanumTeleop_Zeven extends OpMode {
         telemetry.addLine("--- CONTROLS ---");
         telemetry.addLine();
 
-
+//        telemetry.addData("Target is in view:", targetInView);
+//        telemetry.addData("Shooter Current Velocity", shooter.getVelocity());
+//        telemetry.addData("Shooter Target Velocity", shooter.targetVelocity);
+//        telemetry.addData("Distance to Target", limelight.getRange());
 
         telemetry.addData("Left Joystick", "Drive");
         telemetry.addData("Right Joystick", "Rotate");
         telemetry.addLine();
         telemetry.addData("Left Bumper", "Very Slow Drive");
         telemetry.addData("Right Bumper", "Slow Drive");
+//        telemetry.addData("Pad 1, A", "Raise Robot");
+//        telemetry.addData("Pad 1, Y", "Lower Robot");
+//        telemetry.addData("--", "--");
+        telemetry.addData("Left Trigger", "Shoot 1!");
         telemetry.addData("Right Trigger", "Shoot 3!x");
         telemetry.addData("Hold X", "Eject!");
 
@@ -124,7 +136,81 @@ public class MecanumTeleop_Zeven extends OpMode {
         if (gamepad1.start) {
             imu.resetYaw();
         }
+
+        //Slow Drive
+        if (gamepad1.rightBumperWasPressed()) {
+            chassis.setMaxSpeed(0.4);
+        }
+        if (gamepad1.leftBumperWasReleased()) {
+            chassis.setMaxSpeed(1.0);
+        }
+
+        //Precision Drive
+        if (gamepad1.leftBumperWasPressed()) {
+            chassis.setMaxSpeed(0.2);
+        }
+        if (gamepad1.rightBumperWasReleased()) {
+            chassis.setMaxSpeed(1.0);
+        }
+
+//        //Lift Servo Controls
+//        if (gamepad1.yWasPressed()) {
+//            shooter.targetVelocity = 0;
+//            collector.setPower(0.0);
+//            collectorOn = false;
+//            liftServo.setPosition(1.0);
+//        }
+//        if (gamepad1.aWasPressed()) {
+//            shooter.targetVelocity = 0;
+//            collector.setPower(0.0);
+//            collectorOn = false;
+//            liftServo.setPosition(0.0);
+//        }
+//
+//        //Gamepad 2
+//        if (gamepad1.start) {
+//            imu.resetYaw();
+//        }
+
+        //Collector Controls
+        if (gamepad1.bWasReleased()) {
+            if (!collectorOn) {
+                collector.setPower(collectorSpeed);
+                collectorOn = true;
+            }
+//            else {
+//                collector.setPower(0.0);
+//                collectorOn = false;
+//            }
+        }
+
+        if (gamepad1.xWasPressed()) {
+            collector.setPower(-collectorSpeed);
+        }
+        if (gamepad1.xWasReleased()) {
+            collector.setPower(collectorSpeed);
+            collectorOn = false;
+        }
+
         handleShooting();
+
+        if (!isShooting) {
+            chassis.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        } else {
+            chassis.drive(0, 0, 0);
+        }
+
+//        double limelightGetTx = limelight.getTx();
+//        telemetry.addData("Shooting error", Math.abs(limelight.getTx()));
+        telemetry.addData("Allowed to shoot", isWithinLeniencyRange());
+
+//        telemetry.addData("Current Shoot Count", currentShootCount);
+//        telemetry.addData("Collector Current Power:", collector.getVelocity());
+//        telemetry.addData("Collector Target Power", collectorSpeed);
+//        telemetry.addData("Shooter Current Velocity:", shooter.getVelocity());
+//        telemetry.addData("Shooter Target Velocity: ", shooter.targetVelocity);
+//        telemetry.addData("Get Shooter Velocity", shooter.getShooterVelo(limelight));
+        telemetry.update();
     }
 
     public void handleShooting() {
@@ -147,6 +233,8 @@ public class MecanumTeleop_Zeven extends OpMode {
         if (isShooting) {
             shooter.setTargetVelocity(shooter.getShooterVelo(limelight));
             shooter.overridePower();
+
+            collector.setPower(-collectorSpeed);
             collectorOn = false;
 
             if (shooter.atSpeed()) {
@@ -170,9 +258,17 @@ public class MecanumTeleop_Zeven extends OpMode {
                     isShooting = false;
                     shooter.stopShooter();
                     shooter.putHingeDown();
+                    collector.setPower(collectorSpeed);
                     collectorOn = true;
                 }
             }
+        } else {
+//            if (gamepad1.y) {
+//                shooter.setTargetVelocity(35);
+//                shooter.overridePower();
+//            } else {
+//                shooter.stopShooter();
+//            }
         }
     }
 

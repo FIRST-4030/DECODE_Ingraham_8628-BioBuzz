@@ -14,9 +14,7 @@ import org.firstinspires.ftc.teamcode.BuildConfig;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 import org.firstinspires.ftc.teamcode.Datalogger;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.ConstantsDemo;
-import org.firstinspires.ftc.teamcode.pedroPathing.ConstantsCompetition;
+import org.firstinspires.ftc.teamcode.Pedro.Constants;
 
 /*
  * This opMode is provided to show how to introduce PedroPathing into a project.

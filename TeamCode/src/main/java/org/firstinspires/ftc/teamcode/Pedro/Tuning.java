@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.pedroPathing;
+package org.firstinspires.ftc.teamcode.Pedro;
 
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.changes;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.drawOnlyCurrent;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.draw;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.follower;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.stopRobot;
-import static org.firstinspires.ftc.teamcode.pedroPathing.Tuning.telemetryM;
+import static org.firstinspires.ftc.teamcode.Pedro.Tuning.changes;
+import static org.firstinspires.ftc.teamcode.Pedro.Tuning.drawOnlyCurrent;
+import static org.firstinspires.ftc.teamcode.Pedro.Tuning.draw;
+import static org.firstinspires.ftc.teamcode.Pedro.Tuning.follower;
+import static org.firstinspires.ftc.teamcode.Pedro.Tuning.stopRobot;
+import static org.firstinspires.ftc.teamcode.Pedro.Tuning.telemetryM;
 
 import com.bylazar.configurables.PanelsConfigurables;
 import com.bylazar.configurables.annotations.Configurable;
@@ -25,6 +25,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Archive.ConstantsCompetition;
+import org.firstinspires.ftc.teamcode.Archive.ConstantsDemo;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
 import java.util.ArrayList;

@@ -21,10 +21,7 @@ import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 import org.firstinspires.ftc.teamcode.Datalogger;
-import org.firstinspires.ftc.teamcode.Shooter;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.ConstantsCompetition;
-import org.firstinspires.ftc.teamcode.pedroPathing.ConstantsDemo;
+import org.firstinspires.ftc.teamcode.Pedro.Constants;
 
 @Disabled
 @Autonomous(name="Mecanum Auto PedroPathing", group="Linear OpMode")
@@ -44,7 +41,7 @@ public class MecanumAutoPedroPathing extends LinearOpMode {
     Chassis chassis;
     Constants constants;
     DcMotorEx collector;
-    Shooter shooter;
+    DecodeShooter shooter;
     Servo shooterHinge;
 
     ElapsedTime runtime = new ElapsedTime();
@@ -94,7 +91,7 @@ public class MecanumAutoPedroPathing extends LinearOpMode {
         follower.setStartingPose(startPose);   //set your starting pose
 
         doAutonomous = true;
-        shooter = new Shooter(hardwareMap, "shooter", true);
+        shooter = new DecodeShooter(hardwareMap, "shooter", true);
 
         collector = hardwareMap.get(DcMotorEx.class, "collector");
         collector.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

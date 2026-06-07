@@ -1,11 +1,13 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Archive;
 
 import com.pedropathing.follower.Follower;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Blackboard;
+import org.firstinspires.ftc.teamcode.Chassis;
+import org.firstinspires.ftc.teamcode.Limelight;
 
 public class IterativeAutoStepChain {
     public IterativeAutoStep[] iterativeAutoSteps;
@@ -35,7 +37,7 @@ public class IterativeAutoStepChain {
         iterativeAutoSteps = iterativeAutoStepsValue;
     }
 
-    public void update(Follower follower, DcMotorEx collector, Shooter shooter, Limelight limelight, Telemetry telemetry, Chassis chassis) {
+    public void update(Follower follower, DcMotorEx collector, DecodeShooter shooter, Limelight limelight, Telemetry telemetry, Chassis chassis) {
         if (done) {
             telemetry.addLine("Done");
             return;
@@ -135,7 +137,7 @@ public class IterativeAutoStepChain {
         IterativeAutoStep activeIterativeAutoStep = iterativeAutoSteps[activeStepIndex];
     }
 
-    public void nextStep(Follower follower, DcMotorEx collector, Shooter shooter) {
+    public void nextStep(Follower follower, DcMotorEx collector, DecodeShooter shooter) {
         currentShootCount = 0;
         currentWaitTime.reset();
         currentShotTime.reset();

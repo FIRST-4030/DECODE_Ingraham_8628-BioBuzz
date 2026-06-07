@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.Archive;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -6,8 +6,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.Limelight;
 
-public class Shooter {
+public class DecodeShooter {
     //    private DcMotorEx shooter;
     DcMotorEx shooter;
     Servo shooterHinge;
@@ -27,7 +28,7 @@ public class Shooter {
     public double targetVelocity = 0;  // rotations per second (max is ~40)
     double range;
 
-    public Shooter(HardwareMap hardwareMap, String name, Boolean dir) {
+    public DecodeShooter(HardwareMap hardwareMap, String name, Boolean dir) {
         shooter = (DcMotorEx) hardwareMap.get(DcMotor.class, name);
         shooter.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         shooter.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);  // WITH OUT!

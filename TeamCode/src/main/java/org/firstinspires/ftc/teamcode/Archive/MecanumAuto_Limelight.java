@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.OpModes;
+package org.firstinspires.ftc.teamcode.Archive;
 
 import com.bylazar.configurables.annotations.Configurable;
 import com.bylazar.field.FieldManager;
@@ -24,13 +24,8 @@ import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 import org.firstinspires.ftc.teamcode.Datalogger;
-import org.firstinspires.ftc.teamcode.IterativeAutoStep;
-import org.firstinspires.ftc.teamcode.IterativeAutoStepChain;
 import org.firstinspires.ftc.teamcode.Limelight;
-import org.firstinspires.ftc.teamcode.Shooter;
-import org.firstinspires.ftc.teamcode.pedroPathing.Constants;
-import org.firstinspires.ftc.teamcode.pedroPathing.ConstantsCompetition;
-import org.firstinspires.ftc.teamcode.pedroPathing.ConstantsDemo;
+import org.firstinspires.ftc.teamcode.Pedro.Constants;
 
 @Disabled
 @Configurable
@@ -85,7 +80,7 @@ public class MecanumAuto_Limelight extends LinearOpMode {
     Chassis chassis;
     Constants constants;
     DcMotorEx collector;
-    Shooter shooter;
+    DecodeShooter shooter;
     Servo shooterHinge;
     Servo liftServo;
     IMU imu;
@@ -119,7 +114,7 @@ public class MecanumAuto_Limelight extends LinearOpMode {
 
         follower = constants.createFollower(hardwareMap);
 
-        shooter = new Shooter(hardwareMap, "shooter", true);
+        shooter = new DecodeShooter(hardwareMap, "shooter", true);
         shooter.setVeloParameters(polyRangeCrossover, polyVeloBaseFar, polyVeloBaseNear, polyVeloBaseRangeFactor);
 
         collector = hardwareMap.get(DcMotorEx.class, "collector");

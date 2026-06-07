@@ -40,7 +40,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.AprilTag;
 import org.firstinspires.ftc.teamcode.Blackboard;
-import org.firstinspires.ftc.teamcode.Shooter;
 import org.firstinspires.ftc.teamcode.Chassis;
 
 @Disabled
@@ -58,7 +57,7 @@ public class MecanumTeleop_With_Chassis extends OpMode {
 
     Chassis chassis;
     DcMotorEx collector;
-    Shooter shooter;
+    DecodeShooter shooter;
     Servo shooterHinge;
     AprilTag aprilTags;
     Servo liftServo;
@@ -77,7 +76,7 @@ public class MecanumTeleop_With_Chassis extends OpMode {
 
         chassis = new Chassis(hardwareMap);
 
-        shooter=new Shooter(hardwareMap,"shooter",true);
+        shooter=new DecodeShooter(hardwareMap,"shooter",true);
 
         collector = hardwareMap.get(DcMotorEx.class, "collector");
 

@@ -16,7 +16,6 @@ import org.firstinspires.ftc.teamcode.AprilTag;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.Datalogger;
-import org.firstinspires.ftc.teamcode.Shooter;
 
 @Disabled
 @Autonomous(name="Mecanum Auto with Chassis (REFACTORING)", group="Linear OpMode")
@@ -24,7 +23,7 @@ public class MecanumAuto_With_Chassis extends LinearOpMode {
 
     Chassis chassis;
     DcMotorEx collector;
-    Shooter shooter;
+    DecodeShooter shooter;
     Servo shooterHinge;
 
     ElapsedTime runtime = new ElapsedTime();
@@ -49,7 +48,7 @@ public class MecanumAuto_With_Chassis extends LinearOpMode {
     public void runOpMode() {
         chassis = new Chassis(hardwareMap);
 
-        shooter = new Shooter(hardwareMap, "shooter", true);
+        shooter = new DecodeShooter(hardwareMap, "shooter", true);
 
         collector = hardwareMap.get(DcMotorEx.class, "collector");
         collector.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
