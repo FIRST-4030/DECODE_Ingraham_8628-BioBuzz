@@ -2,11 +2,11 @@ package org.firstinspires.ftc.teamcode.StepRunner;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-public class WaitStep implements Step {
+public class WaitBehavior extends Behavior {
     private final ElapsedTime elapsedTime = new ElapsedTime();
     private final double waitTimeMS;
 
-    public WaitStep(double waitTimeMS) {
+    public WaitBehavior(double waitTimeMS) {
         this.waitTimeMS = waitTimeMS;
     }
 

@@ -29,10 +29,7 @@ public class StepSequenceRunner {
         activeStep.update();
 
         if (activeStep.isFinished()) {
-            activeStep.exit();
-
-            activeStepIndex++;
-            activeStepInitialized = false;
+            continueSequence();
         }
     }
 
@@ -40,12 +37,11 @@ public class StepSequenceRunner {
         return (activeStepIndex >= steps.length);
     }
 
-    public void forceExit() {
-        if (activeStepIndex >= steps.length) {
-            return;
-        }
-
+    public void continueSequence() {
         Step activeStep = steps[activeStepIndex];
         activeStep.exit();
+
+        activeStepIndex++;
+        activeStepInitialized = false;
     }
 }
