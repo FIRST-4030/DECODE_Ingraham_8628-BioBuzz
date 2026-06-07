@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Archive;
+package org.firstinspires.ftc.teamcode.Pedro;
 
 import com.pedropathing.control.FilteredPIDFCoefficients;
 import com.pedropathing.control.PIDFCoefficients;
@@ -13,7 +13,6 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Pedro.Constants;
 
 public class ConstantsDemo extends Constants {
     protected FollowerConstants followerConstants = new FollowerConstants()
@@ -38,7 +37,7 @@ public class ConstantsDemo extends Constants {
             .rightRearMotorDirection(DcMotorSimple.Direction.FORWARD)
             .xVelocity(54.433983349737500)
             .yVelocity(46.051271613814400);
-;
+
     protected PinpointConstants localizerConstants = new PinpointConstants()
             .forwardPodY(-5.5)
             .strafePodX(5.0)
