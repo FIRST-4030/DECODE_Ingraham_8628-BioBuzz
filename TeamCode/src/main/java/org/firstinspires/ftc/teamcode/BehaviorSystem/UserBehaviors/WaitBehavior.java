@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.StepRunner;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 public class WaitBehavior extends Behavior {
     private final ElapsedTime elapsedTime = new ElapsedTime();

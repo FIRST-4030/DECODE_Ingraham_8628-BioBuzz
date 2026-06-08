@@ -3,42 +3,30 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.teamcode.StepRunner.Behavior;
-import org.firstinspires.ftc.teamcode.StepRunner.FollowPathBehavior;
-import org.firstinspires.ftc.teamcode.StepRunner.Step;
-import org.firstinspires.ftc.teamcode.StepRunner.StepSequenceRunner;
-import org.firstinspires.ftc.teamcode.StepRunner.WaitBehavior;
-import org.firstinspires.ftc.teamcode.StepRunner.WaitForConditionBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStep;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.FollowPathBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStepSequence;
 
-@Autonomous(name="Step Runner Demo Auto", group="Linear OpMode")
+@Autonomous(name="Step Sequence Runner Demo", group="Linear OpMode")
 public class StepSequenceRunnerDemo extends LinearOpMode {
-    Step moveToShootAndWait = new Step(
-            Step.StepType.FINISHED_ON_ALL,
-            new FollowPathBehavior(null, null),
-            new Behavior[] {
-                    new WaitBehavior(5000)
-            }
+    BehaviorStep moveToOneSpot = new BehaviorStep(
+            new FollowPathBehavior(null, null)
     );
 
-    public boolean condition() {
-        return true;
-    }
-
-    Step waitForCondition = new Step(
-            Step.StepType.FINISHED_ON_PRIMARY,
-            new WaitForConditionBehavior(this::condition)
+    BehaviorStep moveToAnotherSpot = new BehaviorStep(
+            new FollowPathBehavior(null, null)
     );
 
-    StepSequenceRunner demoStepChain = new StepSequenceRunner(
-            new Step[] {
-                    moveToShootAndWait,
-                    waitForCondition,
-                    moveToShootAndWait,
+
+    BehaviorStepSequence farAuto = new BehaviorStepSequence(
+            new BehaviorStep[]{
+                    moveToOneSpot,
+                    moveToAnotherSpot
             }
     );
 
     @Override
-    public void runOpMode() throws InterruptedException {
+    public void runOpMode() {
         // ------ INIT ------
         do {
 
@@ -46,8 +34,11 @@ public class StepSequenceRunnerDemo extends LinearOpMode {
 
         // ------ PLAY ------
         do {
-            demoStepChain.update();
 
         } while (opModeIsActive());
+    }
+
+    public void drive() {
+
     }
 }

@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.StepRunner;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
+
 import java.util.function.Supplier;
 
 public class WaitForConditionBehavior extends Behavior {

@@ -1,7 +1,9 @@
-package org.firstinspires.ftc.teamcode.StepRunner;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
+
+import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 public class FollowPathBehavior extends Behavior {
     private final Follower follower;

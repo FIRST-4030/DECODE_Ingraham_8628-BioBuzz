@@ -1,19 +1,19 @@
-package org.firstinspires.ftc.teamcode.StepRunner;
+package org.firstinspires.ftc.teamcode.BehaviorSystem;
 
-public class Step {
+public class BehaviorStep {
     public enum StepType {FINISHED_ON_PRIMARY, FINISHED_ON_ALL, FINISHED_ON_ANY}
 
     private final StepType stepType;
     private final Behavior primaryBehavior;
     private final Behavior[] secondaryBehaviors;
 
-    public Step(StepType stepType, Behavior primaryBehavior) {
-        this.stepType = stepType;
+    public BehaviorStep(Behavior primaryBehavior) {
+        this.stepType = StepType.FINISHED_ON_PRIMARY;
         this.primaryBehavior = primaryBehavior;
         this.secondaryBehaviors = new Behavior[0];
     }
 
-    public Step(StepType stepType, Behavior primaryBehavior, Behavior[] secondaryBehaviors) {
+    public BehaviorStep(StepType stepType, Behavior primaryBehavior, Behavior[] secondaryBehaviors) {
         this.stepType = stepType;
         this.primaryBehavior = primaryBehavior;
         this.secondaryBehaviors = secondaryBehaviors;
