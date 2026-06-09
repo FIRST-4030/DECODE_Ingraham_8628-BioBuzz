@@ -7,20 +7,19 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStep;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStepSequence;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.FollowPathBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStepSequence;
-import org.firstinspires.ftc.teamcode.Pedro.Constants;
-import org.firstinspires.ftc.teamcode.Pedro.ConstantsCompetition;
+import org.firstinspires.ftc.teamcode.ControlHub;
 import org.firstinspires.ftc.teamcode.Pedro.UserPoses;
 
 @Autonomous(name="Step Sequence Runner Demo", group="Linear OpMode")
 public class StepSequenceRunnerDemo extends LinearOpMode {
     // --- PEDRO ---
 
-    Constants constants = new ConstantsCompetition();
-    Follower follower = constants.createFollower(hardwareMap);
+    ControlHub controlHub = new ControlHub();
+    Follower follower = controlHub.createFollower(hardwareMap);
 
     PathChain examplePathChain1;
     PathChain examplePathChain2;

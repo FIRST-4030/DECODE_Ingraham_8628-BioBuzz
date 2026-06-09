@@ -1,177 +1,82 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.ftccommon.SoundPlayer;
+import android.os.Environment;
+
+import com.pedropathing.follower.Follower;
+import com.pedropathing.ftc.FollowerBuilder;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Pedro.PedroConstants;
+import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsCompetition;
+import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsDemo;
 
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 
-/**
- * This class, which instantiated in <i>MecanumDrive</i>, ensures
- * that only known Control Hubs are used. Using the MAC address, <br>
- * this class controls which set of calibration constants will be used.
- * <p>
- * After creating the <i>drive</i> object you must check to see that
- * the MAC Address is recognized. For example,
- * <pre>
- *     MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose, detailsLog, logDetails);
- *
- *     if (!drive.controlHub.isMacAddressValid()) {
- *        drive.controlHub.reportBadMacAddress(telemetry,hardwareMap);
- *        telemetry.update();
- *     }
- * </pre>
- * If an address is not found than the Driver Station will issue an alert sound
- * and display a message showing the MAC address that was not found
- */
 public class ControlHub {
-     /*
-     * Note: Only the MAC Address is used to control operations within the
-     *       source code. The other fields are merely used as descriptors
-     */
-    static String[][] addresses = {
-            //   MAC Address          Network               Comment
-            {"00:1A:2C:ED:B1:00", "8628-RC",          "8628 Competition Bot"},
-            {"00:1A:2C:2F:26:50", "FTC_Pinpoint",     "Minimal Demo Bot"},
-//            {"C8:FE:0F:2C:56:14", "7462-RC",          "7462 Competition Bot"},
-//            {"7C:A7:B0:0F:CB:78", "7462-RC-2",        "7462 Demo Base"},
-//            {"7C:A7:B0:09:82:54", "FTC-7462-TankGuy", "Duck Bot"}
-    };
 
-    private String macAddress;
-    private boolean isKnown;
+    private final String fileName;
 
-    /**
-     * Constructor for the ControlHub class
-     */
     public ControlHub() {
-        StringBuilder macAddressStr = null;
+        String logFolder = Environment.getExternalStorageDirectory().getPath(); // /storage/emulated/0 also maps to /sdcard
+        fileName = logFolder + "/FIRST/Datalogs/ControlHub.txt";
+    }
 
-        try {
-            // Get the network interfaces on the system
-            Enumeration<NetworkInterface> networks = NetworkInterface.getNetworkInterfaces();
+    public boolean createControlHubFile() throws IOException {
+        File file = new File(fileName);
 
-            while (networks.hasMoreElements()) {
-                NetworkInterface network = networks.nextElement();
+        file.createNewFile();
+        return file.isFile();
+    }
 
-                // Get the hardware address (MAC address)
-                byte[] macAddressBytes = network.getHardwareAddress();
+    public boolean deleteControlHubFile() {
+        File file = new File(fileName);
 
-                if (macAddressBytes != null) {
-                    // Convert the byte array to a readable MAC address format
-                    macAddressStr = new StringBuilder();
-                    for (int i = 0; i < macAddressBytes.length; i++) {
-                        macAddressStr.append(String.format("%02X", macAddressBytes[i]));
-                        if (i < macAddressBytes.length - 1) {
-                            macAddressStr.append(":");
-                        }
-                    }
-                }
-            }
-        } catch (
-                SocketException e) {
-            e.printStackTrace();
-        }
+        return file.delete();
+    }
 
-        if (macAddressStr==null) {
-            this.macAddress = null;
-        } else {
-            this.macAddress = macAddressStr.toString();
-            isKnown = false;
-            for (String[] address : addresses) {
-                if (address[0].equals(this.macAddress)) {
-                    isKnown = true;
-                    break;
-                }
-            }
+    public String getControlHubFileName() {
+        return fileName;
+    }
+
+    public void initializeControlHub(String type) throws IOException {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
+            writer.write(type);
         }
     }
 
-    /**
-     *
-     * @return a boolean that defines if the found MAC address is part of the known addresses
-     */
-    public boolean isMacAddressValid() {
-        return isKnown;
-    }
-
-    /**
-     *
-     * @param offset Integer offset into the <i>addresses</i> array for the given robot
-     * @return Specific <b>MAC Address</b> string from the <i>addresses</i> array
-     */
-    public static String getBotAddress(int offset)
-    {
-        return addresses[offset][0];
-    }
-
-    /**
-     *
-     * @return <b>MAC Address</b> string from the <i>addresses</i> array
-     */
-    public String getMacAddress() {
-        return this.macAddress;
-    }
-
-    /**
-     *
-     * @return <b>Network</b> string from the <i>addresses</i> array as it should appear on the Driver Station
-     */
-    public String getNetworkName() {
-
-        String networkName = "";
-
-        for (String[] address : addresses) {
-            if (address[0].equals(this.macAddress)) {
-                networkName = address[1];
-            }
+    public String getControlHub() throws FileNotFoundException {
+        String line = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            line = reader.readLine();
+        } catch (IOException e) {
+            // Catches potential FileNotFoundException (which is an IOException)
+            // and other I/O errors
+            System.err.println("An error occurred while reading the file: " + e.getMessage());
         }
-        return networkName;
+        return line;
     }
 
-    /**
-     *
-     * @return <b>Comment</b> string from the <i>addresses</i> array
-     */
-    public String getComment() {
-
-        String comment = "";
-
-        for (String[] address : addresses) {
-            if (address[0].equals(this.macAddress)) {
-                comment = address[2];
-            }
+    public PedroConstants getRobotSpecificPedroConstants() {
+        Boolean robotIsDemo = false; // TODO: Properly check which robot it is, based on storing a file on the robot's sd card
+        if (robotIsDemo) {
+            return new PedroConstantsDemo();
         }
-        return comment;
+        return new PedroConstantsCompetition();
     }
 
-    /**
-     *
-     * @param telemetry Telemetry object used to report a message to the Driver Station
-     * @param hardwareMap Current HardwareMap of the robot
-     */
-    public void reportBadMacAddress( Telemetry telemetry, HardwareMap hardwareMap) {
-        /*
-         *  Note: "red_alert.wav" can be found in the "TeamCode/res/raw" folder
-         */
-        int soundID;
-        String packageName = hardwareMap.appContext.getPackageName();
-        soundID = hardwareMap.appContext.getResources().getIdentifier("red_alert", "raw", packageName);
-        if (soundID!=0) {
-            SoundPlayer.getInstance().startPlaying(hardwareMap.appContext, soundID);
-        }
-        telemetry.addLine();
-        telemetry.addLine("Control Hub Mac Address is not recognized: ");
-        telemetry.addLine("           "+this.getMacAddress());
-        telemetry.addLine();
-        telemetry.addLine("Update 'ControlHub' to include this new address.");
-        telemetry.update();
-    }
+    public Follower createFollower(HardwareMap hardwareMap) {
+        PedroConstants pedroConstants = getRobotSpecificPedroConstants();
 
-    public void setMacAddress(String address) {
-        this.macAddress = address;
+        return new FollowerBuilder(getRobotSpecificPedroConstants().getFollowerConstants(), hardwareMap)
+                .pathConstraints(pedroConstants.getPathConstraints())
+                .mecanumDrivetrain(pedroConstants.getDriveConstraints())
+                .pinpointLocalizer(pedroConstants.getLocalizerConstants())
+                .build();
     }
 }

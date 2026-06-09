@@ -84,20 +84,11 @@ public class Tuning extends SelectableOpMode {
 
     @Override
     public void onSelect() {
-        Constants constants;
-        if (controlHub.getMacAddress().equals(Constants.PRIMARY_BOT)) {
-            constants = new ConstantsCompetition();
-        } else if (controlHub.getMacAddress().equals(Constants.SECONDARY_BOT)) {
-             constants = new ConstantsDemo();
-        } else {
-            throw new RuntimeException("ControlHub MAC address did not match primary or secondary");
-        }
-
         if (follower == null) {
-            follower =  constants.createFollower(hardwareMap);
+            follower =  controlHub.createFollower(hardwareMap);
             PanelsConfigurables.INSTANCE.refreshClass(this);
         } else {
-            follower = constants.createFollower(hardwareMap);
+            follower = controlHub.createFollower(hardwareMap);
         }
 
         follower.setStartingPose(new Pose());

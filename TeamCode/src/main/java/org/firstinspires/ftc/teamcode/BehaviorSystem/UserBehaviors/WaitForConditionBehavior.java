@@ -10,10 +10,18 @@ public class WaitForConditionBehavior extends Behavior {
         this.condition = condition;
     }
 
+    @Override
     public void init() {}
+
+    @Override
     public void update() {}
+
+
+    @Override
     public boolean isFinished() {
         return condition.get();
     }
+
+    @Override
     public void exit() {};
 }
