@@ -12,6 +12,7 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.FollowPathBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.RealTimeBehavior;
+import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 import org.firstinspires.ftc.teamcode.Pedro.UserPoses;
@@ -63,6 +64,7 @@ public class TeleOpDemo extends LinearOpMode {
         stateMachine.init(realTimeState);
 
         do {
+            Blackboard.initLoopProcess(telemetry, gamepad1);
 
             telemetry.update();
         } while (opModeInInit());

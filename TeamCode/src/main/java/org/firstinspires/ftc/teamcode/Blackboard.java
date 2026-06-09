@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.hardware.Gamepad;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class Blackboard {
     public enum Alliance {
         RED,
@@ -27,5 +31,20 @@ public class Blackboard {
 
     public static void setAlliance(Alliance alliance) {
         Blackboard.alliance = alliance;
+    }
+
+    public static void initLoopProcess(Telemetry telemetry, Gamepad gamepad1) {
+        telemetry.addLine("--- BLACKBOARD ---");
+        telemetry.addData("Alliance", Blackboard.getAllianceAsString());
+        telemetry.addLine("^^^ RB + A: Blue,  RB + B: Red ^^^");
+        telemetry.addLine();
+
+        if (gamepad1.right_bumper) {
+            if (gamepad1.aWasPressed()) {
+                Blackboard.setAlliance(Blackboard.Alliance.BLUE);
+            } else if (gamepad1.bWasPressed()) {
+                Blackboard.setAlliance(Blackboard.Alliance.RED);
+            }
+        }
     }
 }
