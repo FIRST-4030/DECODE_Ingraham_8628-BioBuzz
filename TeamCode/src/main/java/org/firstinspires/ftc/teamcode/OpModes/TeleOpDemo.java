@@ -64,6 +64,7 @@ public class TeleOpDemo extends LinearOpMode {
 
         do {
 
+            telemetry.update();
         } while (opModeInInit());
 
         do {
@@ -71,6 +72,8 @@ public class TeleOpDemo extends LinearOpMode {
 
             stateMachine.processTelemetry(telemetry);
             pedroStepSequence.processTelemetry(telemetry);
+
+            telemetry.update();
 
         } while (opModeIsActive());
     }

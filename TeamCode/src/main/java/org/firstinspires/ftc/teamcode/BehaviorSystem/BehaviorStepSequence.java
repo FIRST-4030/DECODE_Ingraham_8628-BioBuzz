@@ -67,5 +67,6 @@ public class BehaviorStepSequence {
         telemetry.addData("Active step index", activeStepIndex);
         telemetry.addData("Active step primary behavior", activeBehaviorStep.getPrimaryBehavior());
         telemetry.addData("Active step secondary behaviors", activeBehaviorStep.getSecondaryBehaviors());
+        telemetry.addLine();
     }
 }

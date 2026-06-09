@@ -6,7 +6,11 @@ public class Blackboard {
         BLUE,
         UNKNOWN,
     }
-    public static Alliance alliance = Alliance.UNKNOWN;
+    private static Alliance alliance = Alliance.UNKNOWN;
+
+    public static Alliance getAlliance() {
+        return alliance;
+    };
 
     public static String getAllianceAsString() {
         switch (alliance) {
@@ -16,7 +20,12 @@ public class Blackboard {
                 return "Blue";
             case UNKNOWN:
                 return "Unknown";
+            default:
+                return "Null";
         }
-        return "Undefined";
+    }
+
+    public static void setAlliance(Alliance alliance) {
+        Blackboard.alliance = alliance;
     }
 }
