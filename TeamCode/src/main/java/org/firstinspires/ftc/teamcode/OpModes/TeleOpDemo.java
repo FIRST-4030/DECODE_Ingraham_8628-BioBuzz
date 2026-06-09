@@ -3,22 +3,26 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.paths.PathChain;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStep;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStepSequence;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.FollowPathBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.RealTimeBehavior;
+import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 import org.firstinspires.ftc.teamcode.Pedro.UserPoses;
 
-@Autonomous(name="Step Sequence Runner Demo", group="Linear OpMode")
-public class StepSequenceRunnerDemo extends LinearOpMode {
+@TeleOp(name="Step Sequence Runner Demo", group="Linear OpMode")
+public class TeleOpDemo extends LinearOpMode {
+
     // --- PEDRO ---
 
     ControlHub controlHub = new ControlHub();
+    Chassis chassis = new Chassis(hardwareMap);
     Follower follower = controlHub.createFollower(hardwareMap);
 
     PathChain examplePathChain1;
@@ -26,15 +30,16 @@ public class StepSequenceRunnerDemo extends LinearOpMode {
 
     // --- BEHAVIOR ---
 
+    RealTimeBehavior realTimeBehavior = new RealTimeBehavior(chassis, gamepad1);
+
     BehaviorStep moveToOneSpot = new BehaviorStep(
             new FollowPathBehavior(follower, examplePathChain1)
     );
-
     BehaviorStep moveToAnotherSpot = new BehaviorStep(
             new FollowPathBehavior(follower, examplePathChain2)
     );
 
-    BehaviorStepSequence farAuto = new BehaviorStepSequence(
+    BehaviorStepSequence pedroStepSequence = new BehaviorStepSequence(
             new BehaviorStep[]{
                     moveToOneSpot,
                     moveToAnotherSpot,
@@ -45,9 +50,9 @@ public class StepSequenceRunnerDemo extends LinearOpMode {
 
     // --- STATE MACHINE ---
 
-    State teleState, pedroState;
+    State realTimeState, pedroState;
 
-    StateMachine stateMachine = new StateMachine(telemetry);
+    StateMachine stateMachine = new StateMachine();
 
     // --- OPMODE ---
 
@@ -55,7 +60,7 @@ public class StepSequenceRunnerDemo extends LinearOpMode {
     public void runOpMode() {
         buildPaths();
         makeStates();
-        stateMachine.init(teleState);
+        stateMachine.init(realTimeState);
 
         do {
 
@@ -64,13 +69,10 @@ public class StepSequenceRunnerDemo extends LinearOpMode {
         do {
             stateMachine.update();
 
-            telemetry.update();
+            stateMachine.processTelemetry(telemetry);
+            pedroStepSequence.processTelemetry(telemetry);
 
         } while (opModeIsActive());
-    }
-
-    public void drive() {
-
     }
 
     public void buildPaths() {
@@ -91,44 +93,47 @@ public class StepSequenceRunnerDemo extends LinearOpMode {
 
     // --- STATE MACHINE ---
 
-    public void teleStateUpdate() {
-        drive();
+    public void realTimeStateEnter() {
+        realTimeBehavior.enter();
     }
-    public State teleStateGetNextStateOrNull() {
+    public void realTimeStateUpdate() {
+        realTimeBehavior.update();
+    }
+    public State realTimeStateGetNextState() {
         if (gamepad1.dpadDownWasPressed()) {
             return pedroState;
         }
-        return null;
+        return realTimeState;
     }
 
 
-    public void pedroStateInit() {
-        farAuto.reset();
+    public void pedroStateEnter() {
+        pedroStepSequence.reset();
     }
     public void pedroStateUpdate() {
-        farAuto.update();
+        pedroStepSequence.update();
     }
-    public State pedroStateGetNextStateOrNull() {
-        if (farAuto.isFinished()) {
-            return teleState;
+    public State pedroStateGetNextState() {
+        if (pedroStepSequence.isFinished()) {
+            return realTimeState;
         }
 
-        return null;
+        return pedroState;
     }
 
 
     public void makeStates() {
-        teleState = new State(
-                () -> {},
-                this::teleStateUpdate,
-                this::teleStateGetNextStateOrNull,
+        realTimeState = new State(
+                this::realTimeStateEnter,
+                this::realTimeStateUpdate,
+                this::realTimeStateGetNextState,
                 () -> {}
         );
 
         pedroState = new State(
-                this::pedroStateInit,
+                this::pedroStateEnter,
                 this::pedroStateUpdate,
-                this::pedroStateGetNextStateOrNull,
+                this::pedroStateGetNextState,
                 () -> {}
         );
     }

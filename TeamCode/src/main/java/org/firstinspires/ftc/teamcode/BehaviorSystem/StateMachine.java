@@ -5,10 +5,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class StateMachine {
     private State activeState = null;
 
-    private final Telemetry telemetry;
-
-    public StateMachine(Telemetry telemetry) {
-        this.telemetry = telemetry;
+    public StateMachine() {
     }
 
     public void init(State initialState) {
@@ -23,11 +20,11 @@ public class StateMachine {
 
         activeState.update();
 
-        State nextStateOrNull = activeState.getNextStateOrNull();
+        State nextState = activeState.getNextState();
 
-        if (nextStateOrNull != null) {
+        if (nextState != activeState) {
             activeState.exit();
-            activeState = nextStateOrNull;
+            activeState = nextState;
             activeState.enter();
         }
     }
@@ -36,5 +33,9 @@ public class StateMachine {
         activeState.exit();
         activeState = state;
         activeState.enter();
+    }
+
+    public void processTelemetry(Telemetry telemetry) {
+        telemetry.addData("Active state", activeState);
     }
 }

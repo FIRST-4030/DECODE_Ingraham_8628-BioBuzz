@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
-public class PedroConstantsDemo implements PedroConstants {
+public class PedroConstantsDemoBot implements PedroConstants {
     @Override
     public FollowerConstants getFollowerConstants() {
         return new FollowerConstants()

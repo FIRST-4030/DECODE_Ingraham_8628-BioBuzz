@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.BehaviorSystem;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class BehaviorStepSequence {
     private final BehaviorStep[] behaviorSteps;
     private int activeStepIndex = 0;
@@ -15,7 +17,7 @@ public class BehaviorStepSequence {
     }
 
     public void update() {
-        if (activeStepIndex >= behaviorSteps.length) {
+        if (isFinished()) {
             return;
         }
 
@@ -43,5 +45,27 @@ public class BehaviorStepSequence {
 
         activeStepIndex++;
         activeStepInitialized = false;
+    }
+
+    public void stop() {
+        BehaviorStep activeBehaviorStep = behaviorSteps[activeStepIndex];
+        activeBehaviorStep.exit();
+
+        activeStepIndex = behaviorSteps.length;
+        activeStepInitialized = false;
+    }
+
+    public void processTelemetry(Telemetry telemetry) {
+        BehaviorStep activeBehaviorStep = behaviorSteps[activeStepIndex];
+
+        telemetry.addData("Behavior step sequence is finished", isFinished());
+        if (isFinished()) { return; }
+
+        telemetry.addData("Active step initialized", activeStepInitialized);
+        if (!activeStepInitialized) { return; }
+
+        telemetry.addData("Active step index", activeStepIndex);
+        telemetry.addData("Active step primary behavior", activeBehaviorStep.getPrimaryBehavior());
+        telemetry.addData("Active step secondary behaviors", activeBehaviorStep.getSecondaryBehaviors());
     }
 }

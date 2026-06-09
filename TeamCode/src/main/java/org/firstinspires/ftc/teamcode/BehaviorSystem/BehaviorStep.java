@@ -20,9 +20,9 @@ public class BehaviorStep {
     }
 
     public void init() {
-        this.primaryBehavior.init();
+        this.primaryBehavior.enter();
         for (Behavior secondaryBehavior: this.secondaryBehaviors) {
-            secondaryBehavior.init();
+            secondaryBehavior.enter();
         }
     }
 
@@ -83,5 +83,13 @@ public class BehaviorStep {
         for (Behavior secondaryBehavior: this.secondaryBehaviors) {
             secondaryBehavior.exit();
         }
+    }
+
+    public Behavior getPrimaryBehavior() {
+        return primaryBehavior;
+    }
+
+    public Behavior[] getSecondaryBehaviors() {
+        return secondaryBehaviors;
     }
 }

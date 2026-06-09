@@ -3,7 +3,7 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 import java.util.function.Supplier;
 
-public class WaitForConditionBehavior extends Behavior {
+public class WaitForConditionBehavior implements Behavior {
     private final Supplier<Boolean> condition;
 
     public WaitForConditionBehavior(Supplier<Boolean> condition) {
@@ -11,7 +11,7 @@ public class WaitForConditionBehavior extends Behavior {
     }
 
     @Override
-    public void init() {}
+    public void enter() {}
 
     @Override
     public void update() {}

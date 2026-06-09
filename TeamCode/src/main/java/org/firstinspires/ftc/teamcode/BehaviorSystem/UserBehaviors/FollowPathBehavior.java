@@ -5,7 +5,7 @@ import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
-public class FollowPathBehavior extends Behavior {
+public class FollowPathBehavior implements Behavior {
     private final Follower follower;
     private final PathChain pathChain;
 
@@ -15,7 +15,7 @@ public class FollowPathBehavior extends Behavior {
     }
 
     @Override
-    public void init() {
+    public void enter() {
         follower.followPath(pathChain);
     }
 

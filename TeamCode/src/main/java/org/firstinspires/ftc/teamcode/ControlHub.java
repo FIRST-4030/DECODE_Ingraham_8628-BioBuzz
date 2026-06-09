@@ -7,8 +7,8 @@ import com.pedropathing.ftc.FollowerBuilder;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Pedro.PedroConstants;
-import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsCompetition;
-import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsDemo;
+import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsCompetitionBot;
+import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsDemoBot;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -65,9 +65,9 @@ public class ControlHub {
     public PedroConstants getRobotSpecificPedroConstants() {
         Boolean robotIsDemo = false; // TODO: Properly check which robot it is, based on storing a file on the robot's sd card
         if (robotIsDemo) {
-            return new PedroConstantsDemo();
+            return new PedroConstantsDemoBot();
         }
-        return new PedroConstantsCompetition();
+        return new PedroConstantsCompetitionBot();
     }
 
     public Follower createFollower(HardwareMap hardwareMap) {

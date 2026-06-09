@@ -1,9 +1,9 @@
 package org.firstinspires.ftc.teamcode.BehaviorSystem;
 
-public abstract class Behavior {
+public  interface Behavior {
 
-    public abstract void init();
-    public abstract void update();
-    public abstract boolean isFinished();
-    public abstract void exit();
+    void enter();
+    void update();
+    boolean isFinished();
+    void exit();
 }

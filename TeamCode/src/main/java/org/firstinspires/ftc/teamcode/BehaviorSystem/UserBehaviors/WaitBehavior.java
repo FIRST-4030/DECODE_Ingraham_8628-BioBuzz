@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
-public class WaitBehavior extends Behavior {
+public class WaitBehavior implements Behavior {
     private final ElapsedTime elapsedTime = new ElapsedTime();
     private final double waitTimeMS;
 
@@ -13,7 +13,7 @@ public class WaitBehavior extends Behavior {
     }
 
     @Override
-    public void init() {
+    public void enter() {
         elapsedTime.reset();
     }
 
