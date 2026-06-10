@@ -22,32 +22,23 @@ import org.firstinspires.ftc.teamcode.Pedro.UserPoses;
 
 @TeleOp(name="Step Sequence Runner Demo", group="Linear OpMode")
 public class TeleOpDemo extends LinearOpMode {
-
-    // --- PEDRO ---
-
     ControlHub controlHub;
     Chassis chassis;
     Follower follower;
 
-    PathChain examplePathChain1, examplePathChain2;
-
-    // --- BEHAVIOR ---
 
     RealTimeBehavior realTimeBehavior;
 
+    PathChain examplePathChain1, examplePathChain2;
     BehaviorStep moveToOneSpot, moveToAnotherSpot;
     BehaviorStepSequence pedroStepSequence;
 
     BehaviorStep waitOneSecond, waitThreeSeconds;
     BehaviorStepSequence waitingStepSequence;
 
-    // --- STATE MACHINE ---
 
     State realTimeState, pedroState, waitingState;
-
     StateMachine stateMachine = new StateMachine();
-
-    // --- OPMODE ---
 
     @Override
     public void runOpMode() {
@@ -57,52 +48,14 @@ public class TeleOpDemo extends LinearOpMode {
 
         follower = controlHub.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(0, 0));
+
         buildPaths();
 
-
-
-        moveToOneSpot = new BehaviorStep(
-                new FollowPathBehavior(follower, examplePathChain1)
-        );
-        moveToAnotherSpot = new BehaviorStep(
-                new FollowPathBehavior(follower, examplePathChain2)
-        );
-
-        pedroStepSequence = new BehaviorStepSequence(
-                new BehaviorStep[]{
-                        moveToOneSpot,
-                        moveToAnotherSpot,
-                        moveToOneSpot,
-                        moveToAnotherSpot
-                }
-        );
-
-
-        waitOneSecond = new BehaviorStep(
-                new WaitBehavior(1000)
-        );
-        waitThreeSeconds = new BehaviorStep(
-                BehaviorStep.StepType.FINISHED_ON_PRIMARY,
-                new WaitBehavior(3000),
-                new Behavior[] {
-                        new RealTimeBehavior(chassis, gamepad1),
-                }
-        );
-
-        waitingStepSequence = new BehaviorStepSequence(
-                new BehaviorStep[] {
-                        waitOneSecond,
-                        waitThreeSeconds,
-                        waitThreeSeconds,
-                        waitOneSecond
-                }
-        );
-
+        makeBehaviorSteps();
+        makeBehaviorStepSequences();
 
         makeStates();
-        stateMachine.init(realTimeState);
-
-        // --- LOOPS ---
+        stateMachine.setInitialState(realTimeState);
 
         do {
             Blackboard.initLoopProcess(telemetry, gamepad1);
@@ -119,31 +72,17 @@ public class TeleOpDemo extends LinearOpMode {
         } while (opModeIsActive());
     }
 
-    public void buildPaths() {
-        examplePathChain1 = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        UserPoses.examplePose1,
-                        UserPoses.examplePose2
-                ))
-                .build();
-
-        examplePathChain2 = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        UserPoses.examplePose2,
-                        UserPoses.examplePose1
-                ))
-                .build();
-    }
-
-    // --- STATE MACHINE ---
+    // --- REAL TIME STATE ---
 
     public void realTimeStateEnter() {
         realTimeBehavior.enter();
     }
+
     public void realTimeStateUpdate() {
         realTimeBehavior.update();
         realTimeBehavior.processTelemetry(telemetry, "  ");
     }
+
     public State realTimeStateGetNextState() {
         if (gamepad1.dpadDownWasPressed()) {
             return pedroState;
@@ -152,18 +91,22 @@ public class TeleOpDemo extends LinearOpMode {
         }
         return realTimeState;
     }
+
     public void realTimeStateExit() {
         realTimeBehavior.exit();
     }
 
+    // --- PEDRO STATE ---
 
     public void pedroStateEnter() {
         pedroStepSequence.reset();
     }
+
     public void pedroStateUpdate() {
         pedroStepSequence.update();
         pedroStepSequence.processTelemetry(telemetry);
     }
+
     public State pedroStateGetNextState() {
         if (pedroStepSequence.isFinished()) {
             return realTimeState;
@@ -171,6 +114,8 @@ public class TeleOpDemo extends LinearOpMode {
 
         return pedroState;
     }
+
+    // --- WAITING STATE ---
 
     public void waitingStateEnter() {
         waitingStepSequence.reset();
@@ -211,5 +156,63 @@ public class TeleOpDemo extends LinearOpMode {
                 this::waitingStateGetNextState,
                 () -> {}
         );
+    }
+
+    public void makeBehaviorSteps() {
+        moveToOneSpot = new BehaviorStep(
+                new FollowPathBehavior(follower, examplePathChain1)
+        );
+
+        moveToAnotherSpot = new BehaviorStep(
+                new FollowPathBehavior(follower, examplePathChain2)
+        );
+
+        waitOneSecond = new BehaviorStep(
+                new WaitBehavior(1000)
+        );
+
+        waitThreeSeconds = new BehaviorStep(
+                BehaviorStep.StepType.FINISHED_ON_PRIMARY,
+                new WaitBehavior(3000),
+                new Behavior[] {
+                        new RealTimeBehavior(chassis, gamepad1),
+                }
+        );
+    }
+
+    public void makeBehaviorStepSequences() {
+        waitingStepSequence = new BehaviorStepSequence(
+                new BehaviorStep[] {
+                        waitOneSecond,
+                        waitThreeSeconds,
+                        waitThreeSeconds,
+                        waitOneSecond
+                }
+        );
+
+        pedroStepSequence = new BehaviorStepSequence(
+                new BehaviorStep[]{
+                        moveToOneSpot,
+                        moveToAnotherSpot,
+                        moveToOneSpot,
+                        moveToAnotherSpot
+                }
+        );
+    }
+
+    public void buildPaths() {
+        examplePathChain1 = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        UserPoses.examplePose1,
+                        UserPoses.examplePose2
+                ))
+                .build();
+
+        examplePathChain2 = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        UserPoses.examplePose2,
+                        UserPoses.examplePose1
+                ))
+                .build();
     }
 }

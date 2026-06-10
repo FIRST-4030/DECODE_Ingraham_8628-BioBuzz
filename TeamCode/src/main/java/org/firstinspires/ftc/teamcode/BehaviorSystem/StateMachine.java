@@ -8,7 +8,7 @@ public class StateMachine {
     public StateMachine() {
     }
 
-    public void init(State initialState) {
+    public void setInitialState(State initialState) {
         activeState = initialState;
         activeState.enter();
     }
