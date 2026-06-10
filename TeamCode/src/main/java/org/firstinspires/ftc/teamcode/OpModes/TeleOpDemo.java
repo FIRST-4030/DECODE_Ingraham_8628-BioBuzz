@@ -72,90 +72,92 @@ public class TeleOpDemo extends LinearOpMode {
         } while (opModeIsActive());
     }
 
-    // --- REAL TIME STATE ---
+    public class RealTimeState implements State {
+        @Override
+        public void enter() {
+            realTimeBehavior.enter();
+        }
 
-    public void realTimeStateEnter() {
-        realTimeBehavior.enter();
+        @Override
+        public void update() {
+            realTimeBehavior.update();
+            realTimeBehavior.processTelemetry(telemetry, "  ");
+        }
+
+        @Override
+        public State getNextState() {
+            if (gamepad1.dpadDownWasPressed()) {
+                return pedroState;
+            } else if (gamepad1.dpadUpWasPressed()) {
+                return waitingState;
+            }
+            return realTimeState;
+        }
+
+        @Override
+        public void exit() {
+            realTimeBehavior.exit();
+        }
     }
 
-    public void realTimeStateUpdate() {
-        realTimeBehavior.update();
-        realTimeBehavior.processTelemetry(telemetry, "  ");
-    }
+    public class PedroState implements State {
+        @Override
+        public void enter() {
+            pedroStepSequence.reset();
+        }
 
-    public State realTimeStateGetNextState() {
-        if (gamepad1.dpadDownWasPressed()) {
+        @Override
+        public void update() {
+            pedroStepSequence.update();
+            pedroStepSequence.processTelemetry(telemetry);
+        }
+
+        @Override
+        public State getNextState() {
+            if (pedroStepSequence.isFinished()) {
+                return realTimeState;
+            }
+
             return pedroState;
-        } else if (gamepad1.dpadUpWasPressed()) {
+        }
+
+        @Override
+        public void exit() {
+
+        }
+    }
+
+    public class WaitingState implements State {
+        @Override
+        public void enter() {
+            waitingStepSequence.reset();
+        }
+
+        @Override
+        public void update() {
+            waitingStepSequence.update();
+            waitingStepSequence.processTelemetry(telemetry);
+        }
+
+        @Override
+        public State getNextState() {
+            if (waitingStepSequence.isFinished()) {
+                return realTimeState;
+            }
+
             return waitingState;
         }
-        return realTimeState;
-    }
 
-    public void realTimeStateExit() {
-        realTimeBehavior.exit();
-    }
+        @Override
+        public void exit() {
 
-    // --- PEDRO STATE ---
-
-    public void pedroStateEnter() {
-        pedroStepSequence.reset();
-    }
-
-    public void pedroStateUpdate() {
-        pedroStepSequence.update();
-        pedroStepSequence.processTelemetry(telemetry);
-    }
-
-    public State pedroStateGetNextState() {
-        if (pedroStepSequence.isFinished()) {
-            return realTimeState;
         }
-
-        return pedroState;
-    }
-
-    // --- WAITING STATE ---
-
-    public void waitingStateEnter() {
-        waitingStepSequence.reset();
-    }
-    public void waitingStateUpdate() {
-        waitingStepSequence.update();
-        waitingStepSequence.processTelemetry(telemetry);
-    }
-    public State waitingStateGetNextState() {
-        if (waitingStepSequence.isFinished()) {
-            return realTimeState;
-        }
-
-        return waitingState;
     }
 
     public void makeStates() {
-        realTimeState = new State(
-                "Real time control",
-                this::realTimeStateEnter,
-                this::realTimeStateUpdate,
-                this::realTimeStateGetNextState,
-                this::realTimeStateExit
-        );
-
-        pedroState = new State(
-                "Pedro pathing",
-                this::pedroStateEnter,
-                this::pedroStateUpdate,
-                this::pedroStateGetNextState,
-                () -> {}
-        );
-
-        waitingState = new State(
-                "Waiting and real time control demo",
-                this::waitingStateEnter,
-                this::waitingStateUpdate,
-                this::waitingStateGetNextState,
-                () -> {}
-        );
+        realTimeState = new RealTimeState();
+        pedroState = new PedroState();
+        waitingState = new WaitingState();
     }
 
     public void makeBehaviorSteps() {

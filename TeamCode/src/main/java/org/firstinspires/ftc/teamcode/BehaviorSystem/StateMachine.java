@@ -37,7 +37,7 @@ public class StateMachine {
 
     public void processTelemetry(Telemetry telemetry) {
         telemetry.addLine("--- STATE MACHINE ---");
-        telemetry.addData("Active state", activeState.getStateName());
+        telemetry.addData("Active state", activeState.getClass().getSimpleName());
         telemetry.addLine();
     }
 }
