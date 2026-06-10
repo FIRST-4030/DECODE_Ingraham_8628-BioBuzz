@@ -5,15 +5,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class BehaviorStepSequence {
     private final BehaviorStep[] behaviorSteps;
     private int activeStepIndex = 0;
-    private boolean activeStepInitialized = false;
 
     public BehaviorStepSequence(BehaviorStep[] behaviorSteps) {
         this.behaviorSteps = behaviorSteps;
     }
 
     public void reset() {
+        stop();
         activeStepIndex = 0;
-        activeStepInitialized = false;
     }
 
     public void update() {
@@ -23,9 +22,8 @@ public class BehaviorStepSequence {
 
         BehaviorStep activeBehaviorStep = behaviorSteps[activeStepIndex];
 
-        if (!activeStepInitialized) {
+        if (!activeBehaviorStep.isInitialized()) {
             activeBehaviorStep.init();
-            activeStepInitialized = true;
         }
 
         activeBehaviorStep.update();
@@ -44,29 +42,37 @@ public class BehaviorStepSequence {
         activeBehaviorStep.exit();
 
         activeStepIndex++;
-        activeStepInitialized = false;
     }
 
     public void stop() {
+        if (isFinished()) { return; };
+
         BehaviorStep activeBehaviorStep = behaviorSteps[activeStepIndex];
         activeBehaviorStep.exit();
 
         activeStepIndex = behaviorSteps.length;
-        activeStepInitialized = false;
     }
 
     public void processTelemetry(Telemetry telemetry) {
-        BehaviorStep activeBehaviorStep = behaviorSteps[activeStepIndex];
-
-        telemetry.addData("Behavior step sequence is finished", isFinished());
         if (isFinished()) { return; }
 
-        telemetry.addData("Active step initialized", activeStepInitialized);
-        if (!activeStepInitialized) { return; }
+        BehaviorStep activeBehaviorStep = behaviorSteps[activeStepIndex];
+
+        telemetry.addData("Active step initialized", activeBehaviorStep.isInitialized());
+        if (!activeBehaviorStep.isInitialized()) { return; }
 
         telemetry.addData("Active step index", activeStepIndex);
-        telemetry.addData("Active step primary behavior", activeBehaviorStep.getPrimaryBehavior());
-        telemetry.addData("Active step secondary behaviors", activeBehaviorStep.getSecondaryBehaviors());
+
+        telemetry.addData("Active step primary behavior", activeBehaviorStep.getPrimaryBehavior().getClass().getSimpleName());
+        activeBehaviorStep.getPrimaryBehavior().processTelemetry(telemetry, "  ");
+
+        if (activeBehaviorStep.getSecondaryBehaviors().length > 0) {
+            telemetry.addLine("Active step secondary behaviors:");
+            for (Behavior secondaryBehavior : activeBehaviorStep.getSecondaryBehaviors()) {
+                telemetry.addLine("   -> " + secondaryBehavior.getClass().getSimpleName());
+                secondaryBehavior.processTelemetry(telemetry, "        ");
+            }
+        }
         telemetry.addLine();
     }
 }

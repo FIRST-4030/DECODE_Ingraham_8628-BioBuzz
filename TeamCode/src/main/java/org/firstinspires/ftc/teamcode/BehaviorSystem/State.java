@@ -7,12 +7,14 @@ public class State {
     private final Runnable updateMethod;
     private final Supplier<State> getNextState;
     private final Runnable exitMethod;
+    private final String stateName;
 
-    public State(Runnable enterMethod, Runnable updateMethod, Supplier<State> getNextState, Runnable exitMethod) {
+    public State(String stateName, Runnable enterMethod, Runnable updateMethod, Supplier<State> getNextState, Runnable exitMethod) {
         this.enterMethod = enterMethod;
         this.updateMethod = updateMethod;
         this.getNextState = getNextState;
         this.exitMethod = exitMethod;
+        this.stateName = stateName;
     }
 
     public void enter() {
@@ -29,5 +31,9 @@ public class State {
 
     public void exit() {
         exitMethod.run();
+    }
+
+    public String getStateName() {
+        return stateName;
     }
 }

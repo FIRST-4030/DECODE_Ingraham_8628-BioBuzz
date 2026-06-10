@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 import org.firstinspires.ftc.teamcode.Chassis;
 
@@ -16,7 +17,7 @@ public class RealTimeBehavior implements Behavior {
 
     @Override
     public void enter() {
-
+        chassis.resetZeroPowerBehavior();
     }
 
     @Override
@@ -31,6 +32,11 @@ public class RealTimeBehavior implements Behavior {
 
     @Override
     public void exit() {
+        chassis.stopMotors();
+    }
 
+    @Override
+    public void processTelemetry(Telemetry telemetry, String prefix) {
+        telemetry.addLine(prefix + "(Real time controlled driving on gamepad 1)");
     }
 }

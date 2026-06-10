@@ -7,6 +7,8 @@ public class BehaviorStep {
     private final Behavior primaryBehavior;
     private final Behavior[] secondaryBehaviors;
 
+    private boolean initialized = false;
+
     public BehaviorStep(Behavior primaryBehavior) {
         this.stepType = StepType.FINISHED_ON_PRIMARY;
         this.primaryBehavior = primaryBehavior;
@@ -24,6 +26,7 @@ public class BehaviorStep {
         for (Behavior secondaryBehavior: this.secondaryBehaviors) {
             secondaryBehavior.enter();
         }
+        initialized = true;
     }
 
     public void update() {
@@ -83,6 +86,7 @@ public class BehaviorStep {
         for (Behavior secondaryBehavior: this.secondaryBehaviors) {
             secondaryBehavior.exit();
         }
+        initialized = false;
     }
 
     public Behavior getPrimaryBehavior() {
@@ -91,5 +95,9 @@ public class BehaviorStep {
 
     public Behavior[] getSecondaryBehaviors() {
         return secondaryBehaviors;
+    }
+
+    public boolean isInitialized() {
+        return initialized;
     }
 }

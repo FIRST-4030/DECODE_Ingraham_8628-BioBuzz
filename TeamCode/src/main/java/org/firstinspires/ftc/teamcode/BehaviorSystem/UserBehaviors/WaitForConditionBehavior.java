@@ -1,4 +1,5 @@
 package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 import java.util.function.Supplier;
@@ -24,4 +25,9 @@ public class WaitForConditionBehavior implements Behavior {
 
     @Override
     public void exit() {};
+
+    @Override
+    public void processTelemetry(Telemetry telemetry, String prefix) {
+        telemetry.addLine(prefix + "(Waiting for condition...)");
+    }
 }
