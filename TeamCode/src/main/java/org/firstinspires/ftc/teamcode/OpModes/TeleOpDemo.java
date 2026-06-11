@@ -27,8 +27,6 @@ public class TeleOpDemo extends LinearOpMode {
     Follower follower;
 
 
-    RealTimeBehavior realTimeBehavior;
-
     PathChain examplePathChain1, examplePathChain2;
     BehaviorStep moveToOneSpot, moveToAnotherSpot;
     BehaviorStepSequence pedroStepSequence;
@@ -37,6 +35,8 @@ public class TeleOpDemo extends LinearOpMode {
     BehaviorStepSequence waitingStepSequence;
 
 
+    RealTimeBehavior realTimeBehavior;
+
     State realTimeState, pedroState, waitingState;
     StateMachine stateMachine = new StateMachine();
 
@@ -44,7 +44,6 @@ public class TeleOpDemo extends LinearOpMode {
     public void runOpMode() {
         controlHub = new ControlHub();
         chassis = new Chassis(hardwareMap);
-        realTimeBehavior = new RealTimeBehavior(chassis, gamepad1);
 
         follower = controlHub.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(0, 0));
@@ -54,8 +53,10 @@ public class TeleOpDemo extends LinearOpMode {
         makeBehaviorSteps();
         makeBehaviorStepSequences();
 
+        realTimeBehavior = new RealTimeBehavior(chassis, gamepad1);
+
         makeStates();
-        stateMachine.setInitialState(realTimeState);
+        stateMachine.setState(realTimeState);
 
         do {
             Blackboard.initLoopProcess(telemetry, gamepad1);
@@ -70,6 +71,64 @@ public class TeleOpDemo extends LinearOpMode {
             telemetry.update();
 
         } while (opModeIsActive());
+    }
+
+    public void buildPaths() {
+        examplePathChain1 = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        UserPoses.examplePose1,
+                        UserPoses.examplePose2
+                ))
+                .build();
+
+        examplePathChain2 = follower.pathBuilder()
+                .addPath(new BezierLine(
+                        UserPoses.examplePose2,
+                        UserPoses.examplePose1
+                ))
+                .build();
+    }
+
+    public void makeBehaviorSteps() {
+        moveToOneSpot = new BehaviorStep(
+                new FollowPathBehavior(follower, examplePathChain1)
+        );
+
+        moveToAnotherSpot = new BehaviorStep(
+                new FollowPathBehavior(follower, examplePathChain2)
+        );
+
+        waitOneSecond = new BehaviorStep(
+                new WaitBehavior(1000)
+        );
+
+        waitThreeSeconds = new BehaviorStep(
+                BehaviorStep.StepType.FINISHED_ON_PRIMARY,
+                new WaitBehavior(3000),
+                new Behavior[] {
+                        new RealTimeBehavior(chassis, gamepad1),
+                }
+        );
+    }
+
+    public void makeBehaviorStepSequences() {
+        waitingStepSequence = new BehaviorStepSequence(
+                new BehaviorStep[] {
+                        waitOneSecond,
+                        waitThreeSeconds,
+                        waitThreeSeconds,
+                        waitOneSecond
+                }
+        );
+
+        pedroStepSequence = new BehaviorStepSequence(
+                new BehaviorStep[]{
+                        moveToOneSpot,
+                        moveToAnotherSpot,
+                        moveToOneSpot,
+                        moveToAnotherSpot
+                }
+        );
     }
 
     public class RealTimeState implements State {
@@ -158,63 +217,5 @@ public class TeleOpDemo extends LinearOpMode {
         realTimeState = new RealTimeState();
         pedroState = new PedroState();
         waitingState = new WaitingState();
-    }
-
-    public void makeBehaviorSteps() {
-        moveToOneSpot = new BehaviorStep(
-                new FollowPathBehavior(follower, examplePathChain1)
-        );
-
-        moveToAnotherSpot = new BehaviorStep(
-                new FollowPathBehavior(follower, examplePathChain2)
-        );
-
-        waitOneSecond = new BehaviorStep(
-                new WaitBehavior(1000)
-        );
-
-        waitThreeSeconds = new BehaviorStep(
-                BehaviorStep.StepType.FINISHED_ON_PRIMARY,
-                new WaitBehavior(3000),
-                new Behavior[] {
-                        new RealTimeBehavior(chassis, gamepad1),
-                }
-        );
-    }
-
-    public void makeBehaviorStepSequences() {
-        waitingStepSequence = new BehaviorStepSequence(
-                new BehaviorStep[] {
-                        waitOneSecond,
-                        waitThreeSeconds,
-                        waitThreeSeconds,
-                        waitOneSecond
-                }
-        );
-
-        pedroStepSequence = new BehaviorStepSequence(
-                new BehaviorStep[]{
-                        moveToOneSpot,
-                        moveToAnotherSpot,
-                        moveToOneSpot,
-                        moveToAnotherSpot
-                }
-        );
-    }
-
-    public void buildPaths() {
-        examplePathChain1 = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        UserPoses.examplePose1,
-                        UserPoses.examplePose2
-                ))
-                .build();
-
-        examplePathChain2 = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        UserPoses.examplePose2,
-                        UserPoses.examplePose1
-                ))
-                .build();
     }
 }
