@@ -32,7 +32,6 @@ public class BehaviorStep {
         this.secondaryBehaviors = new Behavior[0];
     }
 
-
     /**
      * Constructor that takes a primary Behavior, array of secondaryBehaviors, and
      * StepCompletedConditionType to specify which Behaviors must complete before the
