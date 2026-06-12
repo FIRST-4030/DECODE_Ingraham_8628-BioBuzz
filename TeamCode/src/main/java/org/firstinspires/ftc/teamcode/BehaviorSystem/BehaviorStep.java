@@ -32,10 +32,12 @@ public class BehaviorStep {
         this.secondaryBehaviors = new Behavior[0];
     }
 
+
     /**
      * Constructor that takes a primary Behavior, array of secondaryBehaviors, and
      * StepCompletedConditionType to specify which Behaviors must complete before the
-     * BehaviorStepSequencePerformer can move on to the next step.
+     * BehaviorStepSequencePerformer can move on to the next step. The primary Behavior and
+     * secondary Behaviors are performed simultaneously while this BehaviorStep is active.
      * @param stepCompletedConditionType The StepType to use.
      * @param primaryBehavior The primary Behavior to perform.
      * @param secondaryBehaviors The secondary Behavior(s) to perform.
