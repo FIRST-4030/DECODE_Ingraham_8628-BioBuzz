@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.BehaviorSystem;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
- * Handles updating and switching of States.
+ * Handles updating and switching of States based on conditions.
  * @author edsonjames
  */
 public class StateMachine {
@@ -13,7 +13,8 @@ public class StateMachine {
     }
 
     /**
-     * Calls update() on the active State. Handles switching to the next active State.
+     * Calls update() on the active State. Switches the active State if the current active
+     * State returns another State from State.getNextState().
      */
     public void update() {
         if (activeState == null) {
