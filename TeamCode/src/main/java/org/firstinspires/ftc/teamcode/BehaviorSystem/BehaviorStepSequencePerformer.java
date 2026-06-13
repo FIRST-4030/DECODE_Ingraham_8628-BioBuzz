@@ -83,11 +83,12 @@ public class BehaviorStepSequencePerformer {
      * @param telemetry The Telemetry instance to print to.
      */
     public void processTelemetry(Telemetry telemetry) {
+        telemetry.addLine("--- BEHAVIOR STEP SEQUENCE PERFORMER ---");
         if (isComplete()) { return; }
 
         BehaviorStep activeBehaviorStep = behaviorSteps[activeStepIndex];
 
-        telemetry.addData("Active step initialized", activeBehaviorStep.isInitialized());
+//        telemetry.addData("Active step initialized", activeBehaviorStep.isInitialized());
         if (!activeBehaviorStep.isInitialized()) { return; }
 
         telemetry.addData("Active step index", activeStepIndex);
@@ -102,6 +103,5 @@ public class BehaviorStepSequencePerformer {
                 secondaryBehavior.processTelemetry(telemetry, "        ");
             }
         }
-        telemetry.addLine();
     }
 }

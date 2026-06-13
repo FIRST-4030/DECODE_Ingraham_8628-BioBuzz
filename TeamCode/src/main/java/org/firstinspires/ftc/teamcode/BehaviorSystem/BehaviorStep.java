@@ -143,10 +143,9 @@ public class BehaviorStep {
     }
 
     /**
-    * Executes when this BehaviorStep is no longer active. Calls exit() on the primary Behavior
-    * and all secondary Behaviors.
-    */
-
+     * Executes when this BehaviorStep is no longer active. Calls exit() on the primary Behavior
+     * and all secondary Behaviors.
+     */
     public void exit() {
         this.primaryBehavior.exit();
         for (Behavior secondaryBehavior: this.secondaryBehaviors) {

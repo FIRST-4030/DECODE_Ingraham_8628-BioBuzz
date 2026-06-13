@@ -96,13 +96,13 @@ public class TeleOpDemo extends LinearOpMode {
         );
     }
 
-    public BehaviorStep createWaitOneSecondBehaviorStep() {
+    public BehaviorStep createWaitTenSecondsBehaviorStep() {
         return new BehaviorStep(
-                new WaitBehavior(1000)
+                new WaitBehavior(10000)
         );
     }
 
-    public BehaviorStep createWaitThreeSecondsBehaviorStep() {
+    public BehaviorStep createWaitThreeSecondsAndRealTimeStep() {
         return new BehaviorStep(
                 BehaviorStep.StepCompletedConditionType.ON_PRIMARY_BEHAVIOR_COMPLETED,
                 new WaitBehavior(3000),
@@ -115,10 +115,9 @@ public class TeleOpDemo extends LinearOpMode {
     public void makeBehaviorStepSequencePerformers() {
         waitingStepSequencePerformer = new BehaviorStepSequencePerformer(
                 new BehaviorStep[] {
-                        createWaitOneSecondBehaviorStep(),
-                        createWaitOneSecondBehaviorStep(),
-                        createWaitThreeSecondsBehaviorStep(),
-                        createWaitOneSecondBehaviorStep()
+                        createWaitTenSecondsBehaviorStep(),
+                        createWaitThreeSecondsAndRealTimeStep(),
+                        createWaitTenSecondsBehaviorStep()
                 }
         );
 

@@ -9,8 +9,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class StateMachine {
     private State activeState = null;
 
-    public StateMachine() {
-    }
+    public StateMachine() {}
 
     /**
      * Calls update() on the active State. Switches the active State if the current active
@@ -31,11 +30,14 @@ public class StateMachine {
     }
 
     /**
-     * Manually sets the active State. Calls exit() on the old State and enter() on the new State.
+     * Manually sets the active State. Calls exit() on the old State (if there is one) and enter()
+     * on the new State.
      * @param state The State to set as the active State
      */
     public void setState(State state) {
-        activeState.exit();
+        if (activeState != null) {
+            activeState.exit();
+        }
         activeState = state;
         activeState.enter();
     }
@@ -47,7 +49,11 @@ public class StateMachine {
      */
     public void processTelemetry(Telemetry telemetry) {
         telemetry.addLine("--- STATE MACHINE ---");
-        telemetry.addData("Active state", activeState.getClass().getSimpleName());
-        telemetry.addLine();
+
+        if (activeState == null) {
+            telemetry.addLine("No active state");
+        } else {
+            telemetry.addData("Active state", activeState.getClass().getSimpleName());
+        }
     }
 }
