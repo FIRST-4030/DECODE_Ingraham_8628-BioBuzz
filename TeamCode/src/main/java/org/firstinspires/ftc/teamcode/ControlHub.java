@@ -7,8 +7,9 @@ import com.pedropathing.ftc.FollowerBuilder;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.Pedro.PedroConstants;
-import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsCompetitionBot;
-import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsDemoBot;
+import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsBioBuzzCompetitionBot;
+import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsDecodeBot;
+import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsBioBuzzDemoBot;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -19,6 +20,12 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 public class ControlHub {
+    public enum BotIdentification {
+        DECODE,
+        BIOBUZZ_COMPETITION,
+        BIOBUZZ_DEMO,
+        UNKNOWN,
+    }
 
     private final String fileName;
 
@@ -44,13 +51,13 @@ public class ControlHub {
         return fileName;
     }
 
-    public void initializeControlHub(String type) throws IOException {
+    public void initializeControlHub(BotIdentification botIdentification) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) {
-            writer.write(type);
+            writer.write(botIdentificationToString(botIdentification));
         }
     }
 
-    public String getControlHub() throws FileNotFoundException {
+    public BotIdentification getBotIdentification() throws FileNotFoundException {
         String line = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             line = reader.readLine();
@@ -59,15 +66,51 @@ public class ControlHub {
             // and other I/O errors
             System.err.println("An error occurred while reading the file: " + e.getMessage());
         }
-        return line;
+
+        return stringToBotIdentification(line);
+    }
+
+    public String botIdentificationToString(BotIdentification botIdentification) {
+        switch (botIdentification) {
+            case DECODE:
+                return "DECODE";
+            case BIOBUZZ_COMPETITION:
+                return "BIOBUZZ_COMPETITION";
+            case BIOBUZZ_DEMO:
+                return "BIOBUZZ_DEMO";
+            default:
+                return "UNKNOWN";
+        }
+    }
+
+    public BotIdentification stringToBotIdentification(String string) {
+        switch (string) {
+            case "DECODE":
+                return BotIdentification.DECODE;
+            case "BIOBUZZ_COMPETITION":
+                return BotIdentification.BIOBUZZ_COMPETITION;
+            case "BIOBUZZ_DEMO":
+                return BotIdentification.BIOBUZZ_DEMO;
+            default:
+                return BotIdentification.UNKNOWN;
+        }
     }
 
     public PedroConstants getRobotSpecificPedroConstants() {
-        Boolean robotIsDemo = false; // TODO: Properly check which robot it is, based on storing a file on the robot's sd card
-        if (robotIsDemo) {
-            return new PedroConstantsDemoBot();
+        try {
+            switch (getBotIdentification()) {
+                case DECODE:
+                    return new PedroConstantsDecodeBot();
+                case BIOBUZZ_COMPETITION:
+                    return new PedroConstantsBioBuzzCompetitionBot();
+                case BIOBUZZ_DEMO:
+                    return new PedroConstantsBioBuzzDemoBot();
+                default:
+                    return new PedroConstantsBioBuzzCompetitionBot(); // Return competition constants
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
         }
-        return new PedroConstantsCompetitionBot();
     }
 
     public Follower createFollower(HardwareMap hardwareMap) {

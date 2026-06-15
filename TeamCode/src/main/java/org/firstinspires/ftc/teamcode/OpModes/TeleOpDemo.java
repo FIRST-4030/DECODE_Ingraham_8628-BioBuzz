@@ -42,7 +42,7 @@ public class TeleOpDemo extends LinearOpMode {
         chassis = new Chassis(hardwareMap);
 
         follower = controlHub.createFollower(hardwareMap);
-        follower.setStartingPose(new Pose(0, 0));
+        follower.setStartingPose(new Pose(0, 0, 0));
 
         buildPaths();
 
@@ -74,6 +74,10 @@ public class TeleOpDemo extends LinearOpMode {
                         UserPoses.examplePose1,
                         UserPoses.examplePose2
                 ))
+                .setLinearHeadingInterpolation(
+                        UserPoses.examplePose1.getHeading(),
+                        UserPoses.examplePose2.getHeading()
+                )
                 .build();
 
         examplePathChain2 = follower.pathBuilder()
@@ -81,6 +85,10 @@ public class TeleOpDemo extends LinearOpMode {
                         UserPoses.examplePose2,
                         UserPoses.examplePose1
                 ))
+                .setLinearHeadingInterpolation(
+                        UserPoses.examplePose2.getHeading(),
+                        UserPoses.examplePose1.getHeading()
+                )
                 .build();
     }
 
@@ -96,9 +104,9 @@ public class TeleOpDemo extends LinearOpMode {
         );
     }
 
-    public BehaviorStep createWaitTenSecondsBehaviorStep() {
+    public BehaviorStep createWaitTwoSecondsBehaviorStep() {
         return new BehaviorStep(
-                new WaitBehavior(10000)
+                new WaitBehavior(2000)
         );
     }
 
@@ -115,9 +123,9 @@ public class TeleOpDemo extends LinearOpMode {
     public void makeBehaviorStepSequencePerformers() {
         waitingStepSequencePerformer = new BehaviorStepSequencePerformer(
                 new BehaviorStep[] {
-                        createWaitTenSecondsBehaviorStep(),
+                        createWaitTwoSecondsBehaviorStep(),
                         createWaitThreeSecondsAndRealTimeStep(),
-                        createWaitTenSecondsBehaviorStep()
+                        createWaitTwoSecondsBehaviorStep()
                 }
         );
 

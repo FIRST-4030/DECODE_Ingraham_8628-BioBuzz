@@ -14,7 +14,6 @@ import java.io.IOException;
 public class ControlHubTeleop extends OpMode {
 
     ControlHub controlHub;
-    String[] controlHubs = { "Competition", "Demo"};
     String operation= "";
 
     public void init() {
@@ -30,8 +29,9 @@ public class ControlHubTeleop extends OpMode {
         telemetry.addLine("   B   - Delete ControlHub file");
         telemetry.addLine("   X   - Get ControlHub file name");
         telemetry.addLine("   Y   - Get Current ControlHub");
-        telemetry.addLine(String.format("   LB - Define ControlHub (%s)",controlHubs[0]));
-        telemetry.addLine(String.format("   RB - Define ControlHub (%s)",controlHubs[1]));
+        telemetry.addLine("   LB - Define ControlHub as BIOBUZZ_DEMO");
+        telemetry.addLine("   RB - Define ControlHub as BIOBUZZ_COMPETITION");
+        telemetry.addLine("DPAD-DOWN - Define ControlHub as DECODE (probably don't use)");
 
         if (gamepad1.aWasReleased()) {
             try {
@@ -59,15 +59,15 @@ public class ControlHubTeleop extends OpMode {
 
         } else if (gamepad1.yWasReleased()) {
             try {
-                operation = "ControlHub=" + controlHub.getControlHub();
+                operation = "ControlHub=" + controlHub.getBotIdentification();
             } catch (FileNotFoundException e) {
                 throw new RuntimeException(e);
             }
 
         } else if (gamepad1.leftBumperWasReleased()) {
             try {
-                controlHub.initializeControlHub(controlHubs[0]);
-                operation = "ControlHub=" + controlHub.getControlHub();
+                controlHub.initializeControlHub(ControlHub.BotIdentification.BIOBUZZ_DEMO);
+                operation = "ControlHub=" + controlHub.getBotIdentification();
 
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -75,12 +75,20 @@ public class ControlHubTeleop extends OpMode {
 
         } else if (gamepad1.rightBumperWasReleased()) {
             try {
-                controlHub.initializeControlHub(controlHubs[1]);
-                operation = "ControlHub=" + controlHub.getControlHub();
+                controlHub.initializeControlHub(ControlHub.BotIdentification.BIOBUZZ_COMPETITION);
+                operation = "ControlHub=" + controlHub.getBotIdentification();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        } else if (gamepad1.dpadDownWasPressed()) {
+            try {
+                controlHub.initializeControlHub(ControlHub.BotIdentification.DECODE);
+                operation = "ControlHub=" + controlHub.getBotIdentification();
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
+
         telemetry.addData("Operation:",operation);
         telemetry.update();
     }
