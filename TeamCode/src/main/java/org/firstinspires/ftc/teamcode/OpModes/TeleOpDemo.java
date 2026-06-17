@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
 import com.pedropathing.follower.Follower;
-import com.pedropathing.geometry.BezierLine;
 import com.pedropathing.geometry.Pose;
 import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -17,7 +16,7 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviorStepsFactory;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
-import org.firstinspires.ftc.teamcode.Pedro.UserPathChainMaker;
+import org.firstinspires.ftc.teamcode.Pedro.PedroUtility;
 import org.firstinspires.ftc.teamcode.Pedro.UserPoses;
 
 @TeleOp(name="Step Sequence Runner Demo", group="Linear OpMode")
@@ -26,7 +25,7 @@ public class TeleOpDemo extends LinearOpMode {
     Chassis chassis;
     Follower follower;
 
-    UserPathChainMaker userPathChainMaker;
+    PedroUtility pedroUtility;
     PathChain examplePathChain1, examplePathChain2;
 
     BehaviorStepSequencePerformer pedroStepSequencePerformer;
@@ -45,7 +44,7 @@ public class TeleOpDemo extends LinearOpMode {
         follower = controlHub.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(0, 0, 0));
 
-        userPathChainMaker = new UserPathChainMaker(follower);
+        pedroUtility = new PedroUtility(follower);
         buildPaths();
 
         makeBehaviorStepSequencePerformers();
@@ -71,12 +70,12 @@ public class TeleOpDemo extends LinearOpMode {
     }
 
     public void buildPaths() {
-        examplePathChain1 = userPathChainMaker.makeCommonTwoPosePathChain(
+        examplePathChain1 = pedroUtility.makeCommonTwoPosePathChain(
                 UserPoses.examplePose1,
                 UserPoses.examplePose2
         );
 
-        examplePathChain2 = userPathChainMaker.makeCommonTwoPosePathChain(
+        examplePathChain2 = pedroUtility.makeCommonTwoPosePathChain(
                 UserPoses.examplePose2,
                 UserPoses.examplePose1
         );
