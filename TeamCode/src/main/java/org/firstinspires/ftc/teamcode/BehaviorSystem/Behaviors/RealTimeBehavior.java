@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.Behaviors;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 

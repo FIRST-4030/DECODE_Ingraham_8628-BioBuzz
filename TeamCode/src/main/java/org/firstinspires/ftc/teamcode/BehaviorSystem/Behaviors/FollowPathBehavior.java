@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.Behaviors;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;

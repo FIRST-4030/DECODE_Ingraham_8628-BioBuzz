@@ -1,9 +1,8 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.Behaviors;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 import java.util.function.BooleanSupplier;
-import java.util.function.Supplier;
 
 /**
  * Behavior that completes when a given condition (a BooleanSupplier) returns true. Could be used

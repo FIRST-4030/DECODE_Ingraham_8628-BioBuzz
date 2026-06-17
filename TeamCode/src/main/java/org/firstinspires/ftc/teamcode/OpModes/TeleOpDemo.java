@@ -7,17 +7,17 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStep;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStepSequencePerformer;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.CommonBehaviorStepsFactory;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.FollowPathBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.RealTimeBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.Behaviors.RealTimeBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviorStepsFactory;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
+import org.firstinspires.ftc.teamcode.Pedro.UserPathChainMaker;
 import org.firstinspires.ftc.teamcode.Pedro.UserPoses;
 
 @TeleOp(name="Step Sequence Runner Demo", group="Linear OpMode")
@@ -26,6 +26,7 @@ public class TeleOpDemo extends LinearOpMode {
     Chassis chassis;
     Follower follower;
 
+    UserPathChainMaker userPathChainMaker;
     PathChain examplePathChain1, examplePathChain2;
 
     BehaviorStepSequencePerformer pedroStepSequencePerformer;
@@ -44,6 +45,7 @@ public class TeleOpDemo extends LinearOpMode {
         follower = controlHub.createFollower(hardwareMap);
         follower.setStartingPose(new Pose(0, 0, 0));
 
+        userPathChainMaker = new UserPathChainMaker(follower);
         buildPaths();
 
         makeBehaviorStepSequencePerformers();
@@ -69,72 +71,32 @@ public class TeleOpDemo extends LinearOpMode {
     }
 
     public void buildPaths() {
-        examplePathChain1 = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        UserPoses.examplePose1,
-                        UserPoses.examplePose2
-                ))
-                .setLinearHeadingInterpolation(
-                        UserPoses.examplePose1.getHeading(),
-                        UserPoses.examplePose2.getHeading()
-                )
-                .build();
-
-        examplePathChain2 = follower.pathBuilder()
-                .addPath(new BezierLine(
-                        UserPoses.examplePose2,
-                        UserPoses.examplePose1
-                ))
-                .setLinearHeadingInterpolation(
-                        UserPoses.examplePose2.getHeading(),
-                        UserPoses.examplePose1.getHeading()
-                )
-                .build();
-    }
-
-    public BehaviorStep createMoveToOneSpotBehaviorStep() {
-        return new BehaviorStep(
-                new FollowPathBehavior(follower, examplePathChain1)
+        examplePathChain1 = userPathChainMaker.makeCommonTwoPosePathChain(
+                UserPoses.examplePose1,
+                UserPoses.examplePose2
         );
-    }
 
-    public BehaviorStep createMoveToAnotherSpotBehaviorStep() {
-        return new BehaviorStep(
-                new FollowPathBehavior(follower, examplePathChain2)
-        );
-    }
-
-    public BehaviorStep createWaitTwoSecondsBehaviorStep() {
-        return new BehaviorStep(
-                new WaitBehavior(2000)
-        );
-    }
-
-    public BehaviorStep createWaitThreeSecondsAndRealTimeStep() {
-        return new BehaviorStep(
-                BehaviorStep.StepCompletedConditionType.ON_PRIMARY_BEHAVIOR_COMPLETED,
-                new WaitBehavior(3000),
-                new Behavior[] {
-                        new RealTimeBehavior(chassis, gamepad1),
-                }
+        examplePathChain2 = userPathChainMaker.makeCommonTwoPosePathChain(
+                UserPoses.examplePose2,
+                UserPoses.examplePose1
         );
     }
 
     public void makeBehaviorStepSequencePerformers() {
         waitingStepSequencePerformer = new BehaviorStepSequencePerformer(
                 new BehaviorStep[] {
-                        createWaitTwoSecondsBehaviorStep(),
-                        createWaitThreeSecondsAndRealTimeStep(),
-                        createWaitTwoSecondsBehaviorStep()
+                        CommonBehaviorStepsFactory.makeWaitBehaviorStep(1000),
+                        UserBehaviorStepsFactory.makeTimedRealTimeStep(chassis, gamepad1, 3000),
+                        CommonBehaviorStepsFactory.makeWaitBehaviorStep(1000)
                 }
         );
 
         pedroStepSequencePerformer = new BehaviorStepSequencePerformer(
                 new BehaviorStep[]{
-                        createMoveToOneSpotBehaviorStep(),
-                        createMoveToAnotherSpotBehaviorStep(),
-                        createMoveToOneSpotBehaviorStep(),
-                        createMoveToAnotherSpotBehaviorStep()
+                        CommonBehaviorStepsFactory.makeFollowPathBehaviorStep(follower, examplePathChain1),
+                        CommonBehaviorStepsFactory.makeFollowPathBehaviorStep(follower, examplePathChain2),
+                        CommonBehaviorStepsFactory.makeFollowPathBehaviorStep(follower, examplePathChain1),
+                        CommonBehaviorStepsFactory.makeFollowPathBehaviorStep(follower, examplePathChain2)
                 }
         );
     }
