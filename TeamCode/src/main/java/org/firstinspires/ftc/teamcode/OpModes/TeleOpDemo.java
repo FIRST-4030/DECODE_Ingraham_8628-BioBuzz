@@ -6,13 +6,9 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStep;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorStepSequencePerformer;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.CommonBehaviorStepsFactory;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behaviors.RealTimeBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviorStepsFactory;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.TaskState;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
@@ -28,13 +24,7 @@ public class TeleOpDemo extends LinearOpMode {
     PedroUtility pedroUtility;
     PathChain examplePathChain1, examplePathChain2;
 
-    BehaviorStepSequencePerformer pedroStepSequencePerformer;
-    BehaviorStepSequencePerformer waitingStepSequencePerformer;
-
-    RealTimeBehavior realTimeBehavior;
-
-    State realTimeState, pedroState, waitingState;
-    StateMachine stateMachine = new StateMachine();
+    StateMachine mainStateMachine = new StateMachine();
 
     @Override
     public void runOpMode() {
@@ -47,12 +37,7 @@ public class TeleOpDemo extends LinearOpMode {
         pedroUtility = new PedroUtility(follower);
         buildPaths();
 
-        makeBehaviorStepSequencePerformers();
-
-        realTimeBehavior = new RealTimeBehavior(chassis, gamepad1);
-
-        makeStates();
-        stateMachine.setState(realTimeState);
+        mainStateMachine.enter();
 
         do {
             Blackboard.initLoopProcess(telemetry, gamepad1);
@@ -61,9 +46,7 @@ public class TeleOpDemo extends LinearOpMode {
         } while (opModeInInit());
 
         do {
-            stateMachine.processTelemetry(telemetry);
-            stateMachine.update();
-
+            mainStateMachine.update();
             telemetry.update();
 
         } while (opModeIsActive());
@@ -79,113 +62,5 @@ public class TeleOpDemo extends LinearOpMode {
                 UserPoses.examplePose2,
                 UserPoses.examplePose1
         );
-    }
-
-    public void makeBehaviorStepSequencePerformers() {
-        waitingStepSequencePerformer = new BehaviorStepSequencePerformer(
-                new BehaviorStep[] {
-                        CommonBehaviorStepsFactory.makeWaitBehaviorStep(1000),
-                        UserBehaviorStepsFactory.makeTimedRealTimeStep(chassis, gamepad1, 3000),
-                        CommonBehaviorStepsFactory.makeWaitBehaviorStep(1000)
-                }
-        );
-
-        pedroStepSequencePerformer = new BehaviorStepSequencePerformer(
-                new BehaviorStep[]{
-                        CommonBehaviorStepsFactory.makeFollowPathBehaviorStep(follower, examplePathChain1),
-                        CommonBehaviorStepsFactory.makeFollowPathBehaviorStep(follower, examplePathChain2),
-                        CommonBehaviorStepsFactory.makeFollowPathBehaviorStep(follower, examplePathChain1),
-                        CommonBehaviorStepsFactory.makeFollowPathBehaviorStep(follower, examplePathChain2)
-                }
-        );
-    }
-
-    public class RealTimeState implements State {
-        @Override
-        public void enter() {
-            realTimeBehavior.enter();
-        }
-
-        @Override
-        public void update() {
-            realTimeBehavior.update();
-            realTimeBehavior.processTelemetry(telemetry, "  ");
-        }
-
-        @Override
-        public State getNextState() {
-            if (gamepad1.dpadDownWasPressed()) {
-                return pedroState;
-            } else if (gamepad1.dpadUpWasPressed()) {
-                return waitingState;
-            }
-
-            return this;
-        }
-
-        @Override
-        public void exit() {
-            realTimeBehavior.exit();
-        }
-    }
-
-    public class PedroState implements State {
-        @Override
-        public void enter() {
-            pedroStepSequencePerformer.reset();
-        }
-
-        @Override
-        public void update() {
-            pedroStepSequencePerformer.update();
-            pedroStepSequencePerformer.processTelemetry(telemetry);
-        }
-
-        @Override
-        public State getNextState() {
-            if (pedroStepSequencePerformer.isComplete()) {
-                return realTimeState;
-            }
-
-            return this;
-        }
-
-        @Override
-        public void exit() {
-
-        }
-    }
-
-    public class WaitingState implements State {
-        @Override
-        public void enter() {
-            waitingStepSequencePerformer.reset();
-        }
-
-        @Override
-        public void update() {
-            waitingStepSequencePerformer.update();
-            waitingStepSequencePerformer.processTelemetry(telemetry);
-        }
-
-        @Override
-        public State getNextState() {
-            if (waitingStepSequencePerformer.isComplete()) {
-                return realTimeState;
-            }
-
-            return this;
-        }
-
-        @Override
-        public void exit() {
-
-        }
-    }
-
-    public void makeStates() {
-        realTimeState = new RealTimeState();
-        pedroState = new PedroState();
-        waitingState = new WaitingState();
     }
 }

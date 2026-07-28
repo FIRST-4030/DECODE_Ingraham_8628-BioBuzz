@@ -3,22 +3,23 @@ package org.firstinspires.ftc.teamcode.BehaviorSystem;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
- * Handles updating and switching of States based on conditions.
+ * Behavior that handles updating and switching of States.
  * @author edsonjames
  */
-public class StateMachine {
+public class StateMachine implements Behavior {
     private State activeState = null;
 
-    public StateMachine() {}
+    @Override
+    public void enter() {
+        if (activeState != null) activeState.enter();
+    }
 
     /**
      * Calls update() on the active State. Switches the active State if the current active
      * State returns another State from State.getNextState().
      */
     public void update() {
-        if (activeState == null) {
-            return;
-        }
+        if (isComplete()) { return; }
 
         activeState.update();
 
@@ -26,6 +27,31 @@ public class StateMachine {
 
         if (nextState != activeState) {
             setState(nextState);
+        }
+    }
+
+    @Override
+    public boolean isComplete() {
+        return activeState == null;
+    }
+
+    @Override
+    public void exit() {
+        if (activeState != null) activeState.exit();
+    }
+
+    @Override
+    public void processTelemetry(Telemetry telemetry, String prefix) {
+        telemetry.addLine(prefix + "--- STATE MACHINE ---");
+
+        if (isComplete()) {
+            telemetry.addLine(prefix + "State machine completed");
+            return;
+        }
+
+        telemetry.addData(prefix + "|  Active State", activeState.getClass().getSimpleName());
+        if (activeState != null) {
+            activeState.processTelemetry(telemetry, prefix + "|  ");
         }
     }
 

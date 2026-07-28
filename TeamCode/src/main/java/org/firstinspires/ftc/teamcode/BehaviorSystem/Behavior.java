@@ -4,8 +4,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /**
  * Interface for all Behavior classes. Behaviors are collections of logic organized in a
- * state-machine-like manner with enter(), update(), and exit() methods. Behavior is optimized to be
- * used in BehaviorSteps and States.
+ * state-machine-like manner with enter(), update(), and exit() methods.
  * @author edsonjames
  */
 public  interface Behavior {
