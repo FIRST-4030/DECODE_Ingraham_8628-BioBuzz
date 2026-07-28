@@ -12,10 +12,16 @@ import org.firstinspires.ftc.teamcode.Chassis;
 public class RealTimeBehavior implements Behavior {
     private final Chassis chassis;
     private final Gamepad gamepad1;
+    private final String label;
 
     public RealTimeBehavior(Chassis chassis, Gamepad gamepad1) {
+        this(chassis, gamepad1, "RealTimeBehavior");
+    }
+
+    public RealTimeBehavior(Chassis chassis, Gamepad gamepad1, String label) {
         this.chassis = chassis;
         this.gamepad1 = gamepad1;
+        this.label = label;
     }
 
     /**
@@ -54,5 +60,10 @@ public class RealTimeBehavior implements Behavior {
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
         telemetry.addLine(prefix + "(Real time controlled driving on gamepad 1)");
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 }

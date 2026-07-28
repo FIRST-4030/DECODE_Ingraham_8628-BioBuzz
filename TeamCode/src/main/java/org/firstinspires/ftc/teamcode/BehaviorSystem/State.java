@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.BehaviorSystem;
 
 /**
  * States are just Behaviors that have a getNextState() method. They are intended for use in a StateMachine.
+ * By default, a state will "complete" when getNextState() does not return the state itself.
  * @author edsonjames
  */
 public interface State extends Behavior {

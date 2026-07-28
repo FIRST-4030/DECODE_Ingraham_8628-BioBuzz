@@ -35,4 +35,9 @@ public class TaskState implements State {
     public void processTelemetry(Telemetry telemetry, String prefix) {
         behavior.processTelemetry(telemetry, prefix);
     }
+
+    @Override
+    public String getLabel() {
+        return "TaskState: " + behavior.getLabel();
+    }
 }

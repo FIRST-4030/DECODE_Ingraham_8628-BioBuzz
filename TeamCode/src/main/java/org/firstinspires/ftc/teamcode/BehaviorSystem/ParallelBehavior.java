@@ -13,10 +13,12 @@ public class ParallelBehavior implements Behavior {
 
     private final CompletionCondition completionCondition;
     private final List<Behavior> behaviors;
+    private final String label;
 
-    public ParallelBehavior(CompletionCondition completionCondition, List<Behavior> behaviors) {
+    public ParallelBehavior(CompletionCondition completionCondition, List<Behavior> behaviors, String label) {
         this.completionCondition = completionCondition;
         this.behaviors = behaviors;
+        this.label = label;
     }
 
     @Override
@@ -88,6 +90,27 @@ public class ParallelBehavior implements Behavior {
 
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
+        int currentMS = (int) (System.currentTimeMillis());
 
+        telemetry.addLine(prefix + "(Ends when " + completionCondition + " behavior(s) complete)");
+        for (Behavior behavior : behaviors) {
+            String listPrefix = "--> ";
+            if (currentMS % 500 < -250) {
+                listPrefix = "--->";
+            }
+            if (behavior.isComplete()) {
+                listPrefix = "✔   ";
+            }
+            telemetry.addLine(prefix + listPrefix + behavior.getClass().getSimpleName());
+
+            if (!behavior.isComplete()) {
+                behavior.processTelemetry(telemetry, prefix + "    ");
+            }
+        }
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 }

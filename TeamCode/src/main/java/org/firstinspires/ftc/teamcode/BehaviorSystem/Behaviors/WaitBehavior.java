@@ -11,9 +11,16 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 public class WaitBehavior implements Behavior {
     private final ElapsedTime elapsedTime = new ElapsedTime();
     private final double waitTimeMS;
+    private boolean entered = false;
+    private final String label;
 
     public WaitBehavior(double waitTimeMS) {
+        this(waitTimeMS, "WaitBehavior");
+    }
+
+    public WaitBehavior(double waitTimeMS, String label) {
         this.waitTimeMS = waitTimeMS;
+        this.label = label;
     }
 
     /**
@@ -30,6 +37,7 @@ public class WaitBehavior implements Behavior {
     @Override
     public void enter() {
         elapsedTime.reset();
+        entered = true;
     }
 
     /**
@@ -44,7 +52,7 @@ public class WaitBehavior implements Behavior {
      */
     @Override
     public boolean isComplete() {
-        return (elapsedTime.milliseconds() >= waitTimeMS);
+        return (elapsedTime.milliseconds() >= waitTimeMS && entered);
     }
 
     /**
@@ -55,6 +63,15 @@ public class WaitBehavior implements Behavior {
 
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
-        telemetry.addLine(prefix + "(MS remaining: " + Math.floor(getTimeRemainingMS()) + " MS)");
+        if (entered) {
+            telemetry.addLine(prefix + "(MS remaining: " + Math.floor(getTimeRemainingMS()) + " MS)");
+        } else {
+            telemetry.addLine(prefix + "Has not begun waiting yet");
+        }
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 }

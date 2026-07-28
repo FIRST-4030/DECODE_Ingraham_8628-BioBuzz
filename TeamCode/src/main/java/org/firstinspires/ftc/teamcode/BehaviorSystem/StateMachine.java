@@ -8,6 +8,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 public class StateMachine implements Behavior {
     private State activeState = null;
+    private final String label;
+
+    public StateMachine() {
+        this("StateMachine");
+    }
+
+    public StateMachine(String label) {
+        this.label = label;
+    }
 
     @Override
     public void enter() {
@@ -42,17 +51,22 @@ public class StateMachine implements Behavior {
 
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
-        telemetry.addLine(prefix + "--- STATE MACHINE ---");
+        telemetry.addLine(prefix + "--- FSM: " + getLabel() + " ---");
 
         if (isComplete()) {
             telemetry.addLine(prefix + "State machine completed");
             return;
         }
 
-        telemetry.addData(prefix + "|  Active State", activeState.getClass().getSimpleName());
+        telemetry.addData(prefix + "    Active State", activeState.getClass().getSimpleName());
         if (activeState != null) {
-            activeState.processTelemetry(telemetry, prefix + "|  ");
+            activeState.processTelemetry(telemetry, prefix + "    ");
         }
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 
     /**
@@ -66,20 +80,5 @@ public class StateMachine implements Behavior {
         }
         activeState = state;
         activeState.enter();
-    }
-
-    /**
-     * Adds lines of information about the StateMachine to a Telemetry instance, including the
-     * active State's simple class name.
-     * @param telemetry The Telemetry instance to print to
-     */
-    public void processTelemetry(Telemetry telemetry) {
-        telemetry.addLine("--- STATE MACHINE ---");
-
-        if (activeState == null) {
-            telemetry.addLine("No active state");
-        } else {
-            telemetry.addData("Active state", activeState.getClass().getSimpleName());
-        }
     }
 }

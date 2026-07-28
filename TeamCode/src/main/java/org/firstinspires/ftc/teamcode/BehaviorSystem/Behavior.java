@@ -9,36 +9,34 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 public  interface Behavior {
     /**
-     * Initializes the Behavior. Executes when the BehaviorStep this Behavior is attached to first
-     * becomes active.
+     * Initializes the Behavior.
      */
     void enter();
 
     /**
-     * The update logic of the Behavior. Executes every frame that the BehaviorStep this Behavior is
-     * attached to is active.
+     * The update logic of the Behavior.
      */
     void update();
 
     /**
-     * Returns whether the Behavior is "complete." Used in BehaviorStepSequencePerformer to decide when to
-     * move to the next BehaviorStep. If a Behavior should not have an "end" state, this method
+     * Returns whether the Behavior is "complete." If a Behavior should not have an "end" state, this method
      * should always return 'false'.
      * @return Whether the Behavior is complete.
      */
     boolean isComplete();
 
     /**
-     * The exit logic of the Behavior. Executes when the BehaviorStep this Behavior is attached to
-     * is no longer active.
+     * The exit logic of the Behavior.
      */
     void exit();
 
     /**
-     * Adds lines of information about the StateMachine to a Telemetry instance, including the
-     * active State's simple class name.
+     * Adds lines of information about the behavior to telemetry. Prefix is used for indentation,
+     * where the convention is "    " (four spaces) for each indent.
      * @param telemetry The Telemetry instance to print to
      * @param prefix Characters to add to the beginning of each line printed
      */
     void processTelemetry(Telemetry telemetry, String prefix);
+
+    String getLabel();
 }

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.BehaviorSystem;
 
+import android.os.Build;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.List;
@@ -7,9 +9,11 @@ import java.util.List;
 public class SequentialBehavior implements Behavior {
     private final List<Behavior> behaviors;
     private int activeBehaviorIndex = 0;
+    private final String label;
 
-    public SequentialBehavior(List<Behavior> behaviors) {
+    public SequentialBehavior(List<Behavior> behaviors, String label) {
         this.behaviors = behaviors;
+        this.label = label;
     }
 
     @Override
@@ -43,13 +47,31 @@ public class SequentialBehavior implements Behavior {
 
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
+        int currentMS = (int) (System.currentTimeMillis());
+
         for (Behavior behavior: behaviors) {
-            String listPrefix = "|  ";
+            String listPrefix = "-     ";
             if (getActiveBehavior() == behavior) {
-                listPrefix = "|->";
+                if (currentMS % 500 < -250) {
+                    listPrefix = "--->";
+                } else {
+                    listPrefix = "--> ";
+                }
+            }
+            if (behavior.isComplete()) {
+                listPrefix = "✔   ";
             }
             telemetry.addLine(prefix + listPrefix + behavior.getClass().getSimpleName());
+
+            if (getActiveBehavior() == behavior) {
+                behavior.processTelemetry(telemetry, prefix + "    ");
+            }
         }
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 
     private void nextBehavior() {

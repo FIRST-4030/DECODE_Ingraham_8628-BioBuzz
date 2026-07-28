@@ -11,13 +11,24 @@ import java.util.function.BooleanSupplier;
  */
 public class WaitForConditionBehavior implements Behavior {
     private final BooleanSupplier condition;
+    private final String label;
 
     /**
      * Takes a BooleanSupplier that reflects the condition you want to wait for.
      * @param condition The BooleanSupplier that reflects the condition you want to wait for.
      */
     public WaitForConditionBehavior(BooleanSupplier condition) {
+        this(condition, "WaitForConditionBehavior");
+    }
+
+    /**
+     * Takes a BooleanSupplier and a label.
+     * @param condition The BooleanSupplier that reflects the condition you want to wait for.
+     * @param label The label for this behavior.
+     */
+    public WaitForConditionBehavior(BooleanSupplier condition, String label) {
         this.condition = condition;
+        this.label = label;
     }
 
     /**
@@ -50,5 +61,10 @@ public class WaitForConditionBehavior implements Behavior {
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
         telemetry.addLine(prefix + "(Waiting for condition...)");
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
     }
 }

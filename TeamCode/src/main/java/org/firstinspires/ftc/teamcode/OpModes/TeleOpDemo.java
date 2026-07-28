@@ -6,6 +6,7 @@ import com.pedropathing.paths.PathChain;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.TaskState;
@@ -24,7 +25,43 @@ public class TeleOpDemo extends LinearOpMode {
     PedroUtility pedroUtility;
     PathChain examplePathChain1, examplePathChain2;
 
+    class RealTimeState implements State {
+        @Override
+        public State getNextState() {
+            return null;
+        }
+
+        @Override
+        public void enter() {
+
+        }
+
+        @Override
+        public void update() {
+
+        }
+
+        @Override
+        public void exit() {
+
+        }
+
+        @Override
+        public void processTelemetry(Telemetry telemetry, String prefix) {
+
+        }
+
+        @Override
+        public String getLabel() {
+            return "RealTimeState";
+        }
+    }
+
+
+
     StateMachine mainStateMachine = new StateMachine();
+
+    RealTimeState realTimeState = new RealTimeState();
 
     @Override
     public void runOpMode() {
