@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem;
+package org.firstinspires.ftc.teamcode.Behavior;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 

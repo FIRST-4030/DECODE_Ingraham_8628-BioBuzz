@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem.Behaviors;
+package org.firstinspires.ftc.teamcode.Behavior.User;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
+import org.firstinspires.ftc.teamcode.Behavior.Behavior;
 
 /**
  * Behavior that uses a Pedro Follower to follow a given pathChain. Completes when the follower is no

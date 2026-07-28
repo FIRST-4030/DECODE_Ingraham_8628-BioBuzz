@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem;
+package org.firstinspires.ftc.teamcode.Behavior.StateMachine;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Behavior.Behavior;
 
 /**
  * Behavior that handles updating and switching of States.

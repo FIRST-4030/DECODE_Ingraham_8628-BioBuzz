@@ -3,16 +3,16 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BaseState;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behaviors.GamepadDrivingBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behaviors.WaitBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behaviors.WaitForConditionBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.State;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.TaskState;
+import org.firstinspires.ftc.teamcode.Behavior.StateMachine.BaseState;
+import org.firstinspires.ftc.teamcode.Behavior.Behavior;
+import org.firstinspires.ftc.teamcode.Behavior.BehaviorBuilder;
+import org.firstinspires.ftc.teamcode.Behavior.User.GamepadDrivingBehavior;
+import org.firstinspires.ftc.teamcode.Behavior.User.WaitBehavior;
+import org.firstinspires.ftc.teamcode.Behavior.User.WaitForConditionBehavior;
+import org.firstinspires.ftc.teamcode.Behavior.ParallelBehavior;
+import org.firstinspires.ftc.teamcode.Behavior.StateMachine.State;
+import org.firstinspires.ftc.teamcode.Behavior.StateMachine.StateMachine;
+import org.firstinspires.ftc.teamcode.Behavior.StateMachine.TaskState;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 

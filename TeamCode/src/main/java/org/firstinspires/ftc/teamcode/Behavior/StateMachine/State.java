@@ -1,4 +1,6 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem;
+package org.firstinspires.ftc.teamcode.Behavior.StateMachine;
+
+import org.firstinspires.ftc.teamcode.Behavior.Behavior;
 
 /**
  * States are just Behaviors that have a getNextState() method. They are intended for use in a StateMachine.

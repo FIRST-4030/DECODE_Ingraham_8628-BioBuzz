@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem.Behaviors;
+package org.firstinspires.ftc.teamcode.Behavior.User;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
+import org.firstinspires.ftc.teamcode.Behavior.Behavior;
 import org.firstinspires.ftc.teamcode.Chassis;
 
 /**
