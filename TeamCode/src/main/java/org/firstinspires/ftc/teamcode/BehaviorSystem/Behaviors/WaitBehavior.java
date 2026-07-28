@@ -59,7 +59,9 @@ public class WaitBehavior implements Behavior {
      * Does nothing.
      */
     @Override
-    public void exit() {}
+    public void exit() {
+        entered = false;
+    }
 
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {

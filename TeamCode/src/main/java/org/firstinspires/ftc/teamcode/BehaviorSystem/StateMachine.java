@@ -11,7 +11,7 @@ public class StateMachine implements Behavior {
     private final String label;
 
     public StateMachine() {
-        this("StateMachine");
+        this("State Machine");
     }
 
     public StateMachine(String label) {
@@ -58,7 +58,7 @@ public class StateMachine implements Behavior {
             return;
         }
 
-        telemetry.addData(prefix + "    Active State", activeState.getClass().getSimpleName());
+        telemetry.addData(prefix + "    Active State", activeState.getLabel());
         if (activeState != null) {
             activeState.processTelemetry(telemetry, prefix + "    ");
         }

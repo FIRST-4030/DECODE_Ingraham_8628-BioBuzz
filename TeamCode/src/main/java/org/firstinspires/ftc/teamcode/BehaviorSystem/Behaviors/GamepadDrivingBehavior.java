@@ -9,18 +9,18 @@ import org.firstinspires.ftc.teamcode.Chassis;
 /**
  * Behavior that drives the robot's driving motors using a gamepad. Never completes.
  */
-public class RealTimeBehavior implements Behavior {
+public class GamepadDrivingBehavior implements Behavior {
     private final Chassis chassis;
-    private final Gamepad gamepad1;
+    private final Gamepad gamepad;
     private final String label;
 
-    public RealTimeBehavior(Chassis chassis, Gamepad gamepad1) {
-        this(chassis, gamepad1, "RealTimeBehavior");
+    public GamepadDrivingBehavior(Chassis chassis, Gamepad gamepad) {
+        this(chassis, gamepad, "GamepadDrivingBehavior");
     }
 
-    public RealTimeBehavior(Chassis chassis, Gamepad gamepad1, String label) {
+    public GamepadDrivingBehavior(Chassis chassis, Gamepad gamepad1, String label) {
         this.chassis = chassis;
-        this.gamepad1 = gamepad1;
+        this.gamepad = gamepad1;
         this.label = label;
     }
 
@@ -37,7 +37,7 @@ public class RealTimeBehavior implements Behavior {
      */
     @Override
     public void update() {
-        chassis.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
+        chassis.drive(-gamepad.left_stick_y, gamepad.left_stick_x, gamepad.right_stick_x);
     }
 
     /**
@@ -59,7 +59,7 @@ public class RealTimeBehavior implements Behavior {
 
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
-        telemetry.addLine(prefix + "(Real time controlled driving on gamepad 1)");
+        telemetry.addLine(prefix + "(Gamepad driving...)");
     }
 
     @Override

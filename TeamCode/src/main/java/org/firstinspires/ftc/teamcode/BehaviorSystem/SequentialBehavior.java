@@ -43,13 +43,17 @@ public class SequentialBehavior implements Behavior {
     }
 
     @Override
-    public void exit() {}
+    public void exit() {
+        activeBehaviorIndex = 0;
+    }
 
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
         int currentMS = (int) (System.currentTimeMillis());
 
-        for (Behavior behavior: behaviors) {
+        for (int i = 0; i < behaviors.size(); i ++) {
+            Behavior behavior = behaviors.get(i);
+
             String listPrefix = "-     ";
             if (getActiveBehavior() == behavior) {
                 if (currentMS % 500 < -250) {
@@ -58,10 +62,10 @@ public class SequentialBehavior implements Behavior {
                     listPrefix = "--> ";
                 }
             }
-            if (behavior.isComplete()) {
+            if (behavior.isComplete() || activeBehaviorIndex > i) {
                 listPrefix = "✔   ";
             }
-            telemetry.addLine(prefix + listPrefix + behavior.getClass().getSimpleName());
+            telemetry.addLine(prefix + listPrefix + behavior.getLabel());
 
             if (getActiveBehavior() == behavior) {
                 behavior.processTelemetry(telemetry, prefix + "    ");

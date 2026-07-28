@@ -54,9 +54,7 @@ public class ParallelBehavior implements Behavior {
     @Override
     public void exit() {
         for (Behavior behavior : behaviors) {
-            if (!behavior.isComplete()) {
-                behavior.exit();
-            }
+            behavior.exit();
         }
     }
 
@@ -101,7 +99,7 @@ public class ParallelBehavior implements Behavior {
             if (behavior.isComplete()) {
                 listPrefix = "✔   ";
             }
-            telemetry.addLine(prefix + listPrefix + behavior.getClass().getSimpleName());
+            telemetry.addLine(prefix + listPrefix + behavior.getLabel());
 
             if (!behavior.isComplete()) {
                 behavior.processTelemetry(telemetry, prefix + "    ");
