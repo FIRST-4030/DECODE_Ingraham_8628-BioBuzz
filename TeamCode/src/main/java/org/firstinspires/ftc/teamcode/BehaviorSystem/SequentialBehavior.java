@@ -44,6 +44,9 @@ public class SequentialBehavior implements Behavior {
 
         if (getActiveBehavior().isComplete()) {
             nextBehavior();
+            update(); // I THINK THIS IS RIGHT????
+            // If the conditions keep being met again and again it should all happen
+            // in one frame, in theory!
         }
     }
 
