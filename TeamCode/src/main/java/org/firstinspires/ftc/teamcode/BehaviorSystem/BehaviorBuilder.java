@@ -6,6 +6,7 @@ import java.util.List;
 /**
  * A fluent API for building complex nested Behaviors.
  * Handles Sequential and Parallel behaviors.
+ * @author Edson James
  */
 public class BehaviorBuilder {
     private final List<Behavior> behaviors = new ArrayList<>();

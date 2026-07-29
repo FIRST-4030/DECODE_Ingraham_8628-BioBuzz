@@ -6,8 +6,9 @@ import java.util.function.BooleanSupplier;
 
 /**
  * Behavior that completes when a given condition (a BooleanSupplier) returns true. Could be used
- * as the primary behavior in a BehaviorStep in conjunction with other behaviors for action to be
- * taken while waiting for a condition before moving to the next BehaviorStep.
+ * as the first behavior in a parallelBehavior in conjunction with other behaviors for action to be
+ * taken while waiting for a condition.
+ * @author Edson James
  */
 public class WaitForConditionBehavior implements Behavior {
     private final BooleanSupplier condition;
@@ -18,7 +19,7 @@ public class WaitForConditionBehavior implements Behavior {
      * @param condition The BooleanSupplier that reflects the condition you want to wait for.
      */
     public WaitForConditionBehavior(BooleanSupplier condition) {
-        this(condition, "WaitForConditionBehavior");
+        this(condition, "Wait for condition");
     }
 
     /**
@@ -31,15 +32,9 @@ public class WaitForConditionBehavior implements Behavior {
         this.label = label;
     }
 
-    /**
-     * Does nothing.
-     */
     @Override
     public void enter() {}
 
-    /**
-     * Does nothing.
-     */
     @Override
     public void update() {}
 
@@ -52,9 +47,6 @@ public class WaitForConditionBehavior implements Behavior {
         return condition.getAsBoolean();
     }
 
-    /**
-     * Does nothing.
-     */
     @Override
     public void exit() {};
 

@@ -6,7 +6,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 /**
- * Behavior that completes after a given duration. Does not take any action during update().
+ * Behavior that completes after a given duration in milliseconds. Keep in mind, you must call enter()
+ * on this behavior before it can ever complete.
+ * @author Edson James
  */
 public class WaitBehavior implements Behavior {
     private final ElapsedTime elapsedTime = new ElapsedTime();
@@ -15,7 +17,7 @@ public class WaitBehavior implements Behavior {
     private final String label;
 
     public WaitBehavior(double waitTimeMS) {
-        this(waitTimeMS, "WaitBehavior");
+        this(waitTimeMS, "Wait");
     }
 
     public WaitBehavior(double waitTimeMS, String label) {
@@ -40,9 +42,6 @@ public class WaitBehavior implements Behavior {
         entered = true;
     }
 
-    /**
-     * Does nothing.
-     */
     @Override
     public void update() {}
 
@@ -55,9 +54,6 @@ public class WaitBehavior implements Behavior {
         return (elapsedTime.milliseconds() >= waitTimeMS && entered);
     }
 
-    /**
-     * Does nothing.
-     */
     @Override
     public void exit() {
         entered = false;
@@ -68,7 +64,7 @@ public class WaitBehavior implements Behavior {
         if (entered) {
             telemetry.addLine(prefix + "(MS remaining: " + Math.floor(getTimeRemainingMS()) + " MS)");
         } else {
-            telemetry.addLine(prefix + "Has not begun waiting yet");
+            telemetry.addLine(prefix + "(Has not begun waiting yet)");
         }
     }
 

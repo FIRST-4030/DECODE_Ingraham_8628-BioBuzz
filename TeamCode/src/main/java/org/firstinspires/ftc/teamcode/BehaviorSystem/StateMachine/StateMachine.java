@@ -4,8 +4,8 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 /**
- * Behavior that handles updating and switching of States.
- * @author edsonjames
+ * Behavior that handles updating and switching of states.
+ * @author Edson James
  */
 public class StateMachine implements Behavior {
     private State activeState = null;
@@ -25,8 +25,8 @@ public class StateMachine implements Behavior {
     }
 
     /**
-     * Calls update() on the active State. Switches the active State if the current active
-     * State returns another State from State.getNextState().
+     * Calls update() on the active state. Switches the active state if the current active
+     * state returns another state from state.getNextState().
      */
     public void update() {
         if (isComplete()) { return; }
@@ -40,14 +40,22 @@ public class StateMachine implements Behavior {
         }
     }
 
+    /**
+     * Completes when there is no active state.
+     * @return Whether there is no active state.
+     */
     @Override
     public boolean isComplete() {
         return activeState == null;
     }
 
+    /**
+     * Exits the active state, is there is one. Then, makes it so there is no active state.
+     */
     @Override
     public void exit() {
         if (activeState != null) activeState.exit();
+        activeState = null;
     }
 
     @Override
@@ -60,7 +68,7 @@ public class StateMachine implements Behavior {
             return;
         }
 
-        telemetry.addData(prefix + "    Active State", activeState.getLabel());
+        telemetry.addData(prefix + "    Active state", activeState.getLabel());
         telemetry.addLine("");
 
         if (activeState != null) {
@@ -74,9 +82,9 @@ public class StateMachine implements Behavior {
     }
 
     /**
-     * Manually sets the active State. Calls exit() on the old State (if there is one) and enter()
-     * on the new State.
-     * @param state The State to set as the active State
+     * Manually sets the active state. Calls exit() on the old state (if there is one) and enter()
+     * on the new state.
+     * @param state The state to set as the new active state.
      */
     public void setState(State state) {
         if (activeState != null) {

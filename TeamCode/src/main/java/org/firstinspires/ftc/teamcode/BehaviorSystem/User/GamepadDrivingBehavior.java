@@ -7,7 +7,8 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 import org.firstinspires.ftc.teamcode.Chassis;
 
 /**
- * Behavior that drives the robot's driving motors using a gamepad. Never completes.
+ * Behavior that robot-centric using a gamepad. Never completes.
+ * @author Edson James
  */
 public class GamepadDrivingBehavior implements Behavior {
     private final Chassis chassis;
@@ -15,7 +16,7 @@ public class GamepadDrivingBehavior implements Behavior {
     private final String label;
 
     public GamepadDrivingBehavior(Chassis chassis, Gamepad gamepad) {
-        this(chassis, gamepad, "GamepadDrivingBehavior");
+        this(chassis, gamepad, "Gamepad driving");
     }
 
     public GamepadDrivingBehavior(Chassis chassis, Gamepad gamepad1, String label) {
@@ -33,7 +34,7 @@ public class GamepadDrivingBehavior implements Behavior {
     }
 
     /**
-     * Drives the robot using gamepad 1's left stick and right stick
+     * Drives the robot using the gamepad's left stick and right stick
      */
     @Override
     public void update() {

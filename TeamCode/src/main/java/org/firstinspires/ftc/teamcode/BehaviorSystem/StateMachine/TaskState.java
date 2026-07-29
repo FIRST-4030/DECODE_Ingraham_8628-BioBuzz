@@ -5,13 +5,18 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 import java.util.function.Supplier;
 
+/**
+ * Class used to easily create states that execute one behavior and then automatically switch to a
+ * specified state once that behavior completes, without too much boilerplate.
+ * @author Edson James
+ */
 public class TaskState implements State {
     private final Behavior behavior;
-    private final Supplier<State> nextStateSupplier;
+    private final Supplier<State> onCompleteNextStateSupplier;
 
-    public TaskState(Behavior behavior, Supplier<State> nextStateSupplier) {
+    public TaskState(Behavior behavior, Supplier<State> onCompleteNextStateSupplier) {
         this.behavior = behavior;
-        this.nextStateSupplier = nextStateSupplier;
+        this.onCompleteNextStateSupplier = onCompleteNextStateSupplier;
     }
 
     @Override
@@ -25,7 +30,7 @@ public class TaskState implements State {
 
     @Override
     public State getNextState() {
-        if (behavior.isComplete()) return nextStateSupplier.get();
+        if (behavior.isComplete()) return onCompleteNextStateSupplier.get();
         return this;
     }
 

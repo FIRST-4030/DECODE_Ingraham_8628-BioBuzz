@@ -9,15 +9,14 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitForConditionBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.TaskState;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
-@TeleOp(name="Behavior System Example", group="Demos")
-public class BehaviorSystemExample extends LinearOpMode {
+@TeleOp(name="Behavior System Messing Around", group="Demos")
+public class BehaviorSystemMessingAround extends LinearOpMode {
     ControlHub controlHub;
     Chassis chassis;
 

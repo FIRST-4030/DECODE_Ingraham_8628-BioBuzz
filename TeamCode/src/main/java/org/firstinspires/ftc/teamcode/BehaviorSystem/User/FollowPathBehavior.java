@@ -7,8 +7,9 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 /**
- * Behavior that uses a Pedro Follower to follow a given pathChain. Completes when the follower is no
+ * Behavior that uses a PedroPathing follower to follow a given pathChain. Completes when the follower is no
  * longer busy.
+ * @author Edson James
  */
 public class FollowPathBehavior implements Behavior {
     private final Follower follower;
@@ -16,12 +17,12 @@ public class FollowPathBehavior implements Behavior {
     private final String label;
 
     /**
-     * Passes the Follower and PathChain to follower to this Behavior.
+     * Passes the Follower and PathChain to this Behavior.
      * @param follower The Pedro Follower to use.
      * @param pathChain The Pedro PathChain to follow.
      */
     public FollowPathBehavior(Follower follower, PathChain pathChain) {
-        this(follower, pathChain, "FollowPathBehavior");
+        this(follower, pathChain, "Follow path");
     }
 
     /**
@@ -61,9 +62,6 @@ public class FollowPathBehavior implements Behavior {
         return !follower.isBusy();
     }
 
-    /**
-     * Does nothing.
-     */
     @Override
     public void exit() {}
 

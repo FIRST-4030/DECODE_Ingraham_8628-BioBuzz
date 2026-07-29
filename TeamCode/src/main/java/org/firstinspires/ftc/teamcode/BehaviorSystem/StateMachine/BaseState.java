@@ -5,6 +5,11 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 import java.util.function.Supplier;
 
+/**
+ * Class used to easily create states that execute one behavior, while passing a state supplier
+ * to the getNextState() method to easily define control flow without too much boilerplate.
+ * @author Edson James
+ */
 public class BaseState implements State {
     private final Behavior behavior;
     private final Supplier<State> nextStateSupplier;

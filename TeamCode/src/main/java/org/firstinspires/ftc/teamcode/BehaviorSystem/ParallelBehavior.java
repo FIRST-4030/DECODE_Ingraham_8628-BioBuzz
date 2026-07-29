@@ -4,6 +4,13 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 import java.util.List;
 
+/**
+ * A behavior which runs every behavior in a list on every update call. The behaviors are executed in the order
+ * that they appear in the list. The completion condition strategy of parallelBehavior can be specified:
+ * ALL for when every behavior is complete, ANY for when any behavior is complete, and FIRST for when the
+ * first behavior in the list completes. The BehaviorBuilder uses ALL by default.
+ * @author Edson James
+ */
 public class ParallelBehavior implements Behavior {
     public enum CompletionCondition {
         ALL,
@@ -21,6 +28,9 @@ public class ParallelBehavior implements Behavior {
         this.label = label;
     }
 
+    /**
+     * Enters all behaviors in the list.
+     */
     @Override
     public void enter() {
         for (Behavior behavior: behaviors) {
@@ -28,6 +38,9 @@ public class ParallelBehavior implements Behavior {
         }
     }
 
+    /**
+     * Updates all behaviors in the list that are not completed.
+     */
     @Override
     public void update() {
         for (Behavior behavior: behaviors) {
@@ -37,6 +50,11 @@ public class ParallelBehavior implements Behavior {
         }
     }
 
+    /**
+     * Returns whether the parallel behavior is complete based on the completionCondition strategy:
+     * ALL, ANY, or FIRST.
+     * @return Whether the parallel behavior is complete
+     */
     @Override
     public boolean isComplete() {
         switch (this.completionCondition) {
@@ -45,12 +63,15 @@ public class ParallelBehavior implements Behavior {
             case ANY:
                 return areAnyBehaviorsCompleted();
             case FIRST:
-                return isIndex0Completed();
+                return isFirstCompleted();
             default:
                 return false;
         }
     }
 
+    /**
+     * Exits every behavior in the list.
+     */
     @Override
     public void exit() {
         for (Behavior behavior : behaviors) {
@@ -78,7 +99,7 @@ public class ParallelBehavior implements Behavior {
         return false;
     }
 
-    public boolean isIndex0Completed() {
+    public boolean isFirstCompleted() {
         if (behaviors.isEmpty()) {
             return true;
         }
@@ -92,6 +113,7 @@ public class ParallelBehavior implements Behavior {
 
         telemetry.addLine(prefix + "(Ends when " + completionCondition + " behavior(s) complete)");
         for (Behavior behavior : behaviors) {
+            // There's some crazy jazz here that just makes the arrows look pretty lol
             String listPrefix = "--> ";
             if (currentMS % 500 < -250) {
                 listPrefix = "--->";
