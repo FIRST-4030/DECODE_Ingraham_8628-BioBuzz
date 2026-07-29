@@ -1,9 +1,9 @@
-package org.firstinspires.ftc.teamcode.Behavior.User;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.User;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Behavior.Behavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 /**
  * Behavior that completes after a given duration. Does not take any action during update().

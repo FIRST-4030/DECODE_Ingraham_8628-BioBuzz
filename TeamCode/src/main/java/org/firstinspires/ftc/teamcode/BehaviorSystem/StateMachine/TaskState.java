@@ -1,19 +1,17 @@
-package org.firstinspires.ftc.teamcode.Behavior.StateMachine;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Behavior.Behavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 import java.util.function.Supplier;
 
-public class BaseState implements State {
+public class TaskState implements State {
     private final Behavior behavior;
     private final Supplier<State> nextStateSupplier;
-    private final Supplier<String> additionalTelemetrySupplier;
 
-    public BaseState(Behavior behavior, Supplier<State> nextStateSupplier, Supplier<String> additionalTelemetrySupplier) {
+    public TaskState(Behavior behavior, Supplier<State> nextStateSupplier) {
         this.behavior = behavior;
         this.nextStateSupplier = nextStateSupplier;
-        this.additionalTelemetrySupplier = additionalTelemetrySupplier;
     }
 
     @Override
@@ -27,7 +25,8 @@ public class BaseState implements State {
 
     @Override
     public State getNextState() {
-        return nextStateSupplier.get();
+        if (behavior.isComplete()) return nextStateSupplier.get();
+        return this;
     }
 
     @Override
@@ -36,11 +35,10 @@ public class BaseState implements State {
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
         behavior.processTelemetry(telemetry, prefix);
-        telemetry.addLine(prefix + additionalTelemetrySupplier.get());
     }
 
     @Override
     public String getLabel() {
-        return "BaseState: " + behavior.getLabel();
+        return behavior.getLabel();
     }
 }

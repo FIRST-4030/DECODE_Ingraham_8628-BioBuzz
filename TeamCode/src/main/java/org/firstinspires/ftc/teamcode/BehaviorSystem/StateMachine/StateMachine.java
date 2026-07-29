@@ -1,7 +1,7 @@
-package org.firstinspires.ftc.teamcode.Behavior.StateMachine;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Behavior.Behavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 /**
  * Behavior that handles updating and switching of States.
@@ -56,10 +56,13 @@ public class StateMachine implements Behavior {
 
         if (isComplete()) {
             telemetry.addLine(prefix + "State machine completed");
+            telemetry.addLine("");
             return;
         }
 
         telemetry.addData(prefix + "    Active State", activeState.getLabel());
+        telemetry.addLine("");
+
         if (activeState != null) {
             activeState.processTelemetry(telemetry, prefix + "    ");
         }

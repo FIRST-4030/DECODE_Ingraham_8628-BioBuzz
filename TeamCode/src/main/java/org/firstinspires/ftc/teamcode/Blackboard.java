@@ -33,16 +33,16 @@ public class Blackboard {
         Blackboard.alliance = alliance;
     }
 
-    public static void initLoopProcess(Telemetry telemetry, Gamepad gamepad1) {
+    public static void initLoopProcess(Telemetry telemetry, Gamepad gamepad) {
         telemetry.addLine("--- BLACKBOARD ---");
         telemetry.addData("Alliance", Blackboard.getAllianceAsString());
         telemetry.addLine("^^^ RB + X: Blue,  RB + B: Red ^^^");
         telemetry.addLine();
 
-        if (gamepad1.right_bumper) {
-            if (gamepad1.xWasPressed()) {
+        if (gamepad.right_bumper) {
+            if (gamepad.xWasPressed()) {
                 Blackboard.setAlliance(Blackboard.Alliance.BLUE);
-            } else if (gamepad1.bWasPressed()) {
+            } else if (gamepad.bWasPressed()) {
                 Blackboard.setAlliance(Blackboard.Alliance.RED);
             }
         }

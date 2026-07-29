@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Behavior;
+package org.firstinspires.ftc.teamcode.BehaviorSystem;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.Behavior.User;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.User;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.Behavior.Behavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 import java.util.function.BooleanSupplier;
 
