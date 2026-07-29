@@ -91,6 +91,9 @@ public class StateMachine implements Behavior {
             activeState.exit();
         }
         activeState = state;
-        activeState.enter();
+
+        if (activeState != null) {
+            activeState.enter();
+        }
     }
 }
