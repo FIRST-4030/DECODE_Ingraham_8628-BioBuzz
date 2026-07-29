@@ -21,7 +21,8 @@ public class BehaviorSystemExample extends LinearOpMode {
     ControlHub controlHub;
     Chassis chassis;
 
-    Behavior gamepadDrivingBehavior, complexBehavior, waitForAPressBehavior;
+    Behavior waitForAPressBehavior;
+    Behavior gamepadDrivingBehavior, complexBehavior;
 
     StateMachine mainStateMachine;
     State gamepadDrivingState, complexState;

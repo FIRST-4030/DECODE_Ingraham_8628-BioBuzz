@@ -31,7 +31,11 @@ public class ControlHub {
 
     public ControlHub() {
         String logFolder = Environment.getExternalStorageDirectory().getPath(); // /storage/emulated/0 also maps to /sdcard
-        fileName = logFolder + "/FIRST/Datalogs/ControlHub.txt";
+
+        // filename used to be "/FIRST/Datalogs/ControlHub.txt" on older robots.
+        // It's necessary to create a new ControlHub.txt with the bot identification
+        // on older robots that used to store it here in order for them to work properly.
+        fileName = logFolder + "/FIRST/ControlHub.txt";
     }
 
     public boolean createControlHubFile() throws IOException {

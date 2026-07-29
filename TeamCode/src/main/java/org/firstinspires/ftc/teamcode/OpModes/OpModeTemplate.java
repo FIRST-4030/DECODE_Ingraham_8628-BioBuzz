@@ -46,6 +46,7 @@ public class OpModeTemplate extends LinearOpMode {
 
         while (opModeInInit()) {
             Blackboard.initLoopProcess(telemetry, gamepad1);
+            telemetry.update();
         }
 
         mainStateMachine.setState(gamepadDrivingState);
