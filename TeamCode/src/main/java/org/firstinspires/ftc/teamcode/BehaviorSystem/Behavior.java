@@ -10,12 +10,12 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 public interface Behavior {
     /**
-     * The initialization logic of the behavior.
+     * Called once when the behavior starts.
      */
     void enter();
 
     /**
-     * The update logic of the behavior.
+     * Called repeatedly in the main loop.
      */
     void update();
 
@@ -27,7 +27,7 @@ public interface Behavior {
     boolean isComplete();
 
     /**
-     * The exit logic of the behavior.
+     * Called once when the behavior finishes or is interrupted.
      */
     void exit();
 

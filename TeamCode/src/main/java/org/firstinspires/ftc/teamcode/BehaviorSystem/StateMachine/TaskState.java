@@ -14,6 +14,13 @@ public class TaskState implements State {
     private final Behavior behavior;
     private final Supplier<State> onCompleteNextStateSupplier;
 
+    /**
+     * Class used to easily create states that execute one behavior and then automatically switch to a
+     * specified state once that behavior completes, without too much boilerplate.
+     * @param behavior The behavior to execute.
+     * @param onCompleteNextStateSupplier The supplier for what the next state should be once the behavior
+     *                                    completes.
+     */
     public TaskState(Behavior behavior, Supplier<State> onCompleteNextStateSupplier) {
         this.behavior = behavior;
         this.onCompleteNextStateSupplier = onCompleteNextStateSupplier;

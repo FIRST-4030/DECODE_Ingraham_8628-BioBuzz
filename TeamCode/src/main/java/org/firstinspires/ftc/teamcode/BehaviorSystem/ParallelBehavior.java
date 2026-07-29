@@ -10,6 +10,7 @@ import java.util.List;
  * ALL for when every behavior is complete, ANY for when any behavior is complete, and FIRST for when the
  * first behavior in the list completes. The BehaviorBuilder uses ALL by default.
  * @author Edson James
+ * @see SequentialBehavior
  */
 public class ParallelBehavior implements Behavior {
     public enum CompletionCondition {

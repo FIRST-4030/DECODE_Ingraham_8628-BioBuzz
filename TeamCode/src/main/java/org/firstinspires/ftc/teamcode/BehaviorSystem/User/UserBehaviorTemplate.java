@@ -26,15 +26,15 @@ public class UserBehaviorTemplate implements Behavior {
         this.label = label;
     }
 
-    // enter() is where you store all the logic for when your behavior first becomes "active."
-    // Initialization, entering, whatever you want to call it.
+    // enter() is called once when the behavior starts. It is where you store all the logic for when
+    // your behavior first becomes "active."
     @Override
     public void enter() {
 
     }
 
-    // update() is where you store all the logic for what your behavior should do while it is on running,
-    // on every frame
+    // update() is called repeatedly in the main loop when the behavior is active. It is where you
+    // store all the logic for what your behavior should do every frame.
     @Override
     public void update() {
 

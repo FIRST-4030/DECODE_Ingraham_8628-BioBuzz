@@ -9,6 +9,7 @@ import java.util.List;
  * once the current one is complete. This behavior completes when the final behavior in the list
  * completes.
  * @author Edson James
+ * @see ParallelBehavior
  */
 public class SequentialBehavior implements Behavior {
     private final List<Behavior> behaviors;
@@ -44,9 +45,9 @@ public class SequentialBehavior implements Behavior {
 
         if (getActiveBehavior().isComplete()) {
             nextBehavior();
-            update(); // I THINK THIS IS RIGHT????
-            // If the conditions keep being met again and again it should all happen
-            // in one frame, in theory!
+            update();
+            // ^^^ Call update recursively so that transitions between
+            // behaviors can occur in a single frame.
         }
     }
 
@@ -120,6 +121,10 @@ public class SequentialBehavior implements Behavior {
         }
     }
 
+    /**
+     * Gets the active behavior, or null is there is none.
+     * @return The active behavior.
+     */
     private Behavior getActiveBehavior() {
         if (activeBehaviorIndex >= 0 && activeBehaviorIndex < behaviors.size()) {
             return behaviors.get(activeBehaviorIndex);

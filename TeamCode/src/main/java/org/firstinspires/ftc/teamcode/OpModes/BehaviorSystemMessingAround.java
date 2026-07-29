@@ -46,7 +46,7 @@ public class BehaviorSystemMessingAround extends LinearOpMode {
             } else {
                 return gamepadDrivingState;
             }
-        }, () -> ("Press UP on the dpad to switch to the example complex state."));
+        });
         complexState = new TaskState(complexBehavior, () -> gamepadDrivingState);
 
         mainStateMachine = new StateMachine("Main State Machine");
