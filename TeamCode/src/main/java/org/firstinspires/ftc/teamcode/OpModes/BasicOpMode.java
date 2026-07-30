@@ -30,11 +30,15 @@ public class BasicOpMode extends LinearOpMode {
         chassis = new Chassis(hardwareMap);
 
         gamepadDrivingBehavior = new GamepadDrivingBehavior(chassis, gamepad1);
-        gamepadDrivingState = new BaseState(gamepadDrivingBehavior, () -> (gamepadDrivingState));
+        gamepadDrivingState = new BaseState(
+                gamepadDrivingBehavior,
+                () -> (gamepadDrivingState)
+        );
 
         mainStateMachine = new StateMachine("Main State Machine");
 
         while (opModeInInit()) {
+            controlHub.processBotIdentificationTelemetry(telemetry);
             Blackboard.initLoopProcess(telemetry, gamepad1);
             telemetry.update();
         }

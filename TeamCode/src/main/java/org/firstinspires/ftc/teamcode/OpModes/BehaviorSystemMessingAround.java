@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.OpModes;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.BaseState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
@@ -36,17 +37,24 @@ public class BehaviorSystemMessingAround extends LinearOpMode {
         complexBehavior = BehaviorBuilder.create()
                 .sequential("Example sequence")
                     .add(new WaitBehavior(2000, "Wait 2 sec"))
-                    .add(waitForAPressBehavior)
+                    .parallel(ParallelBehavior.CompletionCondition.FIRST, "Drive while waiting for A to be pressed")
+                        .add(waitForAPressBehavior)
+                        .add(gamepadDrivingBehavior)
+                    .end()
                 .end()
                 .build();
 
-        gamepadDrivingState = new BaseState(gamepadDrivingBehavior, () -> {
-            if (gamepad1.dpadUpWasPressed()) {
-                return complexState;
-            } else {
-                return gamepadDrivingState;
-            }
-        });
+        gamepadDrivingState = new BaseState(
+                gamepadDrivingBehavior,
+                () -> {
+                    if (gamepad1.dpadUpWasPressed()) {
+                        return complexState;
+                    } else {
+                        return gamepadDrivingState;
+                    }
+                },
+                () -> ("[Press UP on the dpad to enter the complex state.]")
+        );
         complexState = new TaskState(complexBehavior, () -> gamepadDrivingState);
 
         mainStateMachine = new StateMachine("Main State Machine");

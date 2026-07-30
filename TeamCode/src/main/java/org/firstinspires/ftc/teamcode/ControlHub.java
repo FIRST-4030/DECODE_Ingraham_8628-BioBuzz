@@ -6,6 +6,7 @@ import com.pedropathing.follower.Follower;
 import com.pedropathing.ftc.FollowerBuilder;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.Pedro.PedroConstants;
 import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsBioBuzzCompetitionBot;
 import org.firstinspires.ftc.teamcode.Pedro.PedroConstantsDecodeBot;
@@ -61,7 +62,7 @@ public class ControlHub {
         }
     }
 
-    public BotIdentification getBotIdentification() throws FileNotFoundException {
+    public BotIdentification getBotIdentification() {
         String line = null;
         try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
             line = reader.readLine();
@@ -101,20 +102,21 @@ public class ControlHub {
     }
 
     public PedroConstants getRobotSpecificPedroConstants() {
-        try {
-            switch (getBotIdentification()) {
-                case DECODE:
-                    return new PedroConstantsDecodeBot();
-                case BIOBUZZ_COMPETITION:
-                    return new PedroConstantsBioBuzzCompetitionBot();
-                case BIOBUZZ_DEMO:
-                    return new PedroConstantsBioBuzzDemoBot();
-                default:
-                    return new PedroConstantsBioBuzzCompetitionBot(); // Return competition constants
-            }
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
+        switch (getBotIdentification()) {
+            case DECODE:
+                return new PedroConstantsDecodeBot();
+            case BIOBUZZ_COMPETITION:
+                return new PedroConstantsBioBuzzCompetitionBot();
+            case BIOBUZZ_DEMO:
+                return new PedroConstantsBioBuzzDemoBot();
+            default:
+                return new PedroConstantsBioBuzzCompetitionBot(); // Return competition constants
         }
+    }
+
+    public void processBotIdentificationTelemetry(Telemetry telemetry) {
+        telemetry.addData("!!!! This robot is configured to use these pedro+chassis constants", this.getBotIdentification());
+        telemetry.addLine();
     }
 
     public Follower createFollower(HardwareMap hardwareMap) {

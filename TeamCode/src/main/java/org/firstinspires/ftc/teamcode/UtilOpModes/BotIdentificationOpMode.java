@@ -58,11 +58,7 @@ public class BotIdentificationOpMode extends OpMode {
             operation = operation + controlHub.getControlHubFileName();
 
         } else if (gamepad1.yWasReleased()) {
-            try {
-                operation = "ControlHub=" + controlHub.getBotIdentification();
-            } catch (FileNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            operation = "ControlHub=" + controlHub.getBotIdentification();
 
         } else if (gamepad1.leftBumperWasReleased()) {
             try {

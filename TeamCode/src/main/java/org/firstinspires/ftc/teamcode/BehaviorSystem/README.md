@@ -35,5 +35,9 @@ complete.
 3. FIRST: This `parallelBehavior` is complete if the first behavior in the list
 is complete.
 
+---
+
 A `sequentialBehavior` is given a list of behaviors and executes them one at a
 time.
+
+---
