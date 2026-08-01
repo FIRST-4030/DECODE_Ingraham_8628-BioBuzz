@@ -10,7 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 // DO NOT disable this opmode
-@TeleOp(name="Bot Identification Manager")
+@TeleOp(name="Bot Identification Manager", group = "Util")
 public class BotIdentificationOpMode extends OpMode {
 
     ControlHub controlHub;

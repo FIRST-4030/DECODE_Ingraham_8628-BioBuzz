@@ -101,7 +101,7 @@ public class SequentialBehavior implements Behavior {
 
     @Override
     public String getLabel() {
-        return label;
+        return "SEQUENCE:" + label;
     }
 
     /**

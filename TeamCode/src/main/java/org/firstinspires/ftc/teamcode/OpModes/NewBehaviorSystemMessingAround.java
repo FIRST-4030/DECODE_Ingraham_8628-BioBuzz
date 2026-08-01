@@ -1,23 +1,23 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.BaseState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitForConditionBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.BaseState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.TaskState;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitForConditionBehavior;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
 @TeleOp(name="Behavior System Messing Around", group="Demos")
-public class BehaviorSystemMessingAround extends LinearOpMode {
+public class NewBehaviorSystemMessingAround extends OpMode {
     ControlHub controlHub;
     Chassis chassis;
 
@@ -28,7 +28,7 @@ public class BehaviorSystemMessingAround extends LinearOpMode {
     State gamepadDrivingState, complexState;
 
     @Override
-    public void runOpMode() {
+    public void init() {
         controlHub = new ControlHub();
         chassis = new Chassis(hardwareMap);
 
@@ -36,11 +36,11 @@ public class BehaviorSystemMessingAround extends LinearOpMode {
         gamepadDrivingBehavior = new GamepadDrivingBehavior(chassis, gamepad1, "Gamepad driving behavior");
         complexBehavior = BehaviorBuilder.create()
                 .sequential("Example sequence")
-                    .add(new WaitBehavior(2000, "Wait 2 sec"))
-                    .parallel(ParallelBehavior.CompletionCondition.FIRST, "Drive while waiting for A to be pressed")
-                        .add(waitForAPressBehavior)
-                        .add(gamepadDrivingBehavior)
-                    .end()
+                .add(new WaitBehavior(2000, "Wait 2 sec"))
+                .parallel(ParallelBehavior.CompletionCondition.FIRST, "Drive while waiting for A to be pressed")
+                .add(waitForAPressBehavior)
+                .add(gamepadDrivingBehavior)
+                .end()
                 .end()
                 .build();
 
@@ -59,19 +59,17 @@ public class BehaviorSystemMessingAround extends LinearOpMode {
 
         mainStateMachine = new StateMachine("Main State Machine");
         mainStateMachine.setState(gamepadDrivingState);
+        mainStateMachine.enter();
 
         telemetry.addLine("BehaviorSystem example initialized");
         telemetry.update();
+    }
 
-        mainStateMachine.enter();
+    @Override
+    public void loop() {
+        mainStateMachine.update();
+        mainStateMachine.processTelemetry(telemetry, "");
 
-        waitForStart();
-
-        while (opModeIsActive()) {
-            mainStateMachine.update();
-            mainStateMachine.processTelemetry(telemetry, "");
-
-            telemetry.update();
-        }
+        telemetry.update();
     }
 }

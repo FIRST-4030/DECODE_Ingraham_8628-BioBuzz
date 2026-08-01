@@ -1,4 +1,4 @@
-# Behavior System
+# The Behavior System
 
 The Behavior System is a little modular framework for organizing robot logic
 into reusable, composable pieces called `behavior`s.
@@ -13,31 +13,52 @@ following methods:
 - `exit()`: Called once when the behavior completes or is interrupted.
 - `isComplete()`: Defines an "end condition" for the behavior.
 
-Almost every class you will work with in the Behavior System with implements
+Almost every class you will work with in the Behavior System implements
 `Behavior`, making them reusable and easy to work with. It's also easy to
 define new capabilities for the robot that implement `Behavior`, giving custom
-robot logic these benefits too.
+robot logic the same benefits.
 
-## Parallel and Sequential behaviors
+Behaviors also have a `getLabel()` method used to attach a short descriptor/title
+to a behavior, useful in telemetry and debugging. However, most behaviors make it
+optional to specify a label during instantiation.
 
-The Behavior System package includes two behaviors that are, themselves,
-designed to organize groups of other `behavior`s. They are called
+## `State` and `StateMachine`
+
+The `State` interface and `StateMachine` class are great for building opModes with
+different "modes" or "states" the robot can be in, such as driving, shooting, or parking.
+
+### `State`
+`State`s are just `Behavior`s with an extra method: `getNextState()`. Basically, states are
+behaviors with opinions about what the next active state should be.
+
+You can make a new implementation of `State` manually in your opMode if you really need to,
+but the majority of the time you will want to create states using the two classes
+`BaseState` and `TaskState`. These classes are useful because they let you take an
+existing `Behavior` and attach it to a `State` without unnecessary boilerplate.
+
+## `ParallelBehavior` and `SequentialBehavior`
+
+This package includes two behaviors that are, themselves,
+designed to work with lists of other behaviors. They are called
 `ParallelBehavior` and `SequentialBehavior`.
 
-A `parallelBehavior` executes multiple `behavior`s in a list at the same time.
-For every `parallelBehavior`, you can specify how it decides it is complete by
+### `ParallelBehavior`
+
+A `ParallelBehavior` executes multiple `Behavior`s in a list at the same time.
+For every `ParallelBehavior` you create, you can specify how it decides it is complete by
 picking one of three strategies:
 
-1. ALL: This `parallelBehavior` is only complete once every behavior in the list
+1. ALL: This `ParallelBehavior` is only complete once every behavior in the list
 is complete.
-2. ANY: This `parallelBehavior` is complete if any of the behaviors are
+2. ANY: This `ParallelBehavior` is complete if any of the behaviors in the list are
 complete.
-3. FIRST: This `parallelBehavior` is complete if the first behavior in the list
+3. FIRST: This `ParallelBehavior` is complete if the first behavior in the list
 is complete.
 
----
+### `SequentialBehavior`
 
 A `sequentialBehavior` is given a list of behaviors and executes them one at a
+
 time.
 
 ---

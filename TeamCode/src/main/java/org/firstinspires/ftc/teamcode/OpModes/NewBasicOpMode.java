@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.OpModes;
 
-import com.pedropathing.follower.Follower;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
@@ -12,10 +11,9 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
-import org.firstinspires.ftc.teamcode.Pedro.PedroUtility;
 
 @TeleOp(name="Basic OpMode", group="Demos")
-public class BasicOpMode extends LinearOpMode {
+public class NewBasicOpMode extends OpMode {
     ControlHub controlHub;
     Chassis chassis;
 
@@ -25,7 +23,7 @@ public class BasicOpMode extends LinearOpMode {
     State gamepadDrivingState;
 
     @Override
-    public void runOpMode() {
+    public void init() {
         controlHub = new ControlHub();
         chassis = new Chassis(hardwareMap);
 
@@ -36,21 +34,26 @@ public class BasicOpMode extends LinearOpMode {
         );
 
         mainStateMachine = new StateMachine("Main State Machine");
+    }
 
-        while (opModeInInit()) {
-            controlHub.processBotIdentificationTelemetry(telemetry);
-            Blackboard.initLoopProcess(telemetry, gamepad1);
-            telemetry.update();
-        }
+    @Override
+    public void init_loop() {
+        controlHub.processBotIdentificationTelemetry(telemetry);
+        Blackboard.initLoopProcess(telemetry, gamepad1);
+        telemetry.update();
+    }
 
+    @Override
+    public void start() {
         mainStateMachine.setState(gamepadDrivingState);
         mainStateMachine.enter();
+    }
 
-        while (opModeIsActive()) {
-            mainStateMachine.update();
-            mainStateMachine.processTelemetry(telemetry, "");
+    @Override
+    public void loop() {
+        mainStateMachine.update();
+        mainStateMachine.processTelemetry(telemetry, "");
 
-            telemetry.update();
-        }
+        telemetry.update();
     }
 }

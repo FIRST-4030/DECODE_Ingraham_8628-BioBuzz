@@ -7,12 +7,13 @@ import java.util.Objects;
 
 /**
  * Template for easily creating new behaviors. You can duplicate this class, rename it, and modify it
- * to your liking.
+ * to your liking to easily make a new robot capability.
  * @author Edson James
  */
 public class UserBehaviorTemplate implements Behavior {
 
     // Custom label variable so users can label each instance of the behavior differently.
+    // Probably don't touch this.
     private final String label;
 
     // You want this first constructor to take everything the full constructor takes except for the label.
@@ -21,7 +22,7 @@ public class UserBehaviorTemplate implements Behavior {
         this("User behavior");
     }
 
-    // Full constructor.
+    // Full constructor, including a parameter for the label.
     public UserBehaviorTemplate(String label) {
         this.label = label;
     }
