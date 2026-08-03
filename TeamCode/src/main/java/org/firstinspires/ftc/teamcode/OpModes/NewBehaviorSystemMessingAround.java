@@ -36,11 +36,11 @@ public class NewBehaviorSystemMessingAround extends OpMode {
         gamepadDrivingBehavior = new GamepadDrivingBehavior(chassis, gamepad1, "Gamepad driving behavior");
         complexBehavior = BehaviorBuilder.create()
                 .sequential("Example sequence")
-                .add(new WaitBehavior(2000, "Wait 2 sec"))
-                .parallel(ParallelBehavior.CompletionCondition.FIRST, "Drive while waiting for A to be pressed")
-                .add(waitForAPressBehavior)
-                .add(gamepadDrivingBehavior)
-                .end()
+                    .add(new WaitBehavior(2000, "Wait 2 sec"))
+                    .parallel(ParallelBehavior.CompletionCondition.FIRST, "Drive while waiting for A to be pressed")
+                        .add(waitForAPressBehavior)
+                        .add(gamepadDrivingBehavior)
+                    .end()
                 .end()
                 .build();
 
