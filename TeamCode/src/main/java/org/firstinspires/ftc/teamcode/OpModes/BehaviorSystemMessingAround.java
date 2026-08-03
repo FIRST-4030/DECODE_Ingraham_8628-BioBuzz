@@ -17,7 +17,7 @@ import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
 @TeleOp(name="Behavior System Messing Around", group="Demos")
-public class NewBehaviorSystemMessingAround extends OpMode {
+public class BehaviorSystemMessingAround extends OpMode {
     ControlHub controlHub;
     Chassis chassis;
 

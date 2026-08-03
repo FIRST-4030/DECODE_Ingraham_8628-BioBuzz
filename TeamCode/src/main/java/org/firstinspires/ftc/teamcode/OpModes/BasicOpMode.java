@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
 @TeleOp(name="Basic OpMode", group="Demos")
-public class NewBasicOpMode extends OpMode {
+public class BasicOpMode extends OpMode {
     ControlHub controlHub;
     Chassis chassis;
 
