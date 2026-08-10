@@ -8,7 +8,7 @@ import java.util.List;
  * A behavior which runs every behavior in a list on every update call. The behaviors are executed in the order
  * that they appear in the list. The completion condition strategy of parallelBehavior can be specified:
  * ALL for when every behavior is complete, ANY for when any behavior is complete, and FIRST for when the
- * first behavior in the list completes. The BehaviorBuilder uses ALL by default.
+ * first behavior in the list completes. The BehaviorBuilder uses ALL by default when creating parallelBehaviors.
  * @author Edson James
  * @see SequentialBehavior
  */
