@@ -22,10 +22,10 @@ public class BehaviorSystemMessingAround extends OpMode {
     Chassis chassis;
 
     Behavior waitForAPressBehavior;
-    Behavior gamepadDrivingBehavior, complexBehavior;
+    Behavior gamepadDrivingBehavior, complexBehavior, nestedComplexBehavior;
 
     StateMachine mainStateMachine;
-    State gamepadDrivingState, complexState;
+    State gamepadDrivingState, taskState;
 
     @Override
     public void init() {
@@ -44,18 +44,24 @@ public class BehaviorSystemMessingAround extends OpMode {
                 .end()
                 .build();
 
+        nestedComplexBehavior = BehaviorBuilder.create()
+                .sequential("Example nested sequence")
+                    .add(complexBehavior)
+                .end()
+                .build();
+
         gamepadDrivingState = new BaseState(
                 gamepadDrivingBehavior,
                 () -> {
                     if (gamepad1.dpadUpWasPressed()) {
-                        return complexState;
+                        return taskState;
                     } else {
                         return gamepadDrivingState;
                     }
                 },
                 () -> ("[Press UP on the dpad to enter the complex state.]")
         );
-        complexState = new TaskState(complexBehavior, () -> gamepadDrivingState);
+        taskState = new TaskState(nestedComplexBehavior, () -> gamepadDrivingState);
 
         mainStateMachine = new StateMachine("Main State Machine");
         mainStateMachine.setState(gamepadDrivingState);
