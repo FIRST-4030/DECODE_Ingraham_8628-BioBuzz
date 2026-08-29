@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.TaskState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitForConditionBehavior;
+import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
@@ -47,6 +48,7 @@ public class BehaviorSystemMessingAround extends OpMode {
         nestedComplexBehavior = BehaviorBuilder.create()
                 .sequential("Example nested sequence")
                     .add(complexBehavior)
+                    .add(new WaitBehavior(2000))
                 .end()
                 .build();
 
@@ -66,8 +68,12 @@ public class BehaviorSystemMessingAround extends OpMode {
         mainStateMachine = new StateMachine("Main State Machine");
         mainStateMachine.setState(gamepadDrivingState);
         mainStateMachine.enter();
+    }
 
-        telemetry.addLine("BehaviorSystem example initialized");
+    @Override
+    public void init_loop() {
+        controlHub.processBotIdentificationTelemetry(telemetry);
+        Blackboard.initLoopProcess(telemetry, gamepad1);
         telemetry.update();
     }
 

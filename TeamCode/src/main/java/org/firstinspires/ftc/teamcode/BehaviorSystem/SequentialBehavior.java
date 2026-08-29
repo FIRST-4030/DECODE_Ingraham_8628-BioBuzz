@@ -82,7 +82,7 @@ public class SequentialBehavior implements Behavior {
             // There's some crazy jazz here that just makes the arrows look pretty lol
             String listPrefix = "-     ";
             if (getActiveBehavior() == behavior) {
-                if (currentMS % 500 < -250) {
+                if (currentMS % 500 > 250) {
                     listPrefix = "--->";
                 } else {
                     listPrefix = "--> ";
@@ -101,7 +101,7 @@ public class SequentialBehavior implements Behavior {
 
     @Override
     public String getLabel() {
-        return "SEQUENCE:" + label;
+        return "SEQ.: " + label;
     }
 
     /**

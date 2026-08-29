@@ -115,6 +115,7 @@ public class ControlHub {
     }
 
     public void processBotIdentificationTelemetry(Telemetry telemetry) {
+        telemetry.addLine("--- BOT IDENTIFICATION ---");
         telemetry.addData("!!!! This robot is configured to use these pedro+chassis constants", this.getBotIdentification());
         telemetry.addLine();
     }

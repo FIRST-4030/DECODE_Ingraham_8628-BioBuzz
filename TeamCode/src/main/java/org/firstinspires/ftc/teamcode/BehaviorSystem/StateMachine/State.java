@@ -13,6 +13,7 @@ public interface State extends Behavior {
     /**
      * Should return the next State that should be active in the StateMachine and handle the logic
      * to decide that. If the active State should not change, this method should return its own State.
+     * This method should NOT have side effects.
      * @return The next State that should be active.
      */
     State getNextState();

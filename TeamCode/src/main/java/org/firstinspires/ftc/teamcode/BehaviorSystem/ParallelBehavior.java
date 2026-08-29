@@ -116,7 +116,7 @@ public class ParallelBehavior implements Behavior {
         for (Behavior behavior : behaviors) {
             // There's some crazy jazz here that just makes the arrows look pretty lol
             String listPrefix = "--> ";
-            if (currentMS % 500 < -250) {
+            if (currentMS % 500 > 250) {
                 listPrefix = "--->";
             }
             if (behavior.isComplete()) {
@@ -132,6 +132,6 @@ public class ParallelBehavior implements Behavior {
 
     @Override
     public String getLabel() {
-        return "PARALLEL:" + label;
+        return "PAR.: " + label;
     }
 }

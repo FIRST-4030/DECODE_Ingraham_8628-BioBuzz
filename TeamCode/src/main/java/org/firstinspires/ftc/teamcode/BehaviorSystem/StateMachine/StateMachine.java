@@ -94,6 +94,12 @@ public class StateMachine implements Behavior {
 
         if (activeState != null) {
             activeState.enter();
+
+            // Call getNextState() getter when first entering the new state, because some
+            // conditions (like gamepad functions ending in -WasPressed) only become false once
+            // they've been called. Calling getNextState() here makes sure these values are all
+            // accurate and don't bleed over from the previous state.
+            activeState.getNextState();
         }
     }
 }

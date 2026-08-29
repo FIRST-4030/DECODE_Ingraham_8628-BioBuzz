@@ -31,7 +31,6 @@ public class BotIdentificationOpMode extends OpMode {
         telemetry.addLine("   Y   - Get Current ControlHub");
         telemetry.addLine("   LB - Define ControlHub as BIOBUZZ_DEMO");
         telemetry.addLine("   RB - Define ControlHub as BIOBUZZ_COMPETITION");
-        telemetry.addLine("DPAD-DOWN - Define ControlHub as DECODE (probably don't use)");
 
         if (gamepad1.aWasReleased()) {
             try {
@@ -72,13 +71,6 @@ public class BotIdentificationOpMode extends OpMode {
         } else if (gamepad1.rightBumperWasReleased()) {
             try {
                 controlHub.initializeControlHub(ControlHub.BotIdentification.BIOBUZZ_COMPETITION);
-                operation = "ControlHub=" + controlHub.getBotIdentification();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        } else if (gamepad1.dpadDownWasPressed()) {
-            try {
-                controlHub.initializeControlHub(ControlHub.BotIdentification.DECODE);
                 operation = "ControlHub=" + controlHub.getBotIdentification();
             } catch (IOException e) {
                 throw new RuntimeException(e);
