@@ -59,7 +59,7 @@ public class BaseState implements State {
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
         if (!additionalTelemetrySupplier.get().isEmpty()) {
-            telemetry.addLine(additionalTelemetrySupplier.get());
+            telemetry.addLine(prefix + additionalTelemetrySupplier.get());
             telemetry.addLine();
         }
         behavior.processTelemetry(telemetry, prefix);

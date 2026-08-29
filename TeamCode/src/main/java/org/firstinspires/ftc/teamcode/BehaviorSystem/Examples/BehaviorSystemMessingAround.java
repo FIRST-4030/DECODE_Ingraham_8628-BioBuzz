@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BehaviorSystem.Examples;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -17,6 +18,7 @@ import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
+@Disabled
 @TeleOp(name="Behavior System Messing Around", group="Demos")
 public class BehaviorSystemMessingAround extends OpMode {
     ControlHub controlHub;
@@ -38,7 +40,7 @@ public class BehaviorSystemMessingAround extends OpMode {
         complexBehavior = BehaviorBuilder.create()
                 .sequential("Example sequence")
                     .add(new WaitBehavior(2000, "Wait 2 sec"))
-                    .parallel(ParallelBehavior.CompletionCondition.FIRST, "Drive while waiting for A to be pressed")
+                    .parallel(ParallelBehavior.CompletionCondition.FIRST, "Drive while waiting for A button")
                         .add(waitForAPressBehavior)
                         .add(gamepadDrivingBehavior)
                     .end()
@@ -46,7 +48,7 @@ public class BehaviorSystemMessingAround extends OpMode {
                 .build();
 
         nestedComplexBehavior = BehaviorBuilder.create()
-                .sequential("Example nested sequence")
+                .parallel(ParallelBehavior.CompletionCondition.ALL, "Nested Complex Behavior")
                     .add(complexBehavior)
                     .add(new WaitBehavior(2000))
                 .end()

@@ -28,6 +28,8 @@ public class ControlHub {
         UNKNOWN,
     }
 
+    public static final BotIdentification defaultBotIdentification = BotIdentification.BIOBUZZ_COMPETITION;
+
     private final String fileName;
 
     public ControlHub() {
@@ -69,10 +71,35 @@ public class ControlHub {
         } catch (IOException e) {
             // Catches potential FileNotFoundException (which is an IOException)
             // and other I/O errors
-            System.err.println("An error occurred while reading the file: " + e.getMessage());
+
+//            System.err.println("An error occurred while reading the file: " + e.getMessage());
+
+            line = botIdentificationToString(defaultBotIdentification);
         }
 
         return stringToBotIdentification(line);
+    }
+
+    /**
+     * Returns whether the robot is resorting to the default bot identification because its
+     * bot identification was incorrectly configured or is not present on the sd card.
+     * @return Whether the robot is falling back to the default bot identification.
+     */
+    public boolean isFallBack() {
+        boolean fallback = false;
+
+        String line = null;
+        try (BufferedReader reader = new BufferedReader(new FileReader(fileName))) {
+            line = reader.readLine();
+        } catch (IOException e) {
+            fallback = true;
+        }
+
+        if (line == null) {
+            fallback = true;
+        }
+
+        return fallback;
     }
 
     public String botIdentificationToString(BotIdentification botIdentification) {
@@ -89,6 +116,10 @@ public class ControlHub {
     }
 
     public BotIdentification stringToBotIdentification(String string) {
+        if (string == null) {
+            return defaultBotIdentification;
+        }
+
         switch (string) {
             case "DECODE":
                 return BotIdentification.DECODE;
@@ -116,7 +147,14 @@ public class ControlHub {
 
     public void processBotIdentificationTelemetry(Telemetry telemetry) {
         telemetry.addLine("--- BOT IDENTIFICATION ---");
-        telemetry.addData("!!!! This robot is configured to use these pedro+chassis constants", this.getBotIdentification());
+        telemetry.addData("This robot will use the pedro constants for", this.botIdentificationToString(this.getBotIdentification()));
+        if (this.isFallBack()) {
+            telemetry.addLine("");
+            telemetry.addLine("(WARNING: this is a fallback; bot identification is not configured or ControlHub.txt is " +
+                    "not present on the sd card. The robot is resorting to the default bot: " +
+                    this.botIdentificationToString(this.getBotIdentification()) +
+                    ". Use the \"Bot Identification Manager\" OpMode to fix this.)");
+        }
         telemetry.addLine();
     }
 
