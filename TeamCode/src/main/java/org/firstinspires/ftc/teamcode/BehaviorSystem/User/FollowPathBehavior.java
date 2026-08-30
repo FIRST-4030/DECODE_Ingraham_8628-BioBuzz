@@ -17,7 +17,8 @@ public class FollowPathBehavior implements Behavior {
     private final String label;
 
     /**
-     * Passes the Follower and PathChain to this Behavior.
+     * Behavior that uses a PedroPathing follower to follow a given pathChain. Completes when the follower is no
+     * longer busy.
      * @param follower The Pedro Follower to use.
      * @param pathChain The Pedro PathChain to follow.
      */
@@ -26,7 +27,8 @@ public class FollowPathBehavior implements Behavior {
     }
 
     /**
-     * Passes the Follower, PathChain, and Label to this Behavior.
+     * Behavior that uses a PedroPathing follower to follow a given pathChain. Completes when the follower is no
+     * longer busy.
      * @param follower The Pedro Follower to use.
      * @param pathChain The Pedro PathChain to follow.
      * @param label The label for this behavior.

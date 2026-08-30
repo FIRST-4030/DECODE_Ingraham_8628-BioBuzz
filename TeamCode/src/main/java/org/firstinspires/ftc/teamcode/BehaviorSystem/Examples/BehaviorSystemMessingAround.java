@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.TaskState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.User.TimerBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitForConditionBehavior;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
@@ -39,7 +39,7 @@ public class BehaviorSystemMessingAround extends OpMode {
         gamepadDrivingBehavior = new GamepadDrivingBehavior(chassis, gamepad1, "Gamepad driving behavior");
         complexBehavior = BehaviorBuilder.create()
                 .sequential("Example sequence")
-                    .add(new WaitBehavior(2000, "Wait 2 sec"))
+                    .add(new TimerBehavior(2000, "Wait 2 sec"))
                     .parallel(ParallelBehavior.CompletionCondition.FIRST, "Drive while waiting for A button")
                         .add(waitForAPressBehavior)
                         .add(gamepadDrivingBehavior)
@@ -50,7 +50,7 @@ public class BehaviorSystemMessingAround extends OpMode {
         nestedComplexBehavior = BehaviorBuilder.create()
                 .parallel(ParallelBehavior.CompletionCondition.ALL, "Nested Complex Behavior")
                     .add(complexBehavior)
-                    .add(new WaitBehavior(2000))
+                    .add(new TimerBehavior(2000))
                 .end()
                 .build();
 

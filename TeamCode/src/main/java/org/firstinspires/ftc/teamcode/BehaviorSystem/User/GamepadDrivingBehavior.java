@@ -15,10 +15,21 @@ public class GamepadDrivingBehavior implements Behavior {
     private final Gamepad gamepad;
     private final String label;
 
+    /**
+     * Behavior for robot-centric driving using a gamepad. Never completes.
+     * @param chassis The chassis instance to use for driving.
+     * @param gamepad The gamepad to control driving with.
+     */
     public GamepadDrivingBehavior(Chassis chassis, Gamepad gamepad) {
         this(chassis, gamepad, "Gamepad driving");
     }
 
+    /**
+     * Behavior for robot-centric driving using a gamepad. Never completes.
+     * @param chassis The chassis instance to use for driving.
+     * @param gamepad The gamepad to control driving with.
+     * @param label The label for this behavior.
+     */
     public GamepadDrivingBehavior(Chassis chassis, Gamepad gamepad, String label) {
         this.chassis = chassis;
         this.gamepad = gamepad;

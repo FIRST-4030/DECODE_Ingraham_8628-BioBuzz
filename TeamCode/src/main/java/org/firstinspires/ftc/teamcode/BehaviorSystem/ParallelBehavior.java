@@ -132,6 +132,7 @@ public class ParallelBehavior implements Behavior {
 
     @Override
     public String getLabel() {
-        return "PAR: " + label;
+//        return "PAR: " + label;
+        return label;
     }
 }

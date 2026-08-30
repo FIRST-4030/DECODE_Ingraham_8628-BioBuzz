@@ -7,7 +7,7 @@ import java.util.Objects;
 
 /**
  * Template for easily creating new behaviors. You can duplicate this class, rename it, and modify it
- * to your liking to easily make a new robot capability.
+ * to your liking to quickly make a new robot capability.
  * @author Edson James
  */
 public class UserBehaviorTemplate implements Behavior {
@@ -16,13 +16,13 @@ public class UserBehaviorTemplate implements Behavior {
     // Probably don't touch this.
     private final String label;
 
-    // You want this first constructor to take everything the full constructor takes except for the label.
-    // Then, this constructor can just call your full constructor with your hard-coded default label.
+    // You want this first constructor to take everything the full constructor takes EXCEPT for the label.
+    // Then, this constructor can just call your full constructor with a hard-coded default label.
     public UserBehaviorTemplate() {
         this("User behavior");
     }
 
-    // Full constructor, including a parameter for the label.
+    // This is the full constructor, INCLUDING a parameter for the label.
     public UserBehaviorTemplate(String label) {
         this.label = label;
     }
@@ -41,8 +41,10 @@ public class UserBehaviorTemplate implements Behavior {
 
     }
 
-    // isComplete() returns a boolean (true or false) value. Some behaviors, such as a timer, have well-defined
-    // "completed" states. Other behaviors, such as a gamepad driving behavior, don't really have "completed" states
+    // isComplete() returns a boolean (true or false) value. It's used mostly in sequences or parallel
+    // behaviors to decide when to move on to the next step. It's also used in TaskStates to decide when
+    // to switch states. Some behaviors, such as TimerBehavior, have a well-defined "completed" condition.
+    // Other behaviors, such as GamepadDrivingBehavior, don't really have "completed" conditions
     // and thus should always return false here.
     @Override
     public boolean isComplete() {
@@ -50,12 +52,13 @@ public class UserBehaviorTemplate implements Behavior {
     }
 
     // exit() is where you store all the logic for when your behavior "ends." Cleaning up. For example,
-    // GamepadDrivingBehavior stops all driving motors when exiting.
+    // GamepadDrivingBehavior stops all driving motors in exit().
     @Override
     public void exit() {
 
     }
 
+    // This is where you print information about what your behavior is doing.
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
         // ALWAYS make sure to add prefix to the beginning of new lines you print to telemetry.

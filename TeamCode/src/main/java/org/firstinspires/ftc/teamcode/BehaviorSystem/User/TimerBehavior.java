@@ -10,17 +10,28 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
  * on this behavior before it can ever complete.
  * @author Edson James
  */
-public class WaitBehavior implements Behavior {
+public class TimerBehavior implements Behavior {
     private final ElapsedTime elapsedTime = new ElapsedTime();
     private final double waitTimeMS;
     private boolean entered = false;
     private final String label;
 
-    public WaitBehavior(double waitTimeMS) {
-        this(waitTimeMS, "Wait");
+    /**
+     * Behavior that completes after a given duration in milliseconds. Keep in mind, you must call enter()
+     * on this behavior before it can ever complete.
+     * @param waitTimeMS How many milliseconds must elapse since the behavior starts before it completes.
+     */
+    public TimerBehavior(double waitTimeMS) {
+        this(waitTimeMS, "Timer");
     }
 
-    public WaitBehavior(double waitTimeMS, String label) {
+    /**
+     * Behavior that completes after a given duration in milliseconds. Keep in mind, you must call enter()
+     * on this behavior before it can ever complete.
+     * @param waitTimeMS How many milliseconds must elapse since the behavior starts before it completes.
+     * @param label The label for this behavior.
+     */
+    public TimerBehavior(double waitTimeMS, String label) {
         this.waitTimeMS = waitTimeMS;
         this.label = label;
     }

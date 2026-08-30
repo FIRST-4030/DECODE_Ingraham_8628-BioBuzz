@@ -15,7 +15,9 @@ public class WaitForConditionBehavior implements Behavior {
     private final String label;
 
     /**
-     * Takes a BooleanSupplier that reflects the condition you want to wait for.
+     * Behavior that completes when a given condition (a BooleanSupplier) returns true. Could be used
+     * as the first behavior in a parallelBehavior in conjunction with other behaviors for action to be
+     * taken while waiting for a condition.
      * @param condition The BooleanSupplier that reflects the condition you want to wait for.
      */
     public WaitForConditionBehavior(BooleanSupplier condition) {
@@ -23,7 +25,9 @@ public class WaitForConditionBehavior implements Behavior {
     }
 
     /**
-     * Takes a BooleanSupplier and a label.
+     * Behavior that completes when a given condition (a BooleanSupplier) returns true. Could be used
+     * as the first behavior in a parallelBehavior in conjunction with other behaviors for action to be
+     * taken while waiting for a condition.
      * @param condition The BooleanSupplier that reflects the condition you want to wait for.
      * @param label The label for this behavior.
      */
