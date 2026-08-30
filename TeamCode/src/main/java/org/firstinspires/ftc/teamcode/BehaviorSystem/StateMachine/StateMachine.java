@@ -36,6 +36,8 @@ public class StateMachine implements Behavior {
         State nextState = activeState.getNextState();
 
         if (nextState != activeState) {
+            // Unlike SequentialBehavior.update(), I'm NOT doing this recursively. This is to avoid
+            // freezing if there is a circular chain of states.
             setState(nextState);
         }
     }

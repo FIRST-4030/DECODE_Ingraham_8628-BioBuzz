@@ -37,6 +37,7 @@ public class BasicSequenceOpMode extends OpMode {
                         .add(new TimerBehavior(2000))
                         .add(new TimerBehavior(3000))
                         .add(new TimerBehavior(6000))
+                        .add(new GamepadDrivingBehavior(chassis, gamepad1))
                     .end()
                     .add(new TimerBehavior(7000))
                 .end()

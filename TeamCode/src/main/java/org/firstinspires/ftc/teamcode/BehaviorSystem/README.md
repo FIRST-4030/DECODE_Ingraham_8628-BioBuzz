@@ -3,10 +3,11 @@
 The Behavior System is a little modular framework for Ingraham Robotics for organizing robot logic
 into reusable, composable pieces called `behavior`s.
 
-This README documents all of the core functionality in the framework, but every class also has
-documentation in their source code. See the
+This README documents the core functionality in the framework with examples, but each class
+also has documentation in their source code. See the
 [User Behavior Template](User/UserBehaviorTemplate.java) for instructions on making custom robot
-capabilities using the framework, and the [Basic OpMode Demo](Demos/BasicOpMode.java).
+capabilities using the framework, and the [Basic OpMode Demo](Demos/BasicOpMode.java) and
+[Basic Sequence Demo](Demos/BasicSequenceOpMode.java).
 
 ## The [`Behavior`](Behavior.java) interface
 
@@ -29,7 +30,10 @@ optional to specify a label during instantiation.
 
 ### Example with GamepadDrivingBehavior
 
-This opMode lets you drive the robot around using the `GamepadDrivingBehavior` behavior.
+This opMode lets you drive the robot around using the `GamepadDrivingBehavior` behavior. The idea
+is that all robot capabilities (driving, shooting, following a Pedro path, collecting, etc.) can
+be handled inside decoupled behaviors. This makes all of your code very flexible and allows you
+to iterate quickly.
 
 ```java
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -47,7 +51,6 @@ public class BasicOpMode extends OpMode {
     @Override
     public void init() {
         chassis = new Chassis(hardwareMap);
-
         gamepadDrivingBehavior = new GamepadDrivingBehavior(chassis, gamepad1);
     }
 
