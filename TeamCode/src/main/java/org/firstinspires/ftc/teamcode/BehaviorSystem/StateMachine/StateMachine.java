@@ -31,6 +31,7 @@ public class StateMachine implements Behavior {
     public void update() {
         if (isComplete()) { return; }
 
+        // Don't need to do a null check; isComplete() already is a null check for activeState
         activeState.update();
 
         State nextState = activeState.getNextState();

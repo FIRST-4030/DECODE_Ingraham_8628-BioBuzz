@@ -89,11 +89,7 @@ public class SequentialBehavior implements Behavior {
                 }
             }
             if (activeBehaviorIndex > i) {
-//            if (behavior.isComplete() || activeBehaviorIndex > i) {
                 listPrefix = "✔   ";
-            }
-            if (behavior.isComplete()) {
-                listPrefix = "*    ";
             }
             telemetry.addLine(prefix + listPrefix + behavior.getLabel());
 

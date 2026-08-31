@@ -10,19 +10,24 @@ public interface State extends Behavior {
     /**
      * Should return the next State that should be active in the StateMachine and handle the logic
      * to decide that. If the active State should not change, this method should return its own State.
-     * This method should NOT have side effects.
+     *
+     * IMPORTANT: This method should NOT have side effects that persist across multiple calls.
+     * Avoid checking "one-shot" events (like gamepad.a.wasPressed()) here if they are consumed upon
+     * calling. Instead, check those events in update() and store the result, or ensure this method
+     * is only called once per loop by the owner (e.g. StateMachine).
+     *
      * @return The next State that should be active.
      */
     State getNextState();
 
     /**
-     * By default, a state will "complete" when getNextState() does not return the state itself. However,
-     * there aren't really many cases where a state's "completion" status will be useful, because
-     * StateMachine handles the switching of states without using the isComplete() method.
-     * @return Whether the state is complete.
+     * By default, states do not "complete." They are intended to transition to other states via
+     * getNextState(), and the StateMachine itself handles the lifecycle.
+     *
+     * @return false.
      */
     @Override
     default boolean isComplete() {
-        return getNextState() != this;
+        return false;
     }
 }

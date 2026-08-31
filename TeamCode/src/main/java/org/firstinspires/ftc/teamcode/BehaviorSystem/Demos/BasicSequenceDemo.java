@@ -1,6 +1,5 @@
-package org.firstinspires.ftc.teamcode.OpModes;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.Demos;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -18,9 +17,9 @@ import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
-@Disabled
-@TeleOp(name="Behavior System Messing Around", group="Demos")
-public class BehaviorSystemMessingAround extends OpMode {
+//@Disabled
+@TeleOp(name="Behavior System Complex Demo", group="Demos")
+public class BasicSequenceDemo extends OpMode {
     ControlHub controlHub;
     Chassis chassis;
 
@@ -48,7 +47,7 @@ public class BehaviorSystemMessingAround extends OpMode {
                 .build();
 
         nestedComplexBehavior = BehaviorBuilder.create()
-                .parallel(ParallelBehavior.CompletionCondition.ALL, "Nested Complex Behavior")
+                .sequential("Nested Complex Behavior")
                     .add(complexBehavior)
                     .add(new TimerBehavior(2000))
                 .end()

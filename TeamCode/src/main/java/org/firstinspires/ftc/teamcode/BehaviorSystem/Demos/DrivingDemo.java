@@ -12,8 +12,8 @@ import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
-@TeleOp(name="Basic OpMode w/ the Behavior System", group="Demos")
-public class BasicOpMode extends OpMode {
+@TeleOp(name="Behavior System Driving Demo", group="Demos")
+public class DrivingDemo extends OpMode {
     ControlHub controlHub;
     Chassis chassis;
 
