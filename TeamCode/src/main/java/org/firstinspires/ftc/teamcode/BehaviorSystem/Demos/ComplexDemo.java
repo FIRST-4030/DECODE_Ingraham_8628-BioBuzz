@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.ControlHub;
 
 //@Disabled
 @TeleOp(name="Behavior System Complex Demo", group="Demos")
-public class BasicSequenceDemo extends OpMode {
+public class ComplexDemo extends OpMode {
     ControlHub controlHub;
     Chassis chassis;
 

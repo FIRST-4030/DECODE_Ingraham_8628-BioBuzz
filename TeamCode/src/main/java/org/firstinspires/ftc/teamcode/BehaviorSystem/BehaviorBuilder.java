@@ -112,7 +112,7 @@ public class BehaviorBuilder {
      */
     public BehaviorBuilder end() {
         if (parent == null) {
-            throw new IllegalStateException("Cannot call end() on root builder. Use build() instead.");
+            throw new IllegalStateException("BehaviorBuilder cannot call end() on root builder. Use build() instead.");
         }
         parent.add(this.internalBuild());
         return parent;
@@ -125,7 +125,7 @@ public class BehaviorBuilder {
      */
     public Behavior build() {
         if (parent != null) {
-            throw new IllegalStateException("Builder has unclosed blocks. Call end() before build().");
+            throw new IllegalStateException("BehaviorBuilder has unclosed blocks. Call end() before build().");
         }
         return internalBuild();
     }
