@@ -17,6 +17,7 @@ public class ParallelBehavior implements Behavior {
         ALL,
         ANY,
         FIRST_IN_LIST,
+        NEVER,
     }
 
     private final CompletionCondition completionCondition;
@@ -71,6 +72,8 @@ public class ParallelBehavior implements Behavior {
                 return areAnyBehaviorsCompleted();
             case FIRST_IN_LIST:
                 return isFirstCompleted();
+            case NEVER:
+                return false;
             default:
                 return false;
         }
@@ -118,7 +121,11 @@ public class ParallelBehavior implements Behavior {
     public void processTelemetry(Telemetry telemetry, String prefix) {
         int currentMS = (int) (System.currentTimeMillis());
 
-        telemetry.addLine(prefix + "(Ends when " + completionCondition + " behavior(s) complete)");
+        if (completionCondition == CompletionCondition.NEVER) {
+            telemetry.addLine(prefix + "(NEVER ends)");
+        } else {
+            telemetry.addLine(prefix + "(Ends once " + completionCondition + " behavior(s) have completed)");
+        }
         for (int i = 0; i < behaviors.size(); i++) {
             Behavior behavior = behaviors.get(i);
             // There's some crazy jazz here that just makes the arrows look pretty lol

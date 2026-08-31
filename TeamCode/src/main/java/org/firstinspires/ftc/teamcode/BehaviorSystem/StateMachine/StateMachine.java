@@ -12,7 +12,7 @@ public class StateMachine implements Behavior {
     private final String label;
 
     public StateMachine() {
-        this("State Machine");
+        this("");
     }
 
     public StateMachine(String label) {
@@ -63,7 +63,9 @@ public class StateMachine implements Behavior {
 
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
-        telemetry.addLine(prefix + "--- FSM: " + getLabel() + " ---");
+        if (!label.isEmpty()) {
+            telemetry.addLine(prefix + "--- FSM: " + getLabel() + " ---");
+        }
 
         if (isComplete()) {
             telemetry.addLine(prefix + "State machine completed");
@@ -72,7 +74,6 @@ public class StateMachine implements Behavior {
         }
 
         telemetry.addData(prefix + "    Active state", activeState.getLabel());
-        telemetry.addLine("");
 
         if (activeState != null) {
             activeState.processTelemetry(telemetry, prefix + "    ");
