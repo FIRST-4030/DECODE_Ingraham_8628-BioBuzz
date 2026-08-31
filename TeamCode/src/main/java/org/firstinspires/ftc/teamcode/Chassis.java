@@ -99,6 +99,10 @@ public class Chassis {
         backRightDrive.setPower(backrightpower);
     }
 
+    // NOTE:
+    // Don't want to use these turn, turnTo, and moveForward methods; they freeze the whole
+    // program with a while loop. Pedro would work better anyway.
+
     public void turn(double power, double mseconds) {
         ElapsedTime timer = new ElapsedTime();
         timer.reset();
