@@ -39,7 +39,7 @@ public class BasicSequenceDemo extends OpMode {
         complexBehavior = BehaviorBuilder.create()
                 .sequential("Example sequence")
                     .add(new TimerBehavior(2000, "Wait 2 sec"))
-                    .parallel(ParallelBehavior.CompletionCondition.FIRST, "Drive while waiting for A button")
+                    .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Drive while waiting for A button")
                         .add(waitForAPressBehavior)
                         .add(gamepadDrivingBehavior)
                     .end()

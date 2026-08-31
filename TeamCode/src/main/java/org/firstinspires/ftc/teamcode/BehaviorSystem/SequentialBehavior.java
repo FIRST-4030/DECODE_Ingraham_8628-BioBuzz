@@ -38,16 +38,15 @@ public class SequentialBehavior implements Behavior {
      */
     @Override
     public void update() {
-        if (isComplete()) { return; }
-        if (getActiveBehavior() == null) { return; }
+        while (!isComplete() && getActiveBehavior() != null) {
+            getActiveBehavior().update();
 
-        getActiveBehavior().update();
-
-        if (getActiveBehavior().isComplete()) {
-            nextBehavior();
-            update();
-            // ^^^ Call update recursively so that transitions between
-            // behaviors can occur in a single frame.
+            if (getActiveBehavior().isComplete()) {
+                nextBehavior();
+                // Loop continues so that transitions between behaviors can occur in a single frame.
+            } else {
+                break;
+            }
         }
     }
 

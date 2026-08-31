@@ -15,6 +15,7 @@ public class FollowPathBehavior implements Behavior {
     private final Follower follower;
     private final PathChain pathChain;
     private final String label;
+    private boolean entered = false;
 
     /**
      * Behavior that uses a PedroPathing follower to follow a given pathChain. Completes when the follower is no
@@ -45,6 +46,7 @@ public class FollowPathBehavior implements Behavior {
     @Override
     public void enter() {
         follower.followPath(pathChain);
+        entered = true;
     }
 
     /**
@@ -61,11 +63,13 @@ public class FollowPathBehavior implements Behavior {
      */
     @Override
     public boolean isComplete() {
-        return !follower.isBusy();
+        return entered && !follower.isBusy();
     }
 
     @Override
-    public void exit() {}
+    public void exit() {
+        entered = false;
+    }
 
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
