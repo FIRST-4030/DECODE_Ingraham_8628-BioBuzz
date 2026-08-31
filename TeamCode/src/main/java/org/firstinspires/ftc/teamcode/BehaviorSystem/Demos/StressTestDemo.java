@@ -46,8 +46,10 @@ public class StressTestDemo extends OpMode {
                     // 2. Test Parallel Caching (Event Stealing fix)
                     .parallel(ParallelBehavior.CompletionCondition.ANY, "Parallel Race")
                         .add(new TimerBehavior(5000, "5s Timer"))
-                        .add(new WaitForConditionBehavior(() -> !gamepad1.a, "Don't press A yet!!"))
-                        .add(new WaitForConditionBehavior(() -> gamepad1.a, "Press A to Skip Timer"))
+                        .sequential("Press A sequence")
+                            .add(new WaitForConditionBehavior(() -> !gamepad1.a, "Don't press A yet!!"))
+                            .add(new WaitForConditionBehavior(() -> gamepad1.a, "Press A to Skip Timer"))
+                        .end()
                     .end()
 
                     // 3. Deep Nesting
