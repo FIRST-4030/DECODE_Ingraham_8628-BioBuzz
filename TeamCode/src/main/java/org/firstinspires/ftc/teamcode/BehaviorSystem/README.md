@@ -1,3 +1,4 @@
+
 # The Behavior System
 
 The Behavior System is a little modular framework for Ingraham Robotics for organizing robot logic
@@ -5,13 +6,12 @@ into reusable, composable pieces called `behavior`s.
 
 This README documents the core functionality in the framework with examples, but each class
 also has documentation in their source code. See the
-[User Behavior Template](User/UserBehaviorTemplate.java) for instructions on making custom robot
-capabilities using the framework, and the [Basic OpMode Demo](Demos/BasicOpMode.java) and
-[Basic Sequence Demo](Demos/BasicSequenceOpMode.java).
+[User Behavior Template](UserBehaviors/UserBehaviorTemplate.java) for instructions on making custom robot
+capabilities using the framework.
 
-## The [`Behavior`](Behavior.java) interface
+## The `Behavior` interface
 
-Every `behavior` must implement the following methods:
+Every [`Behavior`](Behavior.java) must implement the following methods:
 
 - `enter()`: Called once when the behavior starts.
 - `update()`: Called repeatedly during the main loop.
@@ -22,51 +22,128 @@ Almost every class you will work with in the Behavior System implements
 `Behavior`. You can define new capabilities for the robot that implement `Behavior`, allowing
 you to use your own custom robot functionality anywhere that a `Behavior` can be used.
 
-Behaviors also must implement `processTelemetry()`, which is where information about
-what the behavior is actively doing is printed to the driver station. Finally, behaviors
-have a `getLabel()` method used to attach a short descriptor/title
-to a behavior, useful in telemetry and debugging. However, most behaviors make it
-optional to specify a label during instantiation.
+### Note
 
-### Example with GamepadDrivingBehavior
+Behaviors also must implement `processTelemetry()` (and optionally `processSimpleTelemetry`),
+which is where information about what the behavior is actively doing is printed to the driver
+station. Finally, behaviors have a `getLabel()` method used to attach a short descriptor/title
+to a behavior, useful in telemetry and debugging. However, most behaviors make it optional
+to specify a label during instantiation.
 
-This opMode lets you drive the robot around using the `GamepadDrivingBehavior` behavior. The idea
-is that all robot capabilities (driving, shooting, following a Pedro path, collecting, etc.) can
-be handled inside decoupled behaviors. This makes all of your code very flexible and allows you
-to iterate quickly.
+## `ParallelBehavior` and `SequentialBehavior`
+
+This package includes two behaviors that are, themselves,
+designed to work with lists of other behaviors. They are called
+[`ParallelBehavior`](ParallelBehavior.java) and [`SequentialBehavior`](SequentialBehavior.java).
+
+### `ParallelBehavior`
+
+A parallelBehavior executes multiple `Behavior`s in a list at the same time, exiting each
+of them as they complete.
+
+For every parallelBehavior you create, you can specify how it decides it is complete by
+picking one of three strategies:
+
+1. ALL: This parallelBehavior is only complete once every behavior in the list
+   is complete.
+2. ANY: This parallelBehavior is complete if any of the behaviors in the list are
+   complete.
+3. FIRST_IN_LIST: This parallelBehavior is complete if the first behavior in the list
+   is complete.
+
+### `SequentialBehavior`
+
+A `sequentialBehavior` is given a list of behaviors and executes them one at a time.
+
+## `BehaviorBuilder`
+
+Instances of ParallelBehavior and SequentialBehavior aren't designed to be created manually.
+Instead, I encourage you to use the `BehaviorBuilder` which lets you fluently define
+parallelBehaviors and sequentialBehaviors with a more readable syntax.
+
+### Examples with one parallel/Sequential block
+
+The BehaviorBuilder uses a builder pattern. You define parallel and sequential behaviors by
+opening and closing blocks using `parallel()`, `sequential()`, and `end()` after calling
+`BehaviorBuilder.create()`. The first block you open becomes the root of the behavior.
+
+Making a sequentialBehavior could look like this:
 
 ```java
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
 
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior;
-import org.firstinspires.ftc.teamcode.Chassis;
+// (...)
 
-@TeleOp(name="Basic OpMode w/ the Behavior System", group="Demos")
-public class BasicOpMode extends OpMode {
-    Chassis chassis;
-    Behavior gamepadDrivingBehavior;
-    
-    @Override
-    public void init() {
-        chassis = new Chassis(hardwareMap);
-        gamepadDrivingBehavior = new GamepadDrivingBehavior(chassis, gamepad1);
-    }
+Behavior myCoolBehavior = BehaviorBuilder.create()
+        // Open a sequential block. Since this is the first block we open,
+        // the whole behavior will be a sequentialBehavior once built.
+        .sequential("My cool behavior") // You can specify labels for blocks
 
-    @Override
-    public void start() {
-        gamepadDrivingBehavior.enter();
-    }
+        // Each behavior will run one at a time
+        .add(new WaitMS(5000), "Wait 5 seconds") // You can set labels for behaviors
+        .add(new WaitMS(2000), "Wait 2 seconds")
+        .add(new WaitMS(3000), "Wait 3 seconds")
+        .add(new WaitMS(1000), "Wait 1 second")
 
-    @Override
-    public void loop() {
-        gamepadDrivingBehavior.update();
-        gamepadDrivingBehavior.processTelemetry(telemetry, "");
+        .end() // Close the block
+        .build(); // Build and return the final behavior
+```
 
-        telemetry.update();
-    }
-}
+...and making a parallelBehavior could look like this:
+
+```java
+import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.GamepadDrive;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
+
+// (...)
+
+Behavior myAmazingBehavior = BehaviorBuilder.create()
+        // Open a parallel block. This behavior will complete once the FIRST behavior
+        // in the list completes.
+        .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "My amazing behavior")
+
+        // Add a behavior inside the block
+        .add(new WaitMS(5000), "Wait 5 seconds")
+
+        // Both of these behaviors will be performed at the same time
+        // during myAmazingBehavior's update loop.
+        .add(new GamepadDrive(chassis, gamepad1))
+
+        .end() // Close the block
+        .build(); // Build and return the final behavior
+```
+
+### Example with nested parallel/Sequential blocks
+
+BehaviorBuilder is most powerful when you nest these parallel and sequential blocks to define
+complex logic.
+
+```java
+import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.GamepadDrive;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
+
+// (...)
+
+Behavior myIncredibleBehavior = BehaviorBuilder.create()
+        .sequential("My incredible behavior") // Open the first block
+        .add(new WaitMS(2000), "Wait 2 seconds")
+
+        // This second block will finish after the timer inside it completes:
+        .parallel(ParallelBehavior.CompletionCondition.ALL, "Drive for 2 seconds")
+        .add(new WaitMS(2000), "Wait 2 seconds")
+        .add(new GamepadDrive(chassis, gamepad1))
+        .end() // Close the second block
+
+        .add(new WaitMS(3000), "Wait just 3 more seconds")
+
+        .end() // Close the first block
+        .build(); // Build everything as one behavior
 ```
 
 ## `State` and `StateMachine`
@@ -82,28 +159,5 @@ You can make a new implementation of `State` manually in your opMode if you real
 but the majority of the time it's faster to create states using the classes
 `BaseState` or `TaskState`. These classes are useful because they let you take an
 existing `Behavior` and attach it to a `State` without unnecessary boilerplate.
-
-## `ParallelBehavior` and `SequentialBehavior`
-
-This package includes two behaviors that are, themselves,
-designed to work with lists of other behaviors. They are called
-`ParallelBehavior` and `SequentialBehavior`.
-
-### `ParallelBehavior`
-
-A `ParallelBehavior` executes multiple `Behavior`s in a list at the same time.
-For every `ParallelBehavior` you create, you can specify how it decides it is complete by
-picking one of three strategies:
-
-1. ALL: This `ParallelBehavior` is only complete once every behavior in the list
-is complete.
-2. ANY: This `ParallelBehavior` is complete if any of the behaviors in the list are
-complete.
-3. FIRST: This `ParallelBehavior` is complete if the first behavior in the list
-is complete.
-
-### `SequentialBehavior`
-
-A `sequentialBehavior` is given a list of behaviors and executes them one at a time.
 
 ---

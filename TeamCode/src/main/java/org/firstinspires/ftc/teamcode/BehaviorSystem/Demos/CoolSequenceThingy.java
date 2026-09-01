@@ -3,51 +3,60 @@ package org.firstinspires.ftc.teamcode.BehaviorSystem.Demos;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.BaseState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.TaskState;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.GamepadDrive;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.InstantBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.LambdaBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitUntil;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
-@TeleOp(name="Behavior System Driving Demo", group="Demos")
-public class DrivingDemo extends OpMode {
+@TeleOp(name="Cool", group="Demos")
+public class CoolSequenceThingy extends OpMode {
     ControlHub controlHub;
     Chassis chassis;
 
+    LambdaBehavior coolLambdaBehavior;
+
     StateMachine mainStateMachine;
-    State gamepadDrivingState, turnAroundState;
+    State mainState;
 
     @Override
     public void init() {
         controlHub = new ControlHub();
         chassis = new Chassis(hardwareMap);
 
-        gamepadDrivingState = new BaseState(
-                new GamepadDrive(chassis, gamepad1),
+        coolLambdaBehavior = new LambdaBehavior(
+                () -> { chassis.resetZeroPowerBehavior(); },
                 () -> {
-                    if (gamepad1.a) return turnAroundState;
-                    return gamepadDrivingState;
+                    chassis.drive(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x);
                 },
-                () -> "[A: turn around]"
+                () -> gamepad1.a,
+                () -> {},
+                () -> "(Driving woohoo!)",
+                "My amazing lambda behavior, press a to exit"
         );
 
-        turnAroundState = new TaskState(
+        mainState = new TaskState(
                 BehaviorBuilder.create()
-                        .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Turning around")
-                        .add(new WaitMS(3000, "3000 ms"))
-                        .add(new WaitUntil(() -> false, "Ummm just pretend I'm turning around rn"))
+                        .sequential()
+                            .add(new WaitMS(5000))
+                            .add(coolLambdaBehavior)
+                            .add(new WaitMS(5000))
+                            .add(new WaitUntil(() -> gamepad1.b, "Press B!"))
+                            .add(new InstantBehavior(
+                                    () -> { chassis.stopMotors(); }
+                            ))
+                            .add(new WaitMS(5000))
                         .end()
                         .build(),
-                () -> gamepadDrivingState
+                () -> null
         );
-
         mainStateMachine = new StateMachine("Main State Machine");
     }
 
@@ -60,7 +69,7 @@ public class DrivingDemo extends OpMode {
 
     @Override
     public void start() {
-        mainStateMachine.setInitialState(gamepadDrivingState);
+        mainStateMachine.setInitialState(mainState);
         mainStateMachine.enter();
     }
 

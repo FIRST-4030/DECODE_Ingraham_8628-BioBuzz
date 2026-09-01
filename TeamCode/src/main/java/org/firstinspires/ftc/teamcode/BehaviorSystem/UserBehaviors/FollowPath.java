@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem.User;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
 
 import com.pedropathing.follower.Follower;
 import com.pedropathing.paths.PathChain;
@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
  * longer busy.
  * @author Edson James
  */
-public class FollowPathBehavior implements Behavior {
+public class FollowPath implements Behavior {
     private final Follower follower;
     private final PathChain pathChain;
     private final String label;
@@ -23,8 +23,8 @@ public class FollowPathBehavior implements Behavior {
      * @param follower The Pedro Follower to use.
      * @param pathChain The Pedro PathChain to follow.
      */
-    public FollowPathBehavior(Follower follower, PathChain pathChain) {
-        this(follower, pathChain, "Follow path");
+    public FollowPath(Follower follower, PathChain pathChain) {
+        this(follower, pathChain, "Follow Path");
     }
 
     /**
@@ -34,7 +34,7 @@ public class FollowPathBehavior implements Behavior {
      * @param pathChain The Pedro PathChain to follow.
      * @param label The label for this behavior.
      */
-    public FollowPathBehavior(Follower follower, PathChain pathChain, String label) {
+    public FollowPath(Follower follower, PathChain pathChain, String label) {
         this.follower = follower;
         this.pathChain = pathChain;
         this.label = label;
@@ -73,7 +73,7 @@ public class FollowPathBehavior implements Behavior {
 
     @Override
     public void processTelemetry(Telemetry telemetry, String prefix) {
-        telemetry.addLine(prefix + "(Current T value: " + follower.getCurrentTValue() + ")");
+        telemetry.addLine(prefix + "(T value: " + follower.getCurrentTValue() + ")");
     }
 
     @Override

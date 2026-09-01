@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem.User;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
@@ -10,7 +10,7 @@ import java.util.function.BooleanSupplier;
  * taken while waiting for a condition.
  * @author Edson James
  */
-public class WaitForConditionBehavior implements Behavior {
+public class WaitUntil implements Behavior {
     private final BooleanSupplier condition;
     private final String label;
 
@@ -20,8 +20,8 @@ public class WaitForConditionBehavior implements Behavior {
      * taken while waiting for a condition.
      * @param condition The BooleanSupplier that reflects the condition you want to wait for.
      */
-    public WaitForConditionBehavior(BooleanSupplier condition) {
-        this(condition, "Wait for condition");
+    public WaitUntil(BooleanSupplier condition) {
+        this(condition, "Wait Until");
     }
 
     /**
@@ -31,7 +31,7 @@ public class WaitForConditionBehavior implements Behavior {
      * @param condition The BooleanSupplier that reflects the condition you want to wait for.
      * @param label The label for this behavior.
      */
-    public WaitForConditionBehavior(BooleanSupplier condition, String label) {
+    public WaitUntil(BooleanSupplier condition, String label) {
         this.condition = condition;
         this.label = label;
     }

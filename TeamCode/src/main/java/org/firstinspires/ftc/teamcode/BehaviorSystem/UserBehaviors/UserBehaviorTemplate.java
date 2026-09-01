@@ -1,9 +1,7 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem.User;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
-
-import java.util.Objects;
 
 /**
  * Template for easily creating new behaviors. You can duplicate this class, rename it, and modify it
@@ -43,8 +41,8 @@ public class UserBehaviorTemplate implements Behavior {
 
     // isComplete() returns a boolean (true or false) value. It's used mostly in sequences or parallel
     // behaviors to decide when to move on to the next step. It's also used in TaskStates to decide when
-    // to switch states. Some behaviors, such as TimerBehavior, have a well-defined "completed" condition.
-    // Other behaviors, such as GamepadDrivingBehavior, don't really have "completed" conditions
+    // to switch states. Some behaviors, such as WaitMS, have a well-defined "completed" condition.
+    // Other behaviors, such as GamepadDrive, don't really have "completed" conditions
     // and thus should always return false here.
     @Override
     public boolean isComplete() {
@@ -52,7 +50,7 @@ public class UserBehaviorTemplate implements Behavior {
     }
 
     // exit() is where you store all the logic for when your behavior "ends." Cleaning up. For example,
-    // GamepadDrivingBehavior stops all driving motors in exit().
+    // GamepadDrive stops all driving motors in exit().
     @Override
     public void exit() {
 

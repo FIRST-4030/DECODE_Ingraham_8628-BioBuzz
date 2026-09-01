@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem.User;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Chassis;
  * Behavior for robot-centric driving using a gamepad. Never completes.
  * @author Edson James
  */
-public class GamepadDrivingBehavior implements Behavior {
+public class GamepadDrive implements Behavior {
     private final Chassis chassis;
     private final Gamepad gamepad;
     private final String label;
@@ -20,8 +20,8 @@ public class GamepadDrivingBehavior implements Behavior {
      * @param chassis The chassis instance to use for driving.
      * @param gamepad The gamepad to control driving with.
      */
-    public GamepadDrivingBehavior(Chassis chassis, Gamepad gamepad) {
-        this(chassis, gamepad, "Gamepad driving");
+    public GamepadDrive(Chassis chassis, Gamepad gamepad) {
+        this(chassis, gamepad, "Gamepad Drive");
     }
 
     /**
@@ -30,7 +30,7 @@ public class GamepadDrivingBehavior implements Behavior {
      * @param gamepad The gamepad to control driving with.
      * @param label The label for this behavior.
      */
-    public GamepadDrivingBehavior(Chassis chassis, Gamepad gamepad, String label) {
+    public GamepadDrive(Chassis chassis, Gamepad gamepad, String label) {
         this.chassis = chassis;
         this.gamepad = gamepad;
         this.label = label;

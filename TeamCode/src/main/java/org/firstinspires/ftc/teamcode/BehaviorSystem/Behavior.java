@@ -5,7 +5,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 /**
  * Interface for all behaviors. Behaviors are collections of logic organized in a
  * state-machine-like manner with enter(), update(), exit(), and isComplete() methods.
- * @see org.firstinspires.ftc.teamcode.BehaviorSystem.User.UserBehaviorTemplate
+ * @see org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.UserBehaviorTemplate
  * @author Edson James
  */
 public interface Behavior {
@@ -41,15 +41,15 @@ public interface Behavior {
     void processTelemetry(Telemetry telemetry, String prefix);
 
     /**
-     * Returns a short descriptor/title for the behavior. Used in telemetry.
-     * @return The title of the behavior.
-     */
-    String getLabel();
-
-    /**
      * Print less information to the driver station, usually just instructions.
      * @param telemetry The telemetry instance to print to.
      * @param prefix Characters to add to the beginning of each line printed
      */
     default void processSimpleTelemetry(Telemetry telemetry, String prefix) {}
+
+    /**
+     * Returns a short descriptor/title for the behavior. Used in telemetry.
+     * @return The title of the behavior.
+     */
+    String getLabel();
 }

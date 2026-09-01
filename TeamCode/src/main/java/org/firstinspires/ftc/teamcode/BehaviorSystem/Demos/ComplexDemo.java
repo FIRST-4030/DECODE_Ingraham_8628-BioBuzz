@@ -10,9 +10,10 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.InterruptableT
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.TaskState;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.TimerBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitForConditionBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.GamepadDrive;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.InstantBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitUntil;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
@@ -44,7 +45,7 @@ public class ComplexDemo extends OpMode {
         drivingStateMachine = new StateMachine("Driving State Machine");
 
         gamepadDrivingState = new BaseState(
-                new GamepadDrivingBehavior(chassis, gamepad1),
+                new GamepadDrive(chassis, gamepad1),
                 () -> {
                     if (gamepad1.a) return turnAroundState;
                     return gamepadDrivingState;
@@ -55,8 +56,8 @@ public class ComplexDemo extends OpMode {
         turnAroundState = new TaskState(
                 BehaviorBuilder.create()
                         .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Turning around")
-                            .add(new TimerBehavior(3000, "3000 ms"))
-                            .add(new WaitForConditionBehavior(() -> false, "Ummm just pretend I'm turning around rn"))
+                            .add(new WaitMS(3000, "3000 ms"))
+                            .add(new WaitUntil(() -> false, "Ummm just pretend I'm turning around rn"))
                         .end()
                         .build(),
                 () -> gamepadDrivingState
@@ -82,8 +83,8 @@ public class ComplexDemo extends OpMode {
         releaseGateState = new InterruptableTaskState(
                 BehaviorBuilder.create()
                         .sequential("Release Gate")
-                            .add(new TimerBehavior(3000, "Go to gate"))
-                            .add(new TimerBehavior(2000, "Release"))
+                            .add(new WaitMS(3000, "Go to gate"))
+                            .add(new WaitMS(2000, "Release"))
                         .end()
                         .build(),
                 () -> drivingState,
@@ -98,18 +99,18 @@ public class ComplexDemo extends OpMode {
                 BehaviorBuilder.create()
                         .sequential("Far Shoot")
                             .parallel(ParallelBehavior.CompletionCondition.ALL, "Go to far + turning on shooter")
-                                .add(new TimerBehavior(3000, "Go to far shoot"))
-                                .add(new WaitForConditionBehavior(() -> gamepad1.y, "Turning on shooter (press Y)"))
+                                .add(new WaitMS(3000, "Go to far shoot"))
+                                .add(new WaitUntil(() -> gamepad1.y, "Turning on shooter (press Y)"))
                             .end()
                             .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Shooting + aiming")
                                 .sequential("Shooting")
-                                    .add(new WaitForConditionBehavior(() -> gamepad1.right_bumper, "Shooting (press RB)"))
-                                    .add(new WaitForConditionBehavior(() -> gamepad1.left_bumper, "Shooting (press LB)"))
-                                    .add(new WaitForConditionBehavior(() -> gamepad1.right_bumper, "Shooting (press RB)"))
+                                    .add(new WaitUntil(() -> gamepad1.right_bumper, "Shooting (press RB)"))
+                                    .add(new WaitUntil(() -> gamepad1.left_bumper, "Shooting (press LB)"))
+                                    .add(new WaitUntil(() -> gamepad1.right_bumper, "Shooting (press RB)"))
                                 .end()
-                                .add(new TimerBehavior(100000, "Continuous aiming"))
+                                .add(new WaitMS(100000, "Continuous aiming"))
                             .end()
-                            .add(new TimerBehavior(1000, "Turning off shooter"))
+                            .add(new WaitMS(1000, "Turning off shooter"))
                         .end()
                         .build(),
                 () -> drivingState,
@@ -124,21 +125,21 @@ public class ComplexDemo extends OpMode {
                 BehaviorBuilder.create()
                         .sequential("Near Shoot")
                             .parallel(ParallelBehavior.CompletionCondition.ALL, "Go to near + turning on shooter")
-                                .add(new TimerBehavior(3000, "Go to near shoot"))
-                                .add(new WaitForConditionBehavior(() -> gamepad1.y, "Turning on shooter (press Y)"))
+                                .add(new WaitMS(3000, "Go to near shoot"))
+                                .add(new WaitUntil(() -> gamepad1.y, "Turning on shooter (press Y)"))
                             .end()
                             .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Shooting + aiming")
                                 .sequential("Shooting")
-                                    .add(new WaitForConditionBehavior(() -> gamepad1.right_bumper, "Shooting (press RB)"))
-                                    .add(new WaitForConditionBehavior(() -> gamepad1.left_bumper, "Shooting (press LB)"))
-                                    .add(new WaitForConditionBehavior(() -> gamepad1.right_bumper, "Shooting (press RB)"))
+                                    .add(new WaitUntil(() -> gamepad1.right_bumper, "Shooting (press RB)"))
+                                    .add(new WaitUntil(() -> gamepad1.left_bumper, "Shooting (press LB)"))
+                                    .add(new WaitUntil(() -> gamepad1.right_bumper, "Shooting (press RB)"))
                                 .end()
                                 .parallel(ParallelBehavior.CompletionCondition.NEVER, "Continuous aiming")
-                                    .add(new TimerBehavior(100000, "Aiming things"))
-                                    .add(new GamepadDrivingBehavior(chassis, gamepad1, "More aiming things"))
+                                    .add(new WaitMS(100000, "Aiming things"))
+                                    .add(new GamepadDrive(chassis, gamepad1, "More aiming things"))
                                 .end()
                             .end()
-                            .add(new TimerBehavior(1000, "Turning off shooter"))
+                            .add(new WaitMS(1000, "Turning off shooter"))
                         .end()
                         .build(),
                 () -> drivingState,
@@ -150,7 +151,7 @@ public class ComplexDemo extends OpMode {
         );
 
         parkState = new BaseState(
-                new GamepadDrivingBehavior(chassis, gamepad1, "Driving in special pArKiNg mOdE"),
+                new GamepadDrive(chassis, gamepad1, "Driving in special pArKiNg mOdE"),
                 () -> {
                     if (gamepad1.dpad_left) return drivingState;
                     return parkState;

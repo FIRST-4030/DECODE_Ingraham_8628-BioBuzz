@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.BaseState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.GamepadDrive;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
@@ -25,7 +25,7 @@ public class OpModeTemplate extends OpMode {
         chassis = new Chassis(hardwareMap);
 
         mainState = new BaseState(
-                new GamepadDrivingBehavior(chassis, gamepad1),
+                new GamepadDrive(chassis, gamepad1),
                 () -> mainState
         );
         mainStateMachine = new StateMachine("Main State Machine");

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.BehaviorSystem.User;
+package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
  * on this behavior before it can ever complete.
  * @author Edson James
  */
-public class TimerBehavior implements Behavior {
+public class WaitMS implements Behavior {
     private final ElapsedTime elapsedTime = new ElapsedTime();
     private final double waitTimeMS;
     private boolean entered = false;
@@ -21,8 +21,8 @@ public class TimerBehavior implements Behavior {
      * on this behavior before it can ever complete.
      * @param waitTimeMS How many milliseconds must elapse since the behavior starts before it completes.
      */
-    public TimerBehavior(double waitTimeMS) {
-        this(waitTimeMS, "Timer");
+    public WaitMS(double waitTimeMS) {
+        this(waitTimeMS, "Wait MS");
     }
 
     /**
@@ -31,7 +31,7 @@ public class TimerBehavior implements Behavior {
      * @param waitTimeMS How many milliseconds must elapse since the behavior starts before it completes.
      * @param label The label for this behavior.
      */
-    public TimerBehavior(double waitTimeMS, String label) {
+    public WaitMS(double waitTimeMS, String label) {
         this.waitTimeMS = waitTimeMS;
         this.label = label;
     }

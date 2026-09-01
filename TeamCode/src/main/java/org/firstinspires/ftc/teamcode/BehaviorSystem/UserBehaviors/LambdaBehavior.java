@@ -1,0 +1,83 @@
+package org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors;
+
+import org.firstinspires.ftc.robotcore.external.Supplier;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
+
+public class LambdaBehavior implements Behavior {
+
+    private final String label;
+
+    private final Runnable enterRunnable;
+    private final Runnable updateRunnable;
+    private final Supplier<Boolean> isCompleteSupplier;
+    private final Runnable exitRunnable;
+    private final Supplier<String> telemetrySupplier;
+
+    public LambdaBehavior(
+            Runnable enterRunnable,
+            Runnable updateRunnable,
+            Supplier<Boolean> isCompleteSupplier,
+            Runnable exitRunnable,
+            Supplier<String> telemetrySupplier
+    ) {
+        this(
+                enterRunnable,
+                updateRunnable,
+                isCompleteSupplier,
+                exitRunnable,
+                telemetrySupplier,
+                "Lambda Behavior"
+        );
+    }
+
+    public LambdaBehavior(
+            Runnable enterRunnable,
+            Runnable updateRunnable,
+            Supplier<Boolean> isCompleteSupplier,
+            Runnable exitRunnable,
+            Supplier<String> telemetrySupplier,
+            String label
+    ) {
+        this.enterRunnable = enterRunnable;
+        this.updateRunnable = updateRunnable;
+        this.isCompleteSupplier = isCompleteSupplier;
+        this.exitRunnable = exitRunnable;
+        this.telemetrySupplier = telemetrySupplier;
+        this.label = label;
+    }
+
+    @Override
+    public void enter() {
+        enterRunnable.run();
+    }
+
+    @Override
+    public void update() {
+        updateRunnable.run();
+    }
+
+    @Override
+    public boolean isComplete() {
+        return isCompleteSupplier.get();
+    }
+
+    @Override
+    public void exit() {
+        exitRunnable.run();
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public void processTelemetry(Telemetry telemetry, String prefix) {
+        String telemetrySupplierValue = telemetrySupplier.get();
+
+        if (!telemetrySupplierValue.isEmpty()) {
+            telemetry.addLine(prefix + telemetrySupplierValue);
+        }
+    }
+}
