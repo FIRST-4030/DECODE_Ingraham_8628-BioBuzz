@@ -12,22 +12,25 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.TaskState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.TimerBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.TurnLeftForeverBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitForConditionBehavior;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
+/**
+ * Demo OpMode pretending to simulate some states that may have appeared during the DECODE season.
+ * @author Edson James
+ */
 @TeleOp(name="Behavior System Complex Demo", group="Demos")
 public class ComplexDemo extends OpMode {
     ControlHub controlHub;
     Chassis chassis;
 
-    State drivingState, releaseGateState, farShootState, nearShootState, parkState;
     StateMachine mainStateMachine;
+    State drivingState, releaseGateState, farShootState, nearShootState, parkState;
 
-    State gamepadDrivingState, turnAroundState;
     StateMachine drivingStateMachine;
+    State gamepadDrivingState, turnAroundState;
 
     @Override
     public void init() {
@@ -37,6 +40,8 @@ public class ComplexDemo extends OpMode {
         // -----------------------------------------------------------------------------------------
         // Driving State Machine
         // -----------------------------------------------------------------------------------------
+
+        drivingStateMachine = new StateMachine("Driving State Machine");
 
         gamepadDrivingState = new BaseState(
                 new GamepadDrivingBehavior(chassis, gamepad1),
@@ -49,19 +54,19 @@ public class ComplexDemo extends OpMode {
 
         turnAroundState = new TaskState(
                 BehaviorBuilder.create()
-                        .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Turn left for 750 ms")
-                            .add(new TimerBehavior(750, "750 ms"))
-                            .add(new TurnLeftForeverBehavior(chassis))
+                        .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Turning around")
+                            .add(new TimerBehavior(3000, "3000 ms"))
+                            .add(new WaitForConditionBehavior(() -> false, "Ummm just pretend I'm turning around rn"))
                         .end()
                         .build(),
                 () -> gamepadDrivingState
         );
 
-        drivingStateMachine = new StateMachine("Driving State Machine");
-
         // -----------------------------------------------------------------------------------------
         // Main State Machine
         // -----------------------------------------------------------------------------------------
+
+        mainStateMachine = new StateMachine("Main State Machine");
 
         drivingState = new BaseState(
                 drivingStateMachine,
@@ -152,8 +157,6 @@ public class ComplexDemo extends OpMode {
                 },
                 () -> "[LEFT: driving]"
         );
-
-        mainStateMachine = new StateMachine("Main State Machine");
     }
 
     @Override

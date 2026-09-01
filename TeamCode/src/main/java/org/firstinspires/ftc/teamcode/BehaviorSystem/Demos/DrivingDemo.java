@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.BehaviorSystem.Demos;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.BaseState;
@@ -12,7 +11,7 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.TaskState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.GamepadDrivingBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.User.TimerBehavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.User.TurnLeftForeverBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.User.WaitForConditionBehavior;
 import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
@@ -41,9 +40,9 @@ public class DrivingDemo extends OpMode {
 
         turnAroundState = new TaskState(
                 BehaviorBuilder.create()
-                        .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Turn left for 750 ms")
-                            .add(new TimerBehavior(750, "750 ms"))
-                            .add(new TurnLeftForeverBehavior(chassis))
+                        .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Turning around")
+                        .add(new TimerBehavior(3000, "3000 ms"))
+                        .add(new WaitForConditionBehavior(() -> false, "Ummm just pretend I'm turning around rn"))
                         .end()
                         .build(),
                 () -> gamepadDrivingState
