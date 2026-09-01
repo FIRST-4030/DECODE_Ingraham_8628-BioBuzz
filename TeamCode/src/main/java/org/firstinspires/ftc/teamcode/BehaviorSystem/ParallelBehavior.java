@@ -122,9 +122,9 @@ public class ParallelBehavior implements Behavior {
         int currentMS = (int) (System.currentTimeMillis());
 
         if (completionCondition == CompletionCondition.NEVER) {
-            telemetry.addLine(prefix + "(NEVER ends)");
+            telemetry.addLine(prefix + "(Parallel: NEVER ends)");
         } else {
-            telemetry.addLine(prefix + "(Ends once " + completionCondition + " behavior(s) have completed)");
+            telemetry.addLine(prefix + "(Parallel: Ends once " + completionCondition + " have completed)");
         }
         for (int i = 0; i < behaviors.size(); i++) {
             Behavior behavior = behaviors.get(i);

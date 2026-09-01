@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BehaviorSystem.Demos;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -8,6 +9,7 @@ import org.firstinspires.ftc.teamcode.Blackboard;
 import org.firstinspires.ftc.teamcode.Chassis;
 import org.firstinspires.ftc.teamcode.ControlHub;
 
+@Disabled
 @TeleOp(name="OpMode Template", group="Demos")
 public class OpModeTemplate extends OpMode {
     ControlHub controlHub;

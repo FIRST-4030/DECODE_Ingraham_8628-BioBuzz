@@ -2,28 +2,29 @@ package org.firstinspires.ftc.teamcode.BehaviorSystem.User;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
-
-import java.util.Objects;
+import org.firstinspires.ftc.teamcode.Chassis;
 
 /**
  * Template for easily creating new behaviors. You can duplicate this class, rename it, and modify it
  * to your liking to quickly make a new robot capability.
  * @author Edson James
  */
-public class UserBehaviorTemplate implements Behavior {
+public class TurnLeftForeverBehavior implements Behavior {
 
     // Custom label variable so users can label each instance of the behavior differently.
     // Probably don't touch this.
     private final String label;
+    private final Chassis chassis;
 
     // You want this first constructor to take everything the full constructor takes EXCEPT for the label.
     // Then, this constructor can just call your full constructor with a hard-coded default label.
-    public UserBehaviorTemplate() {
-        this("User behavior");
+    public TurnLeftForeverBehavior(Chassis chassis) {
+        this(chassis, "Turn Left Forever");
     }
 
     // This is the full constructor, INCLUDING a parameter for the label.
-    public UserBehaviorTemplate(String label) {
+    public TurnLeftForeverBehavior(Chassis chassis, String label) {
+        this.chassis = chassis;
         this.label = label;
     }
 
@@ -31,14 +32,14 @@ public class UserBehaviorTemplate implements Behavior {
     // your behavior first becomes "active."
     @Override
     public void enter() {
-
+        chassis.resetZeroPowerBehavior();
     }
 
     // update() is called repeatedly in the main loop when the behavior is active. It is where you
     // store all the logic for what your behavior should do every frame.
     @Override
     public void update() {
-
+        chassis.drive(0, 0, -1);
     }
 
     // isComplete() returns a boolean (true or false) value. It's used mostly in sequences or parallel
@@ -55,7 +56,7 @@ public class UserBehaviorTemplate implements Behavior {
     // GamepadDrivingBehavior stops all driving motors in exit().
     @Override
     public void exit() {
-
+        chassis.stopMotors();
     }
 
     // This is where you print information about what your behavior is doing.
@@ -64,7 +65,7 @@ public class UserBehaviorTemplate implements Behavior {
         // ALWAYS make sure to add prefix to the beginning of new lines you print to telemetry.
         // The prefix parameter is used to nest behavior telemetry messages on the screen using
         // indentation, so it makes things look broken if you forget to add it to the beginning.
-        telemetry.addLine(prefix + "(What is your behavior doing?)");
+        telemetry.addLine(prefix + "(Turning left...)");
     }
 
     // Probably don't touch this; this method is what allows users to only optionally specify a custom

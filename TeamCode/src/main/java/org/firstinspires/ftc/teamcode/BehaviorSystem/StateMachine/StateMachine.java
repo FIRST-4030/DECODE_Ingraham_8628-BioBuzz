@@ -8,6 +8,7 @@ import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
  * @author Edson James
  */
 public class StateMachine implements Behavior {
+    private State initialState = null;
     private State activeState = null;
     private final String label;
 
@@ -21,6 +22,7 @@ public class StateMachine implements Behavior {
 
     @Override
     public void enter() {
+        activeState = initialState;
         if (activeState != null) activeState.enter();
     }
 
@@ -80,6 +82,25 @@ public class StateMachine implements Behavior {
         }
     }
 
+    // Just print which state we're on
+    public void processSimpleTelemetry(Telemetry telemetry, String prefix) {
+        if (!label.isEmpty()) {
+            telemetry.addLine(prefix + "--- FSM: " + getLabel() + " ---");
+        }
+
+        if (isComplete()) {
+            telemetry.addLine(prefix + "State machine completed");
+            telemetry.addLine("");
+            return;
+        }
+
+        telemetry.addData(prefix + "    Active state", activeState.getLabel());
+
+        if (activeState != null) {
+            activeState.processSimpleTelemetry(telemetry, prefix + "    ");
+        }
+    }
+
     @Override
     public String getLabel() {
         return label;
@@ -105,5 +126,13 @@ public class StateMachine implements Behavior {
             // accurate and don't bleed over from the previous state.
             activeState.getNextState();
         }
+    }
+
+    /**
+     * The initial state is what state becomes active when calling StateMachine.enter().
+     * @param state The initial state.
+     */
+    public void setInitialState(State state) {
+        this.initialState = state;
     }
 }

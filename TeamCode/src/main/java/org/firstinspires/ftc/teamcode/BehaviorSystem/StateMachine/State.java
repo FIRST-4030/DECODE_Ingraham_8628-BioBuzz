@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
 
 /**
@@ -30,4 +31,11 @@ public interface State extends Behavior {
     default boolean isComplete() {
         return false;
     }
+
+    /**
+     * Print less information to the driver station, usually just instructions.
+     * @param telemetry The telemetry instance to print to.
+     * @param prefix Characters to add to the beginning of each line printed
+     */
+    void processSimpleTelemetry(Telemetry telemetry, String prefix);
 }

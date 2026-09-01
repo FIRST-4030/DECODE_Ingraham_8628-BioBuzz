@@ -64,6 +64,17 @@ public class BaseState implements State {
         behavior.processTelemetry(telemetry, prefix);
     }
 
+    @Override
+    public void processSimpleTelemetry(Telemetry telemetry, String prefix) {
+        if (!additionalTelemetrySupplier.get().isEmpty()) {
+            telemetry.addLine(prefix + additionalTelemetrySupplier.get());
+        }
+
+        if (behavior instanceof StateMachine) {
+            ((StateMachine) behavior).processSimpleTelemetry(telemetry, prefix);
+        }
+    }
+
     /**
      * BaseStates use their root behavior's label as their own label.
      * @return The root behavior's label.
