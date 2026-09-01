@@ -40,12 +40,14 @@ public class DrivingDemo extends OpMode {
 
         turnAroundState = new TaskState(
                 BehaviorBuilder.create()
-                        .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Turning around")
-                        .add(new WaitMS(3000, "3000 ms"))
-                        .add(new WaitUntil(() -> false, "Ummm just pretend I'm turning around rn"))
+                        .parallel(ParallelBehavior.CompletionCondition.ANY, "Turning around")
+                            .add(new WaitMS(3000, "3000 ms"))
+                            .add(new WaitUntil(() -> gamepad1.b, "Cancel on B press"))
+                            .add(new WaitUntil(() -> false, "Ummm just pretend I'm turning around rn"))
                         .end()
                         .build(),
-                () -> gamepadDrivingState
+                () -> gamepadDrivingState,
+                () -> "[B: cancel]"
         );
 
         mainStateMachine = new StateMachine("Main State Machine");
