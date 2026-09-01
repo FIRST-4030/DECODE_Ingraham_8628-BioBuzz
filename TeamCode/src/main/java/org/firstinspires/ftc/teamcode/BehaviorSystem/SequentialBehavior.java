@@ -104,6 +104,13 @@ public class SequentialBehavior implements Behavior {
         return label;
     }
 
+    @Override
+    public void processSimpleTelemetry(Telemetry telemetry, String prefix) {
+        if (getActiveBehavior() != null) {
+            getActiveBehavior().processSimpleTelemetry(telemetry, prefix);
+        }
+    }
+
     /**
      * Exits the active behavior, increments active behavior index by 1, and enters the next active
      * behavior if there is one.

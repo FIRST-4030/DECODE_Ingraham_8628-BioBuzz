@@ -45,4 +45,11 @@ public interface Behavior {
      * @return The title of the behavior.
      */
     String getLabel();
+
+    /**
+     * Print less information to the driver station, usually just instructions.
+     * @param telemetry The telemetry instance to print to.
+     * @param prefix Characters to add to the beginning of each line printed
+     */
+    default void processSimpleTelemetry(Telemetry telemetry, String prefix) {}
 }

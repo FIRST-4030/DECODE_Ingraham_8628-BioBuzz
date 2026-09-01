@@ -131,7 +131,7 @@ public class BehaviorBuilder {
     }
 
     private Behavior internalBuild() {
-        String finalLabel = (label != null) ? label : type.name();
+        String finalLabel = (label != null) ? label : (type == Type.ROOT ? "Root Sequence" : type.name());
 
         if (type == Type.PARALLEL) {
             return new ParallelBehavior(parallelCondition, behaviors, finalLabel);

@@ -71,7 +71,6 @@ public class StateMachine implements Behavior {
 
         if (isComplete()) {
             telemetry.addLine(prefix + "State machine completed");
-            telemetry.addLine("");
             return;
         }
 
@@ -83,6 +82,7 @@ public class StateMachine implements Behavior {
     }
 
     // Just print which state we're on
+    @Override
     public void processSimpleTelemetry(Telemetry telemetry, String prefix) {
         if (!label.isEmpty()) {
             telemetry.addLine(prefix + "--- FSM: " + getLabel() + " ---");
@@ -90,7 +90,6 @@ public class StateMachine implements Behavior {
 
         if (isComplete()) {
             telemetry.addLine(prefix + "State machine completed");
-            telemetry.addLine("");
             return;
         }
 

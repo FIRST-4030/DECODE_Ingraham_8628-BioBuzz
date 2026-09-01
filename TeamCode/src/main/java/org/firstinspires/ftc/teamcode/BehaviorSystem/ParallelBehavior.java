@@ -24,12 +24,14 @@ public class ParallelBehavior implements Behavior {
     private final List<Behavior> behaviors;
     private final String label;
     private final boolean[] completionCache;
+    private final boolean[] exitedCache;
 
     public ParallelBehavior(CompletionCondition completionCondition, List<Behavior> behaviors, String label) {
         this.completionCondition = completionCondition;
         this.behaviors = behaviors;
         this.label = label;
         this.completionCache = new boolean[behaviors.size()];
+        this.exitedCache = new boolean[behaviors.size()];
     }
 
     /**
@@ -41,6 +43,12 @@ public class ParallelBehavior implements Behavior {
             Behavior behavior = behaviors.get(i);
             behavior.enter();
             completionCache[i] = behavior.isComplete();
+            exitedCache[i] = false;
+
+            if (completionCache[i]) {
+                behavior.exit();
+                exitedCache[i] = true;
+            }
         }
     }
 
@@ -54,6 +62,11 @@ public class ParallelBehavior implements Behavior {
             if (!completionCache[i]) {
                 behavior.update();
                 completionCache[i] = behavior.isComplete();
+
+                if (completionCache[i]) {
+                    behavior.exit();
+                    exitedCache[i] = true;
+                }
             }
         }
     }
@@ -80,12 +93,15 @@ public class ParallelBehavior implements Behavior {
     }
 
     /**
-     * Exits every behavior in the list.
+     * Exits every behavior in the list that hasn't already exited.
      */
     @Override
     public void exit() {
-        for (Behavior behavior : behaviors) {
-            behavior.exit();
+        for (int i = 0; i < behaviors.size(); i++) {
+            if (!exitedCache[i]) {
+                behaviors.get(i).exit();
+                exitedCache[i] = true;
+            }
         }
     }
 
@@ -140,6 +156,15 @@ public class ParallelBehavior implements Behavior {
 
             if (!completionCache[i]) {
                 behavior.processTelemetry(telemetry, prefix + "    ");
+            }
+        }
+    }
+
+    @Override
+    public void processSimpleTelemetry(Telemetry telemetry, String prefix) {
+        for (int i = 0; i < behaviors.size(); i++) {
+            if (!completionCache[i]) {
+                behaviors.get(i).processSimpleTelemetry(telemetry, prefix);
             }
         }
     }

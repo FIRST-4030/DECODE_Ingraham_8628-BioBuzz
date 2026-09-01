@@ -86,10 +86,7 @@ public class InterruptableTaskState implements State {
         if (!additionalTelemetrySupplier.get().isEmpty()) {
             telemetry.addLine(prefix + additionalTelemetrySupplier.get());
         }
-
-        if (behavior instanceof StateMachine) {
-            ((StateMachine) behavior).processSimpleTelemetry(telemetry, prefix);
-        }
+        behavior.processSimpleTelemetry(telemetry, prefix);
     }
 
     /**

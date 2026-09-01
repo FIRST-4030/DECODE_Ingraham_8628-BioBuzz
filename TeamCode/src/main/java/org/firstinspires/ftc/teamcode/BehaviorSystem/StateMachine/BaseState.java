@@ -60,6 +60,7 @@ public class BaseState implements State {
     public void processTelemetry(Telemetry telemetry, String prefix) {
         if (!additionalTelemetrySupplier.get().isEmpty()) {
             telemetry.addLine(prefix + additionalTelemetrySupplier.get());
+            telemetry.addLine();
         }
         behavior.processTelemetry(telemetry, prefix);
     }
@@ -69,10 +70,7 @@ public class BaseState implements State {
         if (!additionalTelemetrySupplier.get().isEmpty()) {
             telemetry.addLine(prefix + additionalTelemetrySupplier.get());
         }
-
-        if (behavior instanceof StateMachine) {
-            ((StateMachine) behavior).processSimpleTelemetry(telemetry, prefix);
-        }
+        behavior.processSimpleTelemetry(telemetry, prefix);
     }
 
     /**
