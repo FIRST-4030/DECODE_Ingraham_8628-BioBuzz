@@ -9,14 +9,14 @@ import java.util.List;
  * once the current one is complete. This behavior completes when the final behavior in the list
  * completes.
  * @author Edson James
- * @see ParallelBehavior
+ * @see ParallelGroup
  */
-public class SequentialBehavior implements Behavior {
+public class SequentialGroup implements Behavior {
     private final List<Behavior> behaviors;
     private int activeBehaviorIndex = 0;
     private final String label;
 
-    public SequentialBehavior(List<Behavior> behaviors, String label) {
+    public SequentialGroup(List<Behavior> behaviors, String label) {
         this.behaviors = behaviors;
         this.label = label;
     }

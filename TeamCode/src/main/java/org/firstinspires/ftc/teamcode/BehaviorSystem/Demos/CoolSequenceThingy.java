@@ -3,8 +3,7 @@ package org.firstinspires.ftc.teamcode.BehaviorSystem.Demos;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BehaviorSystem.Behavior;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.GroupBuilder;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.TaskState;
@@ -43,7 +42,7 @@ public class CoolSequenceThingy extends OpMode {
         );
 
         mainState = new TaskState(
-                BehaviorBuilder.create()
+                GroupBuilder.create()
                         .sequential()
                             .add(new WaitMS(5000))
                             .add(coolLambdaBehavior)

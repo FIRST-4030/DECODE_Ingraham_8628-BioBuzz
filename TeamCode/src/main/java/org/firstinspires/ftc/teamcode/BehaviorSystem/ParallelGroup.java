@@ -6,13 +6,13 @@ import java.util.List;
 
 /**
  * A behavior which runs every behavior in a list on every update call. The behaviors are executed in the order
- * that they appear in the list. The completion condition strategy of parallelBehavior can be specified:
+ * that they appear in the list. The completion condition strategy of parallelGroup can be specified:
  * ALL for when every behavior is complete, ANY for when any behavior is complete, and FIRST_IN_LIST for when the
- * first behavior in the list completes. The BehaviorBuilder uses ALL by default when creating parallelBehaviors.
+ * first behavior in the list completes. The GroupBuilder uses ALL by default when creating parallelGroups.
  * @author Edson James
- * @see SequentialBehavior
+ * @see SequentialGroup
  */
-public class ParallelBehavior implements Behavior {
+public class ParallelGroup implements Behavior {
     public enum CompletionCondition {
         ALL,
         ANY,
@@ -26,7 +26,7 @@ public class ParallelBehavior implements Behavior {
     private final boolean[] completionCache;
     private final boolean[] exitedCache;
 
-    public ParallelBehavior(CompletionCondition completionCondition, List<Behavior> behaviors, String label) {
+    public ParallelGroup(CompletionCondition completionCondition, List<Behavior> behaviors, String label) {
         this.completionCondition = completionCondition;
         this.behaviors = behaviors;
         this.label = label;
@@ -72,9 +72,9 @@ public class ParallelBehavior implements Behavior {
     }
 
     /**
-     * Returns whether the parallel behavior is complete based on the completionCondition strategy:
+     * Returns whether the parallel group is complete based on the completionCondition strategy:
      * ALL, ANY, or FIRST.
-     * @return Whether the parallel behavior is complete
+     * @return Whether the parallel group is complete
      */
     @Override
     public boolean isComplete() {

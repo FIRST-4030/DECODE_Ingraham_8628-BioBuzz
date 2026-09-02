@@ -30,88 +30,87 @@ station. Finally, behaviors have a `getLabel()` method used to attach a short de
 to a behavior, useful in telemetry and debugging. However, most behaviors make it optional
 to specify a label during instantiation.
 
-## `ParallelBehavior` and `SequentialBehavior`
+## `ParallelGroup` and `SequentialGroup`
 
 This package includes two behaviors that are, themselves,
 designed to work with lists of other behaviors. They are called
-[`ParallelBehavior`](ParallelBehavior.java) and [`SequentialBehavior`](SequentialBehavior.java).
+[`ParallelGroup`](ParallelGroup.java) and [`SequentialGroup`](SequentialGroup.java).
 
-### `ParallelBehavior`
+### `ParallelGroup`
 
-A parallelBehavior executes multiple `Behavior`s in a list at the same time, exiting each
+A parallelGroup executes multiple `Behavior`s in a list at the same time, exiting each
 of them as they complete.
 
-For every parallelBehavior you create, you can specify how it decides it is complete by
+For every parallelGroup you create, you can specify how it decides it is complete by
 picking one of three strategies:
 
-1. ALL: This parallelBehavior is only complete once every behavior in the list
+1. ALL: This parallelGroup is only complete once every behavior in the list
    is complete.
-2. ANY: This parallelBehavior is complete if any of the behaviors in the list are
+2. ANY: This parallelGroup is complete if any of the behaviors in the list are
    complete.
-3. FIRST_IN_LIST: This parallelBehavior is complete if the first behavior in the list
+3. FIRST_IN_LIST: This parallelGroup is complete if the first behavior in the list
    is complete.
 
-### `SequentialBehavior`
+### `SequentialGroup`
 
-A `sequentialBehavior` is given a list of behaviors and executes them one at a time.
+A `SequentialGroup` is given a list of behaviors and executes them one at a time.
 
-## `BehaviorBuilder`
+## `GroupBuilder`
 
-Instances of ParallelBehavior and SequentialBehavior aren't designed to be created manually.
-Instead, I encourage you to use the `BehaviorBuilder` which lets you fluently define
-parallelBehaviors and sequentialBehaviors with a more readable syntax.
+Instances of ParallelGroup and SequentialGroup aren't designed to be created manually.
+Instead, I encourage you to use the `GroupBuilder` which lets you fluently define
+parallelGroups and sequentialGroups with a more readable syntax.
 
 ### Examples with one parallel/Sequential block
 
-The BehaviorBuilder uses a builder pattern. You define parallel and sequential behaviors by
+The GroupBuilder uses a builder pattern. You define parallel and sequential groups by
 opening and closing blocks using `parallel()`, `sequential()`, and `end()` after calling
-`BehaviorBuilder.create()`. The first block you open becomes the root of the behavior.
+`GroupBuilder.create()`. The first block you open becomes the root of the final behavior.
 
-Making a sequentialBehavior could look like this:
+Making a SequentialGroup could look like this:
 
 ```java
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.GroupBuilder;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
 
 // (...)
 
-Behavior myCoolBehavior = BehaviorBuilder.create()
+Behavior myCoolBehavior = GroupBuilder.create()
         // Open a sequential block. Since this is the first block we open,
-        // the whole behavior will be a sequentialBehavior once built.
+        // the whole behavior will be a SequentialGroup once built.
         .sequential("My cool behavior") // You can specify labels for blocks
 
-        // Each behavior will run one at a time
-        .add(new WaitMS(5000), "Wait 5 seconds") // You can set labels for behaviors
-        .add(new WaitMS(2000), "Wait 2 seconds")
-        .add(new WaitMS(3000), "Wait 3 seconds")
-        .add(new WaitMS(1000), "Wait 1 second")
+           // Each behavior will run one at a time
+           .add(new WaitMS(5000), "Wait 5 seconds") // You can set labels for behaviors
+           .add(new WaitMS(2000), "Wait 2 seconds")
+           .add(new WaitMS(3000), "Wait 3 seconds")
+           .add(new WaitMS(1000), "Wait 1 second")
 
         .end() // Close the block
         .build(); // Build and return the final behavior
 ```
 
-...and making a parallelBehavior could look like this:
+...and making a parallelGroup could look like this:
 
 ```java
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.GroupBuilder;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelGroup;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.GamepadDrive;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
 
 // (...)
 
-Behavior myAmazingBehavior = BehaviorBuilder.create()
+Behavior myAmazingBehavior = GroupBuilder.create()
         // Open a parallel block. This behavior will complete once the FIRST behavior
         // in the list completes.
-        .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "My amazing behavior")
+        .parallel(ParallelGroup.CompletionCondition.FIRST_IN_LIST, "My amazing behavior")
 
-        // Add a behavior inside the block
-        .add(new WaitMS(5000), "Wait 5 seconds")
+           // Add a behavior inside the block
+           .add(new WaitMS(5000), "Wait 5 seconds")
 
-        // Both of these behaviors will be performed at the same time
-        // during myAmazingBehavior's update loop.
-        .add(new GamepadDrive(chassis, gamepad1))
+           // Both of these behaviors will be performed at the same time
+           // during myAmazingBehavior's update loop.
+           .add(new GamepadDrive(chassis, gamepad1))
 
         .end() // Close the block
         .build(); // Build and return the final behavior
@@ -119,28 +118,28 @@ Behavior myAmazingBehavior = BehaviorBuilder.create()
 
 ### Example with nested parallel/Sequential blocks
 
-BehaviorBuilder is most powerful when you nest these parallel and sequential blocks to define
+GroupBuilder is most powerful when you nest these parallel and sequential blocks to define
 complex logic.
 
 ```java
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.GroupBuilder;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelGroup;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.GamepadDrive;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
 
 // (...)
 
-Behavior myIncredibleBehavior = BehaviorBuilder.create()
+Behavior myIncredibleBehavior = GroupBuilder.create()
         .sequential("My incredible behavior") // Open the first block
-        .add(new WaitMS(2000), "Wait 2 seconds")
+           .add(new WaitMS(2000), "Wait 2 seconds")
 
-        // This second block will finish after the timer inside it completes:
-        .parallel(ParallelBehavior.CompletionCondition.ALL, "Drive for 2 seconds")
-        .add(new WaitMS(2000), "Wait 2 seconds")
-        .add(new GamepadDrive(chassis, gamepad1))
-        .end() // Close the second block
+           // This second block will finish after the timer inside it completes:
+           .parallel(ParallelGroup.CompletionCondition.ALL, "Drive for 2 seconds")
+              .add(new WaitMS(2000), "Wait 2 seconds")
+              .add(new GamepadDrive(chassis, gamepad1))
+           .end() // Close the second block
 
-        .add(new WaitMS(3000), "Wait just 3 more seconds")
+           .add(new WaitMS(3000), "Wait just 3 more seconds")
 
         .end() // Close the first block
         .build(); // Build everything as one behavior

@@ -3,8 +3,8 @@ package org.firstinspires.ftc.teamcode.BehaviorSystem.Demos;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.GroupBuilder;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelGroup;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.BaseState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
@@ -39,8 +39,8 @@ public class DrivingDemo extends OpMode {
         );
 
         turnAroundState = new TaskState(
-                BehaviorBuilder.create()
-                        .parallel(ParallelBehavior.CompletionCondition.ANY, "Turning around")
+                GroupBuilder.create()
+                        .parallel(ParallelGroup.CompletionCondition.ANY, "Turning around")
                             .add(new WaitMS(3000, "3000 ms"))
                             .add(new WaitUntil(() -> gamepad1.b, "Cancel on B press"))
                             .add(new WaitUntil(() -> false, "Ummm just pretend I'm turning around rn"))

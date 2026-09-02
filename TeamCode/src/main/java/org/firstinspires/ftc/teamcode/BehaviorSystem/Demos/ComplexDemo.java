@@ -3,15 +3,14 @@ package org.firstinspires.ftc.teamcode.BehaviorSystem.Demos;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.BehaviorSystem.BehaviorBuilder;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelBehavior;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.GroupBuilder;
+import org.firstinspires.ftc.teamcode.BehaviorSystem.ParallelGroup;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.BaseState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.InterruptableTaskState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.State;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.StateMachine;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.StateMachine.TaskState;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.GamepadDrive;
-import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.InstantBehavior;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitMS;
 import org.firstinspires.ftc.teamcode.BehaviorSystem.UserBehaviors.WaitUntil;
 import org.firstinspires.ftc.teamcode.Blackboard;
@@ -54,8 +53,8 @@ public class ComplexDemo extends OpMode {
         );
 
         turnAroundState = new TaskState(
-                BehaviorBuilder.create()
-                        .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Turning around")
+                GroupBuilder.create()
+                        .parallel(ParallelGroup.CompletionCondition.FIRST_IN_LIST, "Turning around")
                             .add(new WaitMS(3000, "3000 ms"))
                             .add(new WaitUntil(() -> false, "Ummm just pretend I'm turning around rn"))
                         .end()
@@ -81,7 +80,7 @@ public class ComplexDemo extends OpMode {
                 () -> "[UP: near, DOWN: far, RIGHT: gate, B: park]");
 
         releaseGateState = new InterruptableTaskState(
-                BehaviorBuilder.create()
+                GroupBuilder.create()
                         .sequential("Release Gate")
                             .add(new WaitMS(3000, "Go to gate"))
                             .add(new WaitMS(2000, "Release"))
@@ -96,13 +95,13 @@ public class ComplexDemo extends OpMode {
         );
 
         farShootState = new InterruptableTaskState(
-                BehaviorBuilder.create()
+                GroupBuilder.create()
                         .sequential("Far Shoot")
-                            .parallel(ParallelBehavior.CompletionCondition.ALL, "Go to far + turning on shooter")
+                            .parallel(ParallelGroup.CompletionCondition.ALL, "Go to far + turning on shooter")
                                 .add(new WaitMS(3000, "Go to far shoot"))
                                 .add(new WaitUntil(() -> gamepad1.y, "Turning on shooter (press Y)"))
                             .end()
-                            .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Shooting + aiming")
+                            .parallel(ParallelGroup.CompletionCondition.FIRST_IN_LIST, "Shooting + aiming")
                                 .sequential("Shooting")
                                     .add(new WaitUntil(() -> gamepad1.right_bumper, "Shooting (press RB)"))
                                     .add(new WaitUntil(() -> gamepad1.left_bumper, "Shooting (press LB)"))
@@ -122,19 +121,19 @@ public class ComplexDemo extends OpMode {
         );
 
         nearShootState = new InterruptableTaskState(
-                BehaviorBuilder.create()
+                GroupBuilder.create()
                         .sequential("Near Shoot")
-                            .parallel(ParallelBehavior.CompletionCondition.ALL, "Go to near + turning on shooter")
+                            .parallel(ParallelGroup.CompletionCondition.ALL, "Go to near + turning on shooter")
                                 .add(new WaitMS(3000, "Go to near shoot"))
                                 .add(new WaitUntil(() -> gamepad1.y, "Turning on shooter (press Y)"))
                             .end()
-                            .parallel(ParallelBehavior.CompletionCondition.FIRST_IN_LIST, "Shooting + aiming")
+                            .parallel(ParallelGroup.CompletionCondition.FIRST_IN_LIST, "Shooting + aiming")
                                 .sequential("Shooting")
                                     .add(new WaitUntil(() -> gamepad1.right_bumper, "Shooting (press RB)"))
                                     .add(new WaitUntil(() -> gamepad1.left_bumper, "Shooting (press LB)"))
                                     .add(new WaitUntil(() -> gamepad1.right_bumper, "Shooting (press RB)"))
                                 .end()
-                                .parallel(ParallelBehavior.CompletionCondition.NEVER, "Continuous aiming")
+                                .parallel(ParallelGroup.CompletionCondition.NEVER, "Continuous aiming")
                                     .add(new WaitMS(100000, "Aiming things"))
                                     .add(new GamepadDrive(chassis, gamepad1, "More aiming things"))
                                 .end()
