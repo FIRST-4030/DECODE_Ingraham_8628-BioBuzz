@@ -1,4 +1,6 @@
 
+## Note: this file isn't done quite yet...
+
 # The Behavior System
 
 The Behavior System is a little modular framework for Ingraham Robotics for organizing robot logic
