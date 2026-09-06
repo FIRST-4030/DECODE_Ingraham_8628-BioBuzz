@@ -1,15 +1,16 @@
 
-## Note: this file isn't done quite yet...
-
 # The Behavior System
 
 The Behavior System is a little modular framework for Ingraham Robotics for organizing robot logic
 into reusable, composable pieces called `behavior`s.
 
 This README documents the core functionality in the framework with examples, but each class
-also has documentation in their source code. See the
-[User Behavior Template](UserBehaviors/UserBehaviorTemplate.java) for instructions on making custom robot
-capabilities using the framework.
+also has documentation in their source code. Additionally, there are various demos/template
+classes you can use:
+
+- The [User Behavior Template](UserBehaviors/UserBehaviorTemplate.java) for instructions on making custom robot capabilities
+using the framework
+- The []
 
 ## The `Behavior` interface
 
@@ -82,11 +83,11 @@ Behavior myCoolBehavior = GroupBuilder.create()
         // the whole behavior will be a SequentialGroup once built.
         .sequential("My cool behavior") // You can specify labels for blocks
 
-           // Each behavior will run one at a time
-           .add(new WaitMS(5000), "Wait 5 seconds") // You can set labels for behaviors
-           .add(new WaitMS(2000), "Wait 2 seconds")
-           .add(new WaitMS(3000), "Wait 3 seconds")
-           .add(new WaitMS(1000), "Wait 1 second")
+            // Each behavior will run one at a time
+            .add(new WaitMS(5000), "Wait 5 seconds") // You can set labels for behaviors
+            .add(new WaitMS(2000), "Wait 2 seconds")
+            .add(new WaitMS(3000), "Wait 3 seconds")
+            .add(new WaitMS(1000), "Wait 1 second")
 
         .end() // Close the block
         .build(); // Build and return the final behavior
@@ -107,12 +108,12 @@ Behavior myAmazingBehavior = GroupBuilder.create()
         // in the list completes.
         .parallel(ParallelGroup.CompletionCondition.FIRST_IN_LIST, "My amazing behavior")
 
-           // Add a behavior inside the block
-           .add(new WaitMS(5000), "Wait 5 seconds")
+            // Add a behavior inside the block
+            .add(new WaitMS(5000), "Wait 5 seconds")
 
-           // Both of these behaviors will be performed at the same time
-           // during myAmazingBehavior's update loop.
-           .add(new GamepadDrive(chassis, gamepad1))
+            // Both of these behaviors will be performed at the same time
+            // during myAmazingBehavior's update loop.
+            .add(new GamepadDrive(chassis, gamepad1))
 
         .end() // Close the block
         .build(); // Build and return the final behavior
@@ -135,13 +136,14 @@ Behavior myIncredibleBehavior = GroupBuilder.create()
         .sequential("My incredible behavior") // Open the first block
            .add(new WaitMS(2000), "Wait 2 seconds")
 
-           // This second block will finish after the timer inside it completes:
-           .parallel(ParallelGroup.CompletionCondition.ALL, "Drive for 2 seconds")
-              .add(new WaitMS(2000), "Wait 2 seconds")
-              .add(new GamepadDrive(chassis, gamepad1))
-           .end() // Close the second block
+            // This second block will finish after the timer inside it completes:
+            .parallel(ParallelGroup.CompletionCondition.ALL, "Drive for 2 seconds")
+                //
+                .add(new WaitMS(2000), "Wait 2 seconds")
+                .add(new GamepadDrive(chassis, gamepad1))
+            .end() // Close the second block
 
-           .add(new WaitMS(3000), "Wait just 3 more seconds")
+            .add(new WaitMS(3000), "Wait just 3 more seconds")
 
         .end() // Close the first block
         .build(); // Build everything as one behavior
